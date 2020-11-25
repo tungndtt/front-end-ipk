@@ -5,6 +5,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tintok.Communication.Communication;
+
 public class AppMainPagesActivity extends AppCompatActivity {
 
     private TextView mTextView;
@@ -17,5 +19,6 @@ public class AppMainPagesActivity extends AppCompatActivity {
         mTextView = (TextView) findViewById(R.id.text);
 
         // Enables Always-on
+        Communication.getInstance().initScoket();
     }
 }

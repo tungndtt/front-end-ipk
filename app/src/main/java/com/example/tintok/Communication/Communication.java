@@ -29,6 +29,7 @@ import io.socket.client.Socket;
 import io.socket.client.IO;
 import io.socket.emitter.Emitter;
 
+import io.socket.engineio.client.transports.WebSocket;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -116,15 +117,13 @@ public class Communication {
                 OkHttpClient okHttpClient = clientBuilder.build();
 
 
-                IO.setDefaultOkHttpCallFactory(okHttpClient);
-                IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
                 IO.Options opts = new IO.Options();
-                //opts.transports = new String[]{ Polling.NAME};
+                opts.transports = new String[]{WebSocket.NAME};
 
                 opts.forceNew = false;
                 //opts.reconnection = false;
-                opts.callFactory = okHttpClient;
-                opts.webSocketFactory = okHttpClient;
+                //opts.callFactory = okHttpClient;
+                //opts.webSocketFactory = okHttpClient;
                 opts.query = "X-Authorization" + "R3YKZFKBVi";
                 opts.path = "/socket.io";
 

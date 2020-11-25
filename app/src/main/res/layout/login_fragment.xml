@@ -36,33 +36,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textSize="25sp"
         android:text="Sign In"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passInput" />
 
 
-
     <TextView
         android:id="@+id/hint_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Still dont have account?"
-        android:textSize="25sp"
+        android:layout_marginTop="50dp"
+        android:text="Don't have an account?"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_inButton"></TextView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sign_upButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register Now"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="137dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/transparent"
+        android:text="Register now"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_dark"
+        android:textSize="12sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hint_signup"
-        android:layout_marginTop="20dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/hint_signup" />
 
     <ProgressBar
         android:id="@+id/progressBar"
