@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tintok.Model.RecyclerViewModel;
 
 public abstract class BaseViewHolder<T extends RecyclerViewModel> extends RecyclerView.ViewHolder {
-    BaseAdapter<T> mAapter;
-    public BaseViewHolder(@NonNull View itemView, BaseAdapter<T> mAdapter) {
+    BaseAdapter mAdapter;
+    public BaseViewHolder(@NonNull View itemView, BaseAdapter mAdapter) {
         super(itemView);
-        this.mAapter = mAdapter;
+        this.mAdapter = mAdapter;
     }
 
     public abstract void bindData(T itemData, int position);
