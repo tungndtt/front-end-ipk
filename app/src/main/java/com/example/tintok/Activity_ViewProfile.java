@@ -5,20 +5,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.tintok.Communication.Communication;
-
-public class AppMainPagesActivity extends AppCompatActivity {
+public class Activity_ViewProfile extends AppCompatActivity {
 
     private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_main_pages);
+        setContentView(R.layout.activity__view_profile);
 
         mTextView = (TextView) findViewById(R.id.text);
 
         // Enables Always-on
-        Communication.getInstance().initScoket();
     }
 }

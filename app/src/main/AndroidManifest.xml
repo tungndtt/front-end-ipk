@@ -20,14 +20,39 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TinTok"
         android:usesCleartextTraffic="true">
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="true" />
 
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
 
         <activity
-            android:name=".AppMainPagesActivity"
+            android:name=".Activity_ViewProfile"
+            android:label="@string/title_activity__view_profile">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activity_ChatRoom"
+            android:label="@string/title_activity__chat_room"
+            android:theme="@style/Theme.TinTok.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activity_AppMainPages"
             android:label="@string/title_activity_app_main_pages">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +60,7 @@
                 <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activity_Login_Signup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

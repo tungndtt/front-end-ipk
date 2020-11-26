@@ -109,7 +109,7 @@ public class Login_Fragment extends Fragment {
                 if(((RestAPI_Entity.StatusResponseEntity) res).status ){
 
                     communication.setToken(((RestAPI_Entity.StatusResponseEntity) res).mToken);
-                    Intent intent = new Intent(getActivity(), AppMainPagesActivity.class);
+                    Intent intent = new Intent(getActivity(), Activity_AppMainPages.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
                     getActivity().finish();
