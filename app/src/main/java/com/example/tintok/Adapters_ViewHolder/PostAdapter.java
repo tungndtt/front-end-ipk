@@ -8,15 +8,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.testsocketclientio.entity.Item;
+import com.android.testsocketclientio.entity.Post;
 
 import java.util.ArrayList;
 
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
-    private ArrayList<Item> posts;
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> { // extends BaseAdapter
+    private ArrayList<Post> posts;
 
-    public PostAdapter(ArrayList<Item> posts){
+    public PostAdapter(ArrayList<Post> posts){
         this.posts = posts;
     }
 
