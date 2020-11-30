@@ -58,6 +58,10 @@ public class SecureConnection {
            mRSAkey = mGenerator.generateKeyPair();
            Log.e("prikey", Base64.getEncoder().encodeToString(mRSAkey.getPrivate().getEncoded()));
             Log.e("pubkey", Base64.getEncoder().encodeToString(mRSAkey.getPublic().getEncoded()));
+<<<<<<< HEAD
+=======
+            Log.e("pubkey Format", mRSAkey.getPublic().toString());
+>>>>>>> upstream/master
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

@@ -51,13 +51,21 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.navigation:navigation-fragment:2.3.1'
     implementation 'androidx.navigation:navigation-ui:2.3.1'
+<<<<<<< HEAD
+=======
+    implementation 'androidx.wear:wear:1.1.0'
+>>>>>>> upstream/master
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation "androidx.interpolator:interpolator:1.0.0"
+<<<<<<< HEAD
     implementation 'com.yuyakaido.android:card-stack-view:2.3.4'
     implementation 'com.squareup.picasso:picasso:2.71828'
+=======
+    compileOnly 'com.google.android.wearable:wearable:2.8.1'
+>>>>>>> upstream/master
 }
 

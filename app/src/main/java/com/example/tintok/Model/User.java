@@ -7,6 +7,7 @@ public class User extends RecyclerViewModel {
     private String userID;
     private String userName;
     private String email;
+<<<<<<< HEAD
     private String description;
     private ArrayList<String> followers;
     private ArrayList<String> followering;
@@ -93,6 +94,12 @@ public class User extends RecyclerViewModel {
     }
 
     private ArrayList<Post> myPosts;
+=======
+    private ArrayList<String> followers;
+    private ArrayList<String> followering;
+    private Queue<User> matching;
+    private ArrayList<String> myPosts;
+>>>>>>> upstream/master
     private ArrayList<ChatRoom> chatRooms;
     private MediaEntity profilePic;
 

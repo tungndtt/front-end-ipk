@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+<<<<<<< HEAD
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
 import android.util.Log;
@@ -31,23 +32,34 @@ import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.ArrayList;
+=======
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+>>>>>>> upstream/master
 
 public class MainPages__PeopleBrowsing__Fragment extends Fragment {
 
     private MainpagesPeoplebrowsingFragmentViewModel mViewModel;
+<<<<<<< HEAD
     CardStackView cardStackView;
     private int currentItem = 0;
     private int offScreenPageLimit = 2;
 
     PeopleBrowsingAdapter adapter;
     CardStackLayoutManager  manager;
+=======
+>>>>>>> upstream/master
 
     public static MainPages__PeopleBrowsing__Fragment newInstance() {
         return new MainPages__PeopleBrowsing__Fragment();
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> upstream/master
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -61,6 +73,7 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+<<<<<<< HEAD
     @Override
     public void onStart() {
         super.onStart();
@@ -151,4 +164,6 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment {
     }
 
 
+=======
+>>>>>>> upstream/master
 }

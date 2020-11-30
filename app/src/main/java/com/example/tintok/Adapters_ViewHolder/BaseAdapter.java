@@ -43,10 +43,16 @@ public abstract class BaseAdapter<T extends RecyclerViewModel, VH extends BaseVi
         items.set(position, item);
         notifyItemChanged(position);
     }
+<<<<<<< HEAD
     public T removeItem(int position) {
         T item = items.remove(position);
         notifyItemRemoved(position);
         return item;
+=======
+    public void removeItem(int position) {
+        T item = items.remove(position);
+        notifyItemRemoved(position);
+>>>>>>> upstream/master
     }
 
     public void setItems(ArrayList<T> items) {
