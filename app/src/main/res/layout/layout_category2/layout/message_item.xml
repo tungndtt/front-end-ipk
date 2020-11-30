@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:contentPadding="5dp"
+    app:cardCornerRadius="5dp"
+    android:layout_margin="5dp"
+    app:cardElevation="10dp">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        app:showDividers="middle"
+        app:divider="@drawable/divider"
+        android:id="@+id/leftSide"
+        android:visibility="visible">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            app:cardCornerRadius="40dp">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/leftprofilePic">
+
+            </androidx.appcompat.widget.AppCompatImageView>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/leftcontent"
+                android:textSize="16sp"
+                android:text="aweawewwwwwwwwwwwwwwwwwwwwwwwwwaeweaweawaaaaaaaaaaaaaw"
+                android:maxEms="11"
+                android:layout_gravity="center_vertical">
+
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:id="@+id/leftdate"
+                android:textSize="12sp"
+                android:text="aaaaaaw"
+                android:maxLines="1"
+                android:layout_gravity="center_vertical|left">
+
+            </TextView>
+        </LinearLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        app:showDividers="middle"
+        app:divider="@drawable/divider"
+        android:id="@+id/rightSide"
+        android:gravity="right"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rightcontent"
+                android:textSize="16sp"
+                android:text="aweawewwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+                android:maxEms="11"
+                android:layout_gravity="center_vertical">
+
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rightdate"
+                android:textSize="12sp"
+                android:maxLines="1"
+                android:layout_marginTop="5dp"
+                android:text="aaaaaaw"
+                android:layout_gravity="center_vertical|right">
+
+            </TextView>
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            app:cardCornerRadius="40dp">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rightprofilePic">
+
+            </androidx.appcompat.widget.AppCompatImageView>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</com.google.android.material.card.MaterialCardView>

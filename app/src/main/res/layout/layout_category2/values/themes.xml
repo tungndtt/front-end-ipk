@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="Theme.TinTok.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.TinTok.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.TinTok.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>
