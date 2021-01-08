@@ -1,29 +1,38 @@
 package com.example.tintok.Adapters_ViewHolder;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.tintok.Model.*;
-import com.example.tintok.R;
+
+
+import com.example.tintok.Model.Comment;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public abstract class BaseAdapter<T extends RecyclerViewModel, VH extends BaseViewHolder<T>> extends RecyclerView.Adapter<VH> {
+public abstract class BaseAdapter<T, VH extends BaseViewHolder<T>> extends RecyclerView.Adapter<VH> {
     Context context;
     ArrayList<T> items;
 
-    BaseAdapter(Context context, ArrayList<T> models){
+    int lastIndexAnimated;
+
+
+    public BaseAdapter(Context context, ArrayList<T> models){
         this.context = context;
         this.items = models;
+        this.lastIndexAnimated = -1;
     }
+
+
 
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.bindData(items.get(position),position);
+
+        holder.bindData(items.get(position));
+
 
     }
 
@@ -43,22 +52,18 @@ public abstract class BaseAdapter<T extends RecyclerViewModel, VH extends BaseVi
         items.set(position, item);
         notifyItemChanged(position);
     }
-<<<<<<< HEAD
     public T removeItem(int position) {
         T item = items.remove(position);
         notifyItemRemoved(position);
         return item;
-=======
-    public void removeItem(int position) {
-        T item = items.remove(position);
-        notifyItemRemoved(position);
->>>>>>> upstream/master
     }
 
     public void setItems(ArrayList<T> items) {
-        this.items.clear();
-        this.items.addAll(items);
+        this.items = items;
         notifyDataSetChanged();
     }
 
+    public Context getContext(){
+        return this.context;
+    }
 }

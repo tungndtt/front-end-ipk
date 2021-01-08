@@ -10,11 +10,6 @@
         android:pivotX="50%"
         android:pivotY="50%"
         ></scale>
-    <rotate
-        android:fromDegrees="360"
-        android:toDegrees="0"
-        android:pivotX="50%"
-        android:pivotY="50%"></rotate>
     <alpha
         android:fromAlpha="0"
         android:toAlpha="1.0"></alpha>

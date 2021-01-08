@@ -21,9 +21,7 @@ import android.widget.TextView;
 
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI_Entity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Login_Fragment extends Fragment {
 
@@ -37,6 +35,7 @@ public class Login_Fragment extends Fragment {
     private ProgressBar loadingBar;
     private TextView status;
     private EditText email,password;
+    private TextView forget;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -53,12 +52,13 @@ public class Login_Fragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     void init(){
         communication = Communication.getInstance();
-       loginButton = getView().findViewById(R.id.sign_inButton);
+        loginButton = getView().findViewById(R.id.sign_inButton);
         registerButton = getView().findViewById(R.id.sign_upButton);
         status = getView().findViewById(R.id.status);
-       loadingBar = getView().findViewById(R.id.progressBar);
-       email = getView().findViewById(R.id.emailInput);
-       password = getView().findViewById(R.id.passInput);
+        loadingBar = getView().findViewById(R.id.progressBar);
+        email = getView().findViewById(R.id.emailInput);
+        password = getView().findViewById(R.id.passInput);
+        forget = getView().findViewById(R.id.forget_account_text);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -70,7 +70,13 @@ public class Login_Fragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Login_Fragment.this.getFragmentManager().beginTransaction().replace(R.id.fragment, Sign_up_Fragment.newInstance()).addToBackStack("Login").commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.fragment, Sign_up_Fragment.newInstance()).addToBackStack("Login").commit();
+            }
+        });
+        forget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().beginTransaction().replace(R.id.fragment, ForgetPasswordFragment.newInstance()).addToBackStack("Login").commit();
             }
         });
     }
@@ -93,14 +99,10 @@ public class Login_Fragment extends Fragment {
         status.setVisibility(View.VISIBLE);
         status.setText("Signing in...");
         loadingBar.setVisibility(View.VISIBLE);
-        JSONObject data = new JSONObject();
-        try {
-            data.put("email", email.getText().toString());
-            data.put("password", password.getText().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-       // Communication.getInstance().emitEvent("login", data);
+        JsonObject data = new JsonObject();
+        data.addProperty("email", email.getText().toString());
+        data.addProperty("password", password.getText().toString());
+        // Communication.getInstance().emitEvent("login", data);
         communication.LoginRequest(data, new RestAPI_Entity.RestApiListener(){
 
             @Override
@@ -109,7 +111,7 @@ public class Login_Fragment extends Fragment {
                 if(((RestAPI_Entity.StatusResponseEntity) res).status ){
 
                     communication.setToken(((RestAPI_Entity.StatusResponseEntity) res).mToken);
-                    Intent intent = new Intent(getActivity(), Activity_AppMainPages.class);
+                    Intent intent = new Intent(getActivity(), Activity_InitData.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
                     getActivity().finish();

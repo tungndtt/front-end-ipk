@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.tintok">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -9,10 +10,27 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:remove="android:maxSdkVersion" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <queries>
+
+        <!-- Camera -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+
+        <!-- Gallery -->
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+        </intent>
+    </queries>
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:allowClearUserData="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,33 +40,43 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TinTok"
         android:usesCleartextTraffic="true">
-<<<<<<< HEAD
-
-=======
-        <uses-library
-            android:name="com.google.android.wearable"
-            android:required="true" />
-
+        <activity
+            android:name=".Activity_View_Profile"
+            android:label="@string/title_activity__view__profile"
+            android:theme="@style/Theme.TinTok.NoActionBar"></activity>
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
-        <meta-data
-            android:name="com.google.android.wearable.standalone"
-            android:value="true" />
->>>>>>> upstream/master
+        <activity
+            android:name=".Activity_Comment"
+            android:label="@string/title_activity__comment">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
+        <!--
+               Set to true if your app is Standalone, that is, it does not require the handheld
+               app to run.
+        -->
+        <activity
+            android:name=".Activity_InitData"
+            android:label="@string/title_activity__init_data">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Activity_ViewProfile"
             android:label="@string/title_activity__view_profile">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-<<<<<<< HEAD
                 <category android:name="android.intent.category.ALTERNATIVE" />
-=======
-                <category android:name="android.intent.category.LAUNCHER" />
->>>>>>> upstream/master
             </intent-filter>
         </activity>
         <activity
@@ -63,7 +91,8 @@
         </activity>
         <activity
             android:name=".Activity_AppMainPages"
-            android:label="@string/title_activity_app_main_pages">
+            android:label="@string/title_activity_app_main_pages"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -77,6 +106,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

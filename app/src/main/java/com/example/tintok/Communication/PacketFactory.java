@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+///DOnt use this class for REST API CALL
 
 public class PacketFactory {
     public static PacketFactory instance;
@@ -21,7 +22,7 @@ public class PacketFactory {
         return instance;
     }
     private PacketFactory(){
-        mToken = null;
+        mToken = "";
     }
 
 
@@ -43,8 +44,7 @@ public class PacketFactory {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public JSONObject getDataFromPacket(String receive){
-        String data = SecureConnection.getInstance().DecodeReceivedData(receive);
+    public JSONObject getDataFromPacket(String data){
         JSONObject jo = null;
         try {
             jo = new JSONObject(data);

@@ -11,7 +11,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tintok.Adapters_ViewHolder.BaseAdapter;
 import com.example.tintok.Adapters_ViewHolder.PeopleBrowsingAdapter;
-import com.example.tintok.Model.User;
+
 
 import java.util.ArrayList;
 
@@ -20,15 +20,7 @@ public class StackViewPager {
     int offScreenPageLimit;
     public void initFragment(){
        // viewPager2 = getView().findViewById(R.id.viewPager);
-        ArrayList<User> models = new ArrayList<User>();
-        User user_1 = new User();
-        user_1.setUserName("1");
-        user_1.setDescription("im 1");
-        User user_2 = new User();
-        user_2.setUserName("2");
-        user_2.setDescription("im 2");
-        models.add(user_1);
-        models.add(user_2);
+
        // BaseAdapter adapter = new PeopleBrowsingAdapter(this.getContext(), models);
        // viewPager2.setAdapter(adapter);
         viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
@@ -46,7 +38,7 @@ public class StackViewPager {
                 page.setElevation(-Math.abs(position));
 
                 float DEFAULT_TRANSLATION_X = .0f;
-                float DEFAULT_TRANSLATION_FACTOR = 1f;
+                float DEFAULT_TRANSLATION_FACTOR = 1.2f;
 
                 float SCALE_FACTOR = .14f;
                 float DEFAULT_SCALE = 1f;

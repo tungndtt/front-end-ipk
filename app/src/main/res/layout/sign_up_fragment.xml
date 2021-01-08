@@ -117,11 +117,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Register Now"
+        android:text="Register"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passInputConfirm"
-        app:layout_constraintBottom_toTopOf="@+id/status"/>
+        android:backgroundTint="@color/black"
+        android:drawableRight="@drawable/ic_arrow_send"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/back_to_login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Back"
+        android:textSize="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WrongInput_warning"
+        android:backgroundTint="@color/red"
+        android:drawableLeft="@drawable/ic_arrow_back"/>
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -148,6 +162,7 @@
         android:textColor="@android:color/holo_red_light"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_upButton" />
 
@@ -173,6 +188,6 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_upButton"
+        app:layout_constraintTop_toBottomOf="@+id/back_to_login_button"
         android:visibility="invisible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

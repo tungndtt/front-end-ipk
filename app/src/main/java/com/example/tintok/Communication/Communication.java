@@ -2,11 +2,13 @@ package com.example.tintok.Communication;
 
 import android.os.Build;
 
-import android.util.JsonReader;
+
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
@@ -24,7 +26,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import io.socket.client.Manager;
 import io.socket.client.Socket;
 import io.socket.client.IO;
 import io.socket.emitter.Emitter;
@@ -39,30 +40,107 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 public class Communication {
     private static Communication instance;
     //ublic static arrayList<String> registeredEvent
-    public static final String myLink ="http://192.168.1.116:3000";
+    public static final String myLink ="https://192.168.2.5:3000";
+
+    public OkHttpClient getHttpsClient() {
+        return httpsClient;
+    }
+
+    public Retrofit getRetrofit() {
+        return retrofit;
+    }
+
+    private Retrofit retrofit;
+
+    private RestAPI api;
+
+    private OkHttpClient httpsClient;
+
+    public Socket get_socket() {
+        return _socket;
+    }
 
     private Socket _socket;
     private RestAPI_Entity.LoginService loginService;
     private RestAPI_Entity.SignUpService signUpService;
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private Communication() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(myLink)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        loginService = retrofit.create(RestAPI_Entity.LoginService.class);
-        signUpService = retrofit.create(RestAPI_Entity.SignUpService.class);
+        try{
+            HostnameVerifier myHostnameVerifier = (hostname, session) -> true;
+            SSLContext mySSLContext = SSLContext.getInstance("TLS");
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new java.security.cert.X509Certificate[0];
+                }
+
+
+                public void checkClientTrusted(X509Certificate[] chain,
+                                               String authType) {
+                }
+
+
+                public void checkServerTrusted(X509Certificate[] chain,
+                                               String authType) {
+                }
+            }};
+            mySSLContext.init(null, trustAllCerts, null);
+
+
+            OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
+                    .addInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(Chain chain) throws IOException {
+                            Request original = chain.request();
+
+                            Request request = original.newBuilder()
+                                    .header("Accept", "application/json")
+                                    .header("Cookie", "X-Authorization "+ Communication.getInstance().getToken())
+                                    .method(original.method(), original.body())
+                                    .build();
+                            return chain.proceed(request);
+                        }
+                    })
+                    /*.retryOnConnectionFailure(true)
+                    .connectTimeout(5, TimeUnit.MINUTES) // connect timeout
+                    .writeTimeout(5, TimeUnit.MINUTES) // write timeout
+                    .readTimeout(5, TimeUnit.MINUTES)// read timeout
+                    .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))*/
+                    .hostnameVerifier(myHostnameVerifier)
+                    .sslSocketFactory(mySSLContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
+
+
+            httpsClient = clientBuilder.build();
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(myLink)
+                    .client(httpsClient)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            loginService = retrofit.create(RestAPI_Entity.LoginService.class);
+            signUpService = retrofit.create(RestAPI_Entity.SignUpService.class);
+            api = retrofit.create(RestAPI.class);
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+
     }
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        public static Communication getInstance(){
+
+
+
+    public static Communication getInstance(){
         if(instance == null)
             instance = new Communication();
         return instance;
+    }
+
+    public RestAPI getApi(){
+        return this.api;
     }
 
     public boolean initScoket(){
@@ -70,67 +148,22 @@ public class Communication {
             if (_socket == null) {
                 Log.e("Object", "called");
 
-                HostnameVerifier myHostnameVerifier = (hostname, session) -> true;
-                SSLContext mySSLContext = SSLContext.getInstance("TLS");
-                TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                        return new java.security.cert.X509Certificate[]{};
-                    }
-
-
-                    public void checkClientTrusted(X509Certificate[] chain,
-                                                   String authType) {
-                    }
-
-
-                    public void checkServerTrusted(X509Certificate[] chain,
-                                                   String authType) {
-                    }
-                }};
-                mySSLContext.init(null, trustAllCerts, null);
-
-
-                OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder()
-                        .addInterceptor(new Interceptor() {
-                            @Override
-                            public Response intercept(Chain chain) throws IOException {
-                                Request original = chain.request();
-
-                                Request request = original.newBuilder()
-                                        .header("Accept", "application/json")
-                                        .header("Cookie", "X-Authorization=R3YKZFKBVi")
-                                        .method(original.method(), original.body())
-                                        .build();
-                                //Log.e("customheader called", request.headers().toString());
-                                return chain.proceed(request);
-                            }
-                        })
-                        /*.retryOnConnectionFailure(true)
-                        .connectTimeout(5, TimeUnit.MINUTES) // connect timeout
-                        .writeTimeout(5, TimeUnit.MINUTES) // write timeout
-                        .readTimeout(5, TimeUnit.MINUTES)// read timeout
-                        .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))*/
-                        .hostnameVerifier(myHostnameVerifier)
-                        .sslSocketFactory(mySSLContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
-
-
-                OkHttpClient okHttpClient = clientBuilder.build();
 
 
                 IO.Options opts = new IO.Options();
                 opts.transports = new String[]{WebSocket.NAME};
 
                 opts.forceNew = false;
-                //opts.reconnection = false;
-                //opts.callFactory = okHttpClient;
-                //opts.webSocketFactory = okHttpClient;
+                opts.reconnection = true;
+                opts.callFactory = httpsClient;
+                opts.webSocketFactory = httpsClient;
                 opts.query = "X-Authorization" + "R3YKZFKBVi";
                 opts.path = "/socket.io";
 
 
                 this._socket = IO.socket(Communication.myLink, opts);
                 _socket.connect();
-                _socket.io().timeout(60L);
+                //_socket.io().timeout(60L);
                 String TAG = "Error";
                 _socket.emit("request_key",SecureConnection.getInstance().getPubKeyClient() );
 
@@ -191,7 +224,7 @@ public class Communication {
                 }).on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
                     @Override
                     public void call(Object... args) {
-                        Log.e("scoket error:",args[0].toString());
+                        Log.e("socket error:",args[0].toString());
                     }
                 }).on("GotAuthen", new Emitter.Listener() {
                     @Override
@@ -223,11 +256,6 @@ public class Communication {
 
 
             }
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -241,6 +269,7 @@ public class Communication {
     public String getToken(){
         return PacketFactory.getInstance().mToken;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void emitEvent(String event, JSONObject data){
@@ -263,10 +292,9 @@ public class Communication {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void LoginRequest(JSONObject jo, RestAPI_Entity.RestApiListener mListener){
-        String data = PacketFactory.getInstance().createPacket(jo);
-        Log.e("to Send", data);
-        Call<RestAPI_Entity.StatusResponseEntity> res= loginService.login(data);
+    public void LoginRequest(JsonObject jo, RestAPI_Entity.RestApiListener mListener){
+        //String data = PacketFactory.getInstance().createPacket(jo);
+        Call<RestAPI_Entity.StatusResponseEntity> res= loginService.login(jo);
         res.enqueue(new Callback<RestAPI_Entity.StatusResponseEntity>() {
             @Override
             public void onResponse(Call<RestAPI_Entity.StatusResponseEntity> call, retrofit2.Response<RestAPI_Entity.StatusResponseEntity> response) {
@@ -284,9 +312,9 @@ public class Communication {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void SignUpRequest(JSONObject jo, RestAPI_Entity.RestApiListener mListener){
-        String data = PacketFactory.getInstance().createPacket(jo);
-        Call<RestAPI_Entity.StatusResponseEntity> res= signUpService.sign_up(data);
+    public void SignUpRequest(JsonObject jo, RestAPI_Entity.RestApiListener mListener){
+        //String data = PacketFactory.getInstance().createPacket(jo);
+        Call<RestAPI_Entity.StatusResponseEntity> res= signUpService.sign_up(jo);
         res.enqueue(new Callback<RestAPI_Entity.StatusResponseEntity>() {
             @Override
             public void onResponse(Call<RestAPI_Entity.StatusResponseEntity> call, retrofit2.Response<RestAPI_Entity.StatusResponseEntity> response) {

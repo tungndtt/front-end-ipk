@@ -13,11 +13,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.tintok.Model.User;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.tintok.Model.UserSimple;
 import com.example.tintok.R;
 
 
-public class PeopleBrowsingViewHolder extends BaseViewHolder<User> {
+public class PeopleBrowsingViewHolder extends BaseViewHolder<UserSimple> {
     TextView name, description;
     ImageView imageView;
     public ImageView likeImg, dislikeImg;
@@ -47,7 +49,6 @@ public class PeopleBrowsingViewHolder extends BaseViewHolder<User> {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 gestureDetector.onTouchEvent(event);
-                Log.e("inside Touch", "at "+ mAdapter.getItemCount());
                 return true;
 
             }
@@ -55,17 +56,14 @@ public class PeopleBrowsingViewHolder extends BaseViewHolder<User> {
 
     }
 
+
     //like = true;
     //dislike = false;
     @Override
-    public void bindData(User itemData, int position) {
-        Log.e("called","why not");
+    public void bindData(UserSimple itemData) {
         name.setText(itemData.getUserName());
         description.setText(itemData.getDescription());
-        if(position %2 == 0)
-            imageView.setImageResource(android.R.drawable.screen_background_dark);
-        else
-            imageView.setImageResource(android.R.drawable.screen_background_dark);
+        Glide.with(mAdapter.getContext()).load(itemData.getProfilePic().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(imageView);
 
     }
 }

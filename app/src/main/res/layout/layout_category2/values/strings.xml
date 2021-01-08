@@ -26,4 +26,9 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity__view_profile">Activity_ViewProfile</string>
+    <string name="title_activity__init_data">Activity_InitData</string>
+    <string name="title_activity__comment">Activity_Comment</string>
+    <string name="title_activity__view__profile">Activity_View_Profile</string>
+
+    <string name="forget_account"><u>Forget your account ?</u></string>
 </resources>

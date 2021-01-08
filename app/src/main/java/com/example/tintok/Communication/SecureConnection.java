@@ -58,10 +58,6 @@ public class SecureConnection {
            mRSAkey = mGenerator.generateKeyPair();
            Log.e("prikey", Base64.getEncoder().encodeToString(mRSAkey.getPrivate().getEncoded()));
             Log.e("pubkey", Base64.getEncoder().encodeToString(mRSAkey.getPublic().getEncoded()));
-<<<<<<< HEAD
-=======
-            Log.e("pubkey Format", mRSAkey.getPublic().toString());
->>>>>>> upstream/master
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -96,7 +92,7 @@ public class SecureConnection {
             Cipher cipher =Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE, mRSAkey.getPrivate());
             byte[] encStr = cipher.doFinal(Base64.getDecoder().decode(data));
-            return  new String(encStr);
+            return  new String(encStr, StandardCharsets.UTF_8);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchPaddingException | InvalidKeyException e) {

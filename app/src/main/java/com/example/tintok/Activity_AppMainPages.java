@@ -1,65 +1,45 @@
 package com.example.tintok;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-<<<<<<< HEAD
 import android.view.MenuItem;
-=======
->>>>>>> upstream/master
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-<<<<<<< HEAD
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 
-import com.example.tintok.Communication.Communication;
+import com.example.tintok.DataLayer.DataRepositoryController;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Activity_AppMainPages extends AppCompatActivity {
 
+
     BottomNavigationView navBar;
     Fragment peopleBrowsing, mediaSurfing, notification, messages, myHomepage;
     Fragment current;
-=======
-import androidx.lifecycle.ViewModelProvider;
-
-import com.example.tintok.Communication.Communication;
-
-public class Activity_AppMainPages extends AppCompatActivity {
-
-    private TextView mTextView;
->>>>>>> upstream/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_main_pages);
 
-<<<<<<< HEAD
         initActivity();
 
-=======
-        mTextView = (TextView) findViewById(R.id.text);
->>>>>>> upstream/master
-
-        // Enables Always-on
-        Communication.getInstance().initScoket();
     }
 
-<<<<<<< HEAD
     private void initActivity() {
         navBar = findViewById(R.id.navBar);
         peopleBrowsing =  new MainPages__PeopleBrowsing__Fragment();
-        current = peopleBrowsing;
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainPageContent, current).commit();
+        messages = new MainPages__Chatroom__Fragment();
+        notification = new MainPages_Notification_Fragment();
 
+        mediaSurfing = new MainPages_Posts_Fragment();
+        myHomepage = new MainPages_MyProfile_Fragment(DataRepositoryController.getInstance().getUser());
+
+        current = mediaSurfing;
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainPageContent, current).commit();
         navBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction().replace(R.id.mainPageContent, peopleBrowsing);
             @Override
@@ -81,14 +61,32 @@ public class Activity_AppMainPages extends AppCompatActivity {
                         current = myHomepage;
                         break;
                 }
-                FragmentTransaction fragmentTransaction =getSupportFragmentManager().beginTransaction().replace(R.id.mainPageContent, current);
-                fragmentTransaction.setCustomAnimations(R.anim.animation_in, R.anim.animation_out);
-                fragmentTransaction.addToBackStack(current.getTag()).commit();
+                FragmentTransaction fragmentTransaction =getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.animation_in, R.anim.animation_out);
+                fragmentTransaction.addToBackStack(current.getTag()).replace(R.id.mainPageContent, current).commit();
                 return true;
             }
         });
     }
 
-=======
->>>>>>> upstream/master
+    @Override
+    public void onBackPressed() {
+        if(navBar.getSelectedItemId() == R.id.mediasurfing)
+            super.onBackPressed();
+        else{
+            current = mediaSurfing;
+            navBar.setSelectedItemId(R.id.mediasurfing);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("navBarID",navBar.getSelectedItemId());
+    }
+
+    @Override
+    public void onRestoreInstanceState(@Nullable Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        navBar.setSelectedItemId(savedInstanceState.getInt("navBarID"));
+    }
 }

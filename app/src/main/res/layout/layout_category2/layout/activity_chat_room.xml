@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity_Login_Signup"
+    android:background="@drawable/chatroom_background">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/messageView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/profileLayout"
+        android:orientation="horizontal"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginEnd="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="5dp"
+            android:layout_centerHorizontal="true">
+
+            <ImageButton
+                android:id="@+id/profileImg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true">
+            </ImageButton>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/messageView"
+        android:clipToPadding="false"
+        android:paddingVertical="10dp"
+        android:clipChildren="false"
+        app:layout_constraintBottom_toTopOf="@+id/sendMsgLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileLayout">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/emojiView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="160dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginBottom="10dp"
+        android:padding="1dp"
+        android:scrollbars="vertical"
+        android:smoothScrollbar="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/sendMsgLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"></androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/sendMsgLayout"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messageView"
+        >
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="5dp"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_weight="10">
+
+            <LinearLayout
+                android:id="@+id/msgLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical|center_horizontal"
+                android:layoutDirection="ltr"
+                android:layout_marginHorizontal="10dp">
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="25dp"
+                    android:layout_marginLeft="8dp"
+                    app:cardElevation="0dp">
+
+                    <ImageButton
+                        android:id="@+id/sendImgbtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"></ImageButton>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="0dp"
+                    android:layout_marginLeft="8dp">
+
+                    <ImageButton
+                        android:id="@+id/cameraBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"></ImageButton>
+                </androidx.cardview.widget.CardView>
+
+                <com.example.tintok.CustomView.EditTextSupportIME
+                    android:id="@+id/newMsg"
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:hint="Messages..."
+                    android:inputType="textMultiLine|text|textImeMultiLine"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical|left"></com.example.tintok.CustomView.EditTextSupportIME>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:cardCornerRadius="30dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    app:cardElevation="0dp">
+
+                    <ImageButton
+                        android:id="@+id/openEmojibtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"></ImageButton>
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            app:cardElevation="0dp">
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/sendButton"
+                android:scaleType="fitXY"></ImageButton>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

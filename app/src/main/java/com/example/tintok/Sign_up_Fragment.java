@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI_Entity;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
 public class Sign_up_Fragment extends Fragment {
 
     private SignUpViewModel mViewModel;
-    private Button registerButton;
+    private Button registerButton, backBtn;
     private ProgressBar loadingBar;
     private TextView status;
     private EditText name, email,password, retypepassword, day,month,year;
@@ -61,6 +62,7 @@ public class Sign_up_Fragment extends Fragment {
     void init(){
         communication = Communication.getInstance();
         registerButton = getView().findViewById(R.id.sign_upButton);
+        backBtn = getView().findViewById(R.id.back_to_login_button);
         status = getView().findViewById(R.id.status);
         loadingBar = getView().findViewById(R.id.progressBar);
         name = getView().findViewById(R.id.nameInput);
@@ -76,6 +78,12 @@ public class Sign_up_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                HandleSignUp();
+            }
+        });
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
             }
         });
     }
@@ -124,17 +132,13 @@ public class Sign_up_Fragment extends Fragment {
         status.setVisibility(View.VISIBLE);
         status.setText("Signing un...");
         loadingBar.setVisibility(View.VISIBLE);
-        JSONObject data = new JSONObject();
-        try {
-            data.put("email", email.getText().toString());
-            data.put("password", password.getText().toString());
-            data.put("day_ofBirth", dayInt);
-            data.put("month_ofBirth", monthInt);
-            data.put("year_ofBirth", yearInt);
-            data.put("name", name.getText().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JsonObject data = new JsonObject();
+        data.addProperty("email", email.getText().toString());
+        data.addProperty("password", password.getText().toString());
+        data.addProperty("day_ofBirth", dayInt);
+        data.addProperty("month_ofBirth", monthInt);
+        data.addProperty("year_ofBirth", yearInt);
+        data.addProperty("name", name.getText().toString());
         communication.LoginRequest(data, new RestAPI_Entity.RestApiListener(){
 
             @Override

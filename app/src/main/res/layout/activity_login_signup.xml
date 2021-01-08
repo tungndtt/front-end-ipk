@@ -6,21 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".Activity_Login_Signup">
 
-    <ImageView
-        android:id="@+id/groupLogo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageView>
-
     <FrameLayout
         android:id="@+id/fragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groupLogo"></FrameLayout>
+        app:layout_constraintTop_toBottomOf="parent"></FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
