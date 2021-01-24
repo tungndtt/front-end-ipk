@@ -68,40 +68,29 @@ public class PostUploadFragment extends DialogFragment {
         String[] colors = {"Gallery", "Camera"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Picking image from");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(which == 0)
-                    askForPermission(REQUEST_IMAGE);
-                else
-                    askForPermission(REQUEST_CAMERA);
-            }
+        builder.setItems(colors, (dialog, which) -> {
+            if(which == 0)
+                askForPermission(REQUEST_IMAGE);
+            else
+                askForPermission(REQUEST_CAMERA);
         });
 
         this.status = getView().findViewById(R.id.new_post_status);
         this.image = getView().findViewById(R.id.new_post_image);
 
-        this.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                builder.show();
-            }
-        });
+        this.image.setOnClickListener(v -> builder.show());
+
         Button postBtn = getView().findViewById(R.id.new_post_submit);
-        postBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               if(chosenImage != null){
-                   Post mPost = new Post("", status.getText().toString(),
-                           DataRepositoryController.getInstance().getUser().getUserID(),
-                           DataRepositoryController.getInstance().getUser().getUserName(),
-                           chosenImage );
-                   mListner.onNewPost(mPost);
-                   getDialog().dismiss();
-               } else {
-                   Toast.makeText(getContext(), "No image chosen", Toast.LENGTH_LONG).show();
-               }
-            }
+        postBtn.setOnClickListener(v -> {
+           if(chosenImage != null){
+               Post mPost = new Post("", status.getText().toString(),
+                       DataRepositoryController.getInstance().getUser().getValue().getUserID(),
+                       chosenImage );
+               mListner.onNewPost(mPost);
+               getDialog().dismiss();
+           } else {
+               Toast.makeText(getContext(), "No image chosen", Toast.LENGTH_LONG).show();
+           }
         });
 
         status.setKeyBoardInputCallbackListener((inputContentInfo, flags, opts) -> {

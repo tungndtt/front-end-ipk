@@ -54,7 +54,7 @@ public class EmoticonHandler implements TextWatcher {
 
     public Pair<String, SpannableStringBuilder> parseMessage() {
         Editable message = mEditText.getEditableText();
-        Log.e("ViewModelCHatroom", message.toString());
+        Log.e("EmoHandler", message.toString());
         for (UnderlineSpan span : message.getSpans(0, message.length(), UnderlineSpan.class))
             message.removeSpan(span);
         SpannableStringBuilder builder = new SpannableStringBuilder(message);

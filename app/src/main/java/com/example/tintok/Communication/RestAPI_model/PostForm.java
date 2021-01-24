@@ -24,9 +24,9 @@ public class PostForm {
     private String author_id;
 
     @SerializedName("comments")
-    private ArrayList<Comment> comments;
+    private ArrayList<CommentForm> comments;
 
-    public ArrayList<Comment> getComments() {
+    public ArrayList<CommentForm> getComments() {
         return comments;
     }
 

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI;
 import com.example.tintok.Communication.RestAPI_model.PostForm;
@@ -24,10 +26,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DataRepository_CurrentUser {
-    UserProfile currentUser;
+    MutableLiveData<UserProfile> currentUser;
     DataRepositoryController controller;
     public DataRepository_CurrentUser(DataRepositoryController controller){
         this.controller = controller;
+        currentUser = new MutableLiveData<>();
     }
 
     public void initData() {
@@ -37,17 +40,19 @@ public class DataRepository_CurrentUser {
             public void onResponse(Call<UserForm> call, Response<UserForm> response) {
                 if(response.isSuccessful()){
                     UserForm form = response.body();
-                    currentUser = new UserProfile();
-                    currentUser.setUserName(form.getUsername());
-                    currentUser.setUserID(form.getId());
-                    currentUser.setEmail(form.getEmail());
+                    UserProfile currUser = new UserProfile();
+                    currUser.setUserName(form.getUsername());
+                    currUser.setUserID(form.getId());
+                    currUser.setEmail(form.getEmail());
+                    currUser.setProfilePic(new MediaEntity(form.getImageUrl()));
                     Log.e("aaaaaaaaaaaa","number = " + form.getPosts().size());
-                    ArrayList<Post> photos = currentUser.getMyPosts().getValue();
+                    ArrayList<Post> photos = currUser.getMyPosts().getValue();
                     for(PostForm post : form.getPosts()){
-                        Post tmp = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), post.getAuthor_name(), new MediaEntity(post.getImageUrl()));
+                        Post tmp = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), new MediaEntity(post.getImageUrl()));
                         photos.add(tmp);
                     }
-                    currentUser.myPosts.postValue(photos);
+                    currUser.myPosts.postValue(photos);
+                    currentUser.postValue( currUser);
                 } else {
                     Log.e("Info", "Response fails");
                 }
@@ -70,9 +75,10 @@ public class DataRepository_CurrentUser {
         if(api != null){
             MultipartBody.Part part = FileUtil.prepareImageFileBody(mContext, "upload", newPost.getImage());
             RequestBody user_id = RequestBody.create(MultipartBody.FORM, newPost.getAuthor_id());
-            RequestBody username = RequestBody.create(MultipartBody.FORM, newPost.getAuthor_name());
             RequestBody status = RequestBody.create(MultipartBody.FORM, newPost.getStatus());
-            api.uploadFile(part, user_id, username, status).enqueue(new Callback<PostForm>() {
+            String[] split = currentUser.getValue().getProfilePic().url.split("/");
+            RequestBody profile_path = RequestBody.create(MultipartBody.FORM, split[split.length-1]);
+            api.uploadFile(part, user_id, profile_path, status).enqueue(new Callback<PostForm>() {
                 @Override
                 public void onResponse(Call<PostForm> call, Response<PostForm> response) {
                     if(response.isSuccessful()){
@@ -84,9 +90,9 @@ public class DataRepository_CurrentUser {
                         Log.e("Id of post ", form.getId());
 
                         // do something with newPost ...
-                        ArrayList<Post> mPosts = currentUser.myPosts.getValue();
+                        ArrayList<Post> mPosts = currentUser.getValue().myPosts.getValue();
                         mPosts.add(0,newPost);
-                        currentUser.myPosts.postValue(mPosts);
+                        currentUser.getValue().myPosts.postValue(mPosts);
 
                     } else {
                         // Toast.makeText(getApplication(), "Fail to get response", Toast.LENGTH_LONG).show();

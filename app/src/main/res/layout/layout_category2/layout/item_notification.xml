@@ -62,20 +62,15 @@
         </TextView>
     </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/contentPic"
+        android:layout_marginVertical="10dp"
         android:layout_width="100dp"
         android:layout_height="match_parent"
-        app:cardElevation="10dp"
-        style="@style/CustomCardViewStyle"
-        android:layout_marginVertical="10dp">
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        app:shapeAppearance="@style/One_side_Rounded"/>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/contentPic"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY">
-
-        </androidx.appcompat.widget.AppCompatImageView>
-    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

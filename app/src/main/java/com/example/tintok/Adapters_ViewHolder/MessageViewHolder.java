@@ -21,18 +21,21 @@ import androidx.cardview.widget.CardView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.tintok.DataLayer.DataRepositoryController;
+import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.MessageEntity;
+import com.example.tintok.Model.UserSimple;
 import com.example.tintok.R;
 import com.example.tintok.R.color;
 
-public class MessageViewHolder extends BaseViewHolder<MessageEntity> {
+public class MessageViewHolder extends BaseViewHolder<MessageEntity> implements DataRepository_UserSimple.OnUserProfileChangeListener {
 
     CardView view;
     LinearLayout messageLayout;
     LinearLayoutCompat leftSide, rightSide;
     ImageView leftProfilePic, rightProfilePic, leftPic, rightPic;
     TextView leftContent, leftDate, rightContent, rightDate;
+    String userID;
     public MessageViewHolder(@NonNull View itemView, BaseAdapter mAdapter) {
         super(itemView, mAdapter);
         messageLayout = itemView.findViewById(R.id.messageLayout);
@@ -54,9 +57,9 @@ public class MessageViewHolder extends BaseViewHolder<MessageEntity> {
 
     @Override
     public void bindData(MessageEntity itemData) {
-        playAppearAnimation(getAdapterPosition());
+        this.userID = itemData.getAuthorID();
 
-        if(!itemData.getAuthorID().equals(DataRepositoryController.getInstance().getUser().getUserID())){
+        if(!itemData.getAuthorID().equals(DataRepositoryController.getInstance().getUser().getValue().getUserID())){
             view.setBackgroundColor(Color.WHITE);
 
             leftSide.setVisibility(View.VISIBLE);
@@ -108,25 +111,24 @@ public class MessageViewHolder extends BaseViewHolder<MessageEntity> {
             }
             rightDate.setText(itemData.getDatePosted().toString());
         }
+        UserSimple user = DataRepositoryController.getInstance().getUserSimpleProfile(itemData.getAuthorID());
+        if(user != null) {
+            this.onProfileChange(user);
+        }
     }
 
-    private void playAppearAnimation(int i){
-        if(i <= mAdapter.lastIndexAnimated)
-            return;
-        mAdapter.lastIndexAnimated = i;
-        itemView.setAlpha(0);
-        int duration = 500;
-        int startDelay = (i%2 +1)*200;
-        ObjectAnimator animatorAlpha = ObjectAnimator.ofFloat(this.itemView, "alpha" ,0f, 0.5f, 1f).setDuration(duration);
-        ObjectAnimator animatorScaleX = ObjectAnimator.ofFloat(this.itemView, "scaleX",0f, 0.5f, 1f).setDuration(duration);
-        ObjectAnimator animatorScaleY = ObjectAnimator.ofFloat(this.itemView, "scaleY",0f, 0.5f, 1f).setDuration(duration);
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setStartDelay(startDelay);
-        animatorSet.playTogether(animatorAlpha, animatorScaleX, animatorScaleY);
-        animatorSet.start();
-
-
+    @Override
+    public void onProfileChange(UserSimple user) {
+        if(this.userID.compareTo(user.getUserID()) == 0){
+            if(!this.userID.equals(DataRepositoryController.getInstance().getUser().getValue().getUserID())){
+                Glide.with(mAdapter.getContext()).load(user.getProfilePic().url)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(this.leftProfilePic);
+            }
+            else{
+                Glide.with(mAdapter.getContext()).load(user.getProfilePic().url)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(this.rightProfilePic);
+            }
+        }
     }
 
 }

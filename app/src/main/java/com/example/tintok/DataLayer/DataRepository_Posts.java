@@ -58,7 +58,7 @@ public class DataRepository_Posts {
                     ArrayList<PostForm> body = response.body();
                     ArrayList<Post> posts = newfeedPosts.getValue();
                     for(PostForm postForm: body){
-                        Post e = new Post(postForm.getId(), postForm.getStatus(),postForm.getAuthor_id(), postForm.getAuthor_name(), new MediaEntity(postForm.getImageUrl()));
+                        Post e = new Post(postForm.getId(), postForm.getStatus(),postForm.getAuthor_id(), new MediaEntity(postForm.getImageUrl()));
                         posts.add(e);
                     }
                     newfeedPosts.postValue(posts);

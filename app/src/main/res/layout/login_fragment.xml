@@ -103,7 +103,7 @@
         app:layout_constraintTop_toBottomOf="@id/progressBar"
         android:textColor="@color/black"
         android:textSize="12dp"
-        android:text="@string/forget_account"
+        android:text="forget password"
         android:layout_marginTop="60dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

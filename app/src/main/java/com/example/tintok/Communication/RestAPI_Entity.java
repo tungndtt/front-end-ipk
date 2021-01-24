@@ -10,6 +10,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 public class RestAPI_Entity {
+    /*
     public interface LoginService{
         @POST("/login")
         Call<StatusResponseEntity> login(@Body JsonObject data);
@@ -50,4 +51,6 @@ public class RestAPI_Entity {
     public abstract class AbstractResponseEntity{
 
     }
+
+     */
 }

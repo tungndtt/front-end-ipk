@@ -1,6 +1,7 @@
 package com.example.tintok;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -12,13 +13,14 @@ import com.example.tintok.Communication.Communication;
 
 public class Activity_Login_Signup extends AppCompatActivity {
     public final String ID = "Login" ;
-    private WebView webView;
+    private Login_SignUp_ViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_signup);
         Communication.getInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, Login_Fragment.newInstance()).commit();
+        this.viewModel = new ViewModelProvider(this).get(Login_SignUp_ViewModel.class);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, Login_Fragment.newInstance(viewModel)).commit();
 
     }
 

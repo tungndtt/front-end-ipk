@@ -15,8 +15,9 @@ public class CommunicationEvent {
     public static final String EVENT_NEW_NOTI = "new_notification";
     public static final String EVENT_NEW_POST = "new_post";
 
-    public static final String LEAVE_POST = "LEAVE_POST";
     public static final String SEND_COMMENT = "SEND_COMMENT";
     public static final String NEW_COMMENT = "NEW_COMMENT";
+    public static final String JOIN_POST = "JOIN_POST";
+    public static final String LEAVE_POST = "LEAVE_POST";
 
 }

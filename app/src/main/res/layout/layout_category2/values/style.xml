@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="CustomCardViewStyle" parent="@style/Widget.MaterialComponents.CardView">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
-    </style>
 
 
-    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
+    <style name="One_side_Rounded" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopRight">0dp</item>
-        <item name="cornerSizeTopLeft">30dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeBottomLeft">30dp</item>
+        <item name="cornerSizeTopRight">0%</item>
+        <item name="cornerSizeTopLeft">30%</item>
+        <item name="cornerSizeBottomRight">0%</item>
+        <item name="cornerSizeBottomLeft">30%</item>
     </style>
     !-- Animations for a non-full-screen window or activity. -->
     <style name="MyAnimation.Window" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/animation_in</item>
         <item name="android:windowExitAnimation">@anim/animation_out</item>
+    </style>
+
+    <style name="margin24dp">
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
     </style>
 </resources>

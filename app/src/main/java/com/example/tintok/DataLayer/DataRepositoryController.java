@@ -31,7 +31,7 @@ public class DataRepositoryController {
     DataRepository_Notificaitons dataRepository_notificaitons;
     DataRepository_Posts dataRepository_posts;
 
-    HashMap<String, UserSimple> cacheQueriedUserSimple;
+    DataRepository_UserSimple dataRepository_userSimple;
 
     public void submitNewPost(Context mContext, Post newPost) {
         this.dataRepository_currentUser.submitNewPost(mContext, newPost);
@@ -43,7 +43,7 @@ public class DataRepositoryController {
 
 
     private DataRepositoryController(){
-        cacheQueriedUserSimple = new HashMap<>();
+       dataRepository_userSimple = new DataRepository_UserSimple();
 
         dataRepositiory_chatrooms = new DataRepositiory_Chatrooms(this);
         dataRepository_currentUser = new DataRepository_CurrentUser(this);
@@ -101,7 +101,7 @@ public class DataRepositoryController {
 
 
 //region CurrentUser
-    public UserProfile getUser() {
+    public MutableLiveData<UserProfile> getUser() {
         return  dataRepository_currentUser.currentUser;
     }
 //endregion
@@ -122,24 +122,22 @@ public class DataRepositoryController {
 //endregion
 
 
-    public void Cache(UserSimple newUser){
-        this.cacheQueriedUserSimple.put(newUser.getUserID(), newUser);
-    }
-    public UserSimple findUserSimpleinCahe(String id){
-        return this.cacheQueriedUserSimple.get(id);
-    }
 
+//region UserSimpleCache
     public UserSimple getUserSimpleProfile(String id){
-        UserSimple result = this.findUserSimpleinCahe(id);
-        if(result == null){
-            //fetch from server and add to cache
-
-        }
+        UserSimple result = dataRepository_userSimple.findUserSimpleinCahe(id);
         return result;
     }
 
+    public void AddUserProfileChangeListener(DataRepository_UserSimple.OnUserProfileChangeListener newListener){
+        dataRepository_userSimple.addListener(newListener);
+    }
 
+    public void RemoveUserProfileChangeListener(DataRepository_UserSimple.OnUserProfileChangeListener newListener){
+        dataRepository_userSimple.removeListener(newListener);
+    }
 
+//endregion
 
     //Network, data update tasks
 

@@ -3,6 +3,7 @@ package com.example.tintok;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,10 +21,11 @@ import com.example.tintok.Adapters_ViewHolder.ChatroomAdapter;
 import com.example.tintok.Adapters_ViewHolder.NotificationsAdapter;
 import com.example.tintok.CustomView.NoSpaceRecyclerViewDecoration;
 import com.example.tintok.Model.Notification;
+import com.example.tintok.Model.Post;
 
 import java.util.ArrayList;
 
-public class MainPages_Notification_Fragment extends Fragment {
+public class MainPages_Notification_Fragment extends Fragment implements NotificationsAdapter.onNotificationClickListener {
 
     private MainPages_Notification_ViewModel mViewModel;
 
@@ -47,18 +49,30 @@ public class MainPages_Notification_Fragment extends Fragment {
         // TODO: Use the ViewModel
         init();
         mViewModel.getNotifications().observe(this.getViewLifecycleOwner(), notifications -> {
-
+            adapter.setItems(notifications);
         });
     }
 
     void init(){
         notifications = getView().findViewById(R.id.notificationview);
-        this.adapter = new NotificationsAdapter(this.getContext(), mViewModel.getNotifications().getValue());
+        this.adapter = new NotificationsAdapter(this.getContext(), new ArrayList<>());
         notifications.setAdapter(adapter);
+        adapter.setNotificationClickListener(this);
         LinearLayoutManager manager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView.ItemDecoration decoration= new NoSpaceRecyclerViewDecoration();
         notifications.setLayoutManager(manager);
         notifications.addItemDecoration(decoration);
     }
 
+    @Override
+    public void onNotificationClick(int position) {
+        Intent intent = new Intent(this.getContext(), Activity_Comment.class);
+        Notification notification =  adapter.getItems().get(position);
+        intent.putExtra("post_id", notification.getPostID());
+        intent.putExtra("status", notification.getPost_status());
+        intent.putExtra("author_id", notification.getPost_author_id());
+        intent.putExtra("imgUrl", notification.getUrl());
+        startActivity(intent);
+
+    }
 }

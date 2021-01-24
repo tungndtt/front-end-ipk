@@ -1,6 +1,7 @@
 package com.example.tintok;
 
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Debug;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +24,16 @@ import com.example.tintok.Adapters_ViewHolder.PostAdapter;
 import com.example.tintok.CustomView.PostUploadFragment;
 import com.example.tintok.Model.Post;
 
+import java.util.ArrayList;
+
 
 public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.onPostListener   {
 
-    private MainPages_Posts_ViewModel mViewModel;
+    private MainPages_Posts_ViewModel mViewModel = null;
 
-
+    public void setViewModel(MainPages_Posts_ViewModel mViewModel){
+        this.mViewModel = mViewModel;
+    }
 
 
     @Override
@@ -39,13 +45,17 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MainPages_Posts_ViewModel.class);
+        if(mViewModel == null)
+            mViewModel = new ViewModelProvider(this).get(MainPages_Posts_ViewModel.class);
         // TODO: Use the ViewMode
-        this.postAdapter = new PostAdapter(getContext(), mViewModel.getPosts().getValue());
+        this.postAdapter = new PostAdapter(getContext(), new ArrayList<>());
         this.postAdapter.setListener(this);
         this.recyclerView = getView().findViewById(R.id.post_list);
         recyclerView.setAdapter(postAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        mViewModel.getPosts().observe(this.getViewLifecycleOwner(), posts -> {
+            postAdapter.setItems(posts);
+        });
 
         Log.i("INFO", "OnActivityCreated fragment for post fragment ...");
     }
@@ -72,17 +82,20 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
         return fragment;
     }
 
-    @Override
     public void onClickAvatar(View v, int position) {
-        Intent intent = new Intent(getContext(), Activity_ViewProfile.class);
+        Intent intent = new Intent(this.getContext(), Activity_ViewProfile.class);
         intent.putExtra("author_id", postAdapter.getItems().get(position).getAuthor_id());
         v.getContext().startActivity(intent);
     }
 
     @Override
     public void onClickComment(View v, int position) {
-        Intent intent = new Intent(getContext(), Activity_Comment.class);
-        intent.putExtra("post_id", postAdapter.getItems().get(position).getId());
+        Intent intent = new Intent(this.getContext(), Activity_Comment.class);
+        Post post =  postAdapter.getItems().get(position);
+        intent.putExtra("post_id", post.getId());
+        intent.putExtra("status", post.getStatus());
+        intent.putExtra("author_id", post.getAuthor_id());
+        intent.putExtra("imgUrl", post.getImage().url);
         v.getContext().startActivity(intent);
     }
 }

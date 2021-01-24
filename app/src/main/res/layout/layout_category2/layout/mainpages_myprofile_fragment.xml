@@ -14,6 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/profile_background">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/openMenuBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="15dp"
+                android:layout_alignParentEnd="true"
+                android:scaleType="fitXY"
+                ></com.google.android.material.imageview.ShapeableImageView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/post_profile_wrap"
                 android:layout_width="100dp"
@@ -220,13 +228,13 @@
             android:layout_height="10dp"
             android:background="@android:color/darker_gray"></View>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/my_posts"
             >
 
-        </androidx.recyclerview.widget.RecyclerView>
+        </FrameLayout>
 
 
     </LinearLayout>

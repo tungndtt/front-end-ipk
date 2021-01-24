@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.R;
 
@@ -29,5 +30,17 @@ public class ChatroomAdapter extends BaseAdapter<ChatRoom, ChatroomViewHolder> {
 
     public interface onChatRoomClickListener{
         public void OnClick(int pos);
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull  ChatroomViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        DataRepositoryController.getInstance().AddUserProfileChangeListener(holder);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull  ChatroomViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        DataRepositoryController.getInstance().RemoveUserProfileChangeListener(holder);
     }
 }

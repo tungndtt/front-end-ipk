@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.tintok.Adapters_ViewHolder.BaseAdapter;
 import com.example.tintok.Adapters_ViewHolder.EmojiAdapter;
 import com.example.tintok.Adapters_ViewHolder.EmojiViewHolder;
@@ -17,9 +19,12 @@ import com.example.tintok.Adapters_ViewHolder.MessageViewHolder;
 import com.example.tintok.Adapters_ViewHolder.MessagesAdapter;
 import com.example.tintok.CustomView.EditTextSupportIME;
 
+import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.EmojiModel;
 import com.example.tintok.Model.MessageEntity;
+import com.example.tintok.Model.UserSimple;
 import com.example.tintok.Utils.AppNotificationChannelManager;
+import com.example.tintok.Utils.CustomItemAnimator;
 import com.example.tintok.Utils.EmoticonHandler;
 
 
@@ -38,11 +43,12 @@ import android.provider.MediaStore;
 import android.view.View;
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 
-public class Activity_ChatRoom extends AppCompatActivity {
+public class Activity_ChatRoom extends AppCompatActivity implements DataRepository_UserSimple.OnUserProfileChangeListener {
     //const
     private String roomID="";
     Activity_Chatroom_ViewModel mViewModel;
@@ -54,8 +60,8 @@ public class Activity_ChatRoom extends AppCompatActivity {
     RecyclerView emoji;
     RecyclerView messages;
     EditTextSupportIME nextMsg;
-    ImageButton emojiButton, galleryImgButton, profileImg, sendBtn, cameraBtn;
-    String newRawMsg;
+    ImageButton emojiButton, galleryImgButton, sendBtn, cameraBtn;
+    ImageView profileImg;
     EmoticonHandler mEmoHandler;
     //Data
     ArrayList<EmojiModel> emojis;
@@ -143,9 +149,9 @@ public class Activity_ChatRoom extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         layoutManager.setStackFromEnd(true);
         messages.setLayoutManager(layoutManager);
-        ArrayList<MessageEntity> msgs = mViewModel.getMessEntity(this.roomID).getValue();
-        msgAdapter = new MessagesAdapter(this, msgs);
+        msgAdapter = new MessagesAdapter(this, new ArrayList<>());
         messages.setAdapter(msgAdapter);
+        messages.setItemAnimator(new CustomItemAnimator());
         messages.addItemDecoration(new DividerItemDecoration( this, LinearLayoutManager.VERTICAL ));
     }
 
@@ -274,5 +280,25 @@ public class Activity_ChatRoom extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onProfileChange(UserSimple user) {
+        if(mViewModel.getOtherUser().compareTo(user.getUserID())==0)
+            Glide.with(this).load(user.getProfilePic().url)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profileImg);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mViewModel.registerUserSimpleListener(this);
+        UserSimple user = mViewModel.getUserbyID(mViewModel.getOtherUser());
+        Glide.with(this).load(user.getProfilePic().url)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profileImg);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mViewModel.removeUserSimpleListener(this);
+    }
 }

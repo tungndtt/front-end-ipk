@@ -11,24 +11,24 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.material.snackbar.Snackbar;
 
 public class ForgetPasswordFragment extends Fragment {
     private EditText email,password;
-    private ForgetPasswordViewModel viewModel;
+    private Login_SignUp_ViewModel viewModel;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.viewModel = new ViewModelProvider(this).get(ForgetPasswordViewModel.class);
+    }
+
+    public ForgetPasswordFragment(Login_SignUp_ViewModel viewModel){
+        this.viewModel = viewModel;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static ForgetPasswordFragment newInstance() {
-        ForgetPasswordFragment fragment = new ForgetPasswordFragment();
+    public static ForgetPasswordFragment newInstance(Login_SignUp_ViewModel viewModel) {
+        ForgetPasswordFragment fragment = new ForgetPasswordFragment(viewModel);
         return fragment;
     }
 

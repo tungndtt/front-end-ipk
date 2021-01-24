@@ -5,7 +5,8 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
 
-import androidx.annotation.NonNull;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
@@ -14,27 +15,66 @@ public class Notification {
         NEW_FOLLOWER, NEW_POSTS_FROM_FOLLOWINGS, LIKE_POST, COMMENT_POST
     }
     NotificationType type;
-    UserSimple author;
-    String postTriggeredID;
-    MediaEntity postPic;
+
+
     Date date;
 
-    public Notification(NotificationType type, UserSimple author,
-            String postTriggeredID, Date date, MediaEntity postPic){
+    public Notification(NotificationType type, Date date, String author_username, String author_profile_pic, String url, String postID,  String post_author_id, String post_status) {
         this.type = type;
-        this.author = author;
-        this.postTriggeredID = postTriggeredID;
         this.date = date;
-        this.postPic = postPic;
+        this.author_username = author_username;
+        this.author_profile_pic = author_profile_pic;
+        this.url = url;
+        this.postID = postID;
+        this.post_author_id = post_author_id;
+        this.post_status = post_status;
     }
 
-    public NotificationType getType(){
-        return type;
+    String author_username;
+    String author_profile_pic;
+    String url;
+
+    public Date getDate() {
+        return date;
     }
+
+    public String getAuthor_username() {
+        return author_username;
+    }
+
+    public String getAuthor_profile_pic() {
+        return author_profile_pic;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getPostID() {
+        return postID;
+    }
+
+
+    public String getPost_author_id() {
+        return post_author_id;
+    }
+
+    public String getPost_status() {
+        return post_status;
+    }
+
+    String postID;
+    String post_author_id;
+    String post_status;
+
+
+
+
 
     public SpannableStringBuilder toTextViewString() {
-        SpannableStringBuilder str = new SpannableStringBuilder(author.getUserName());
+        SpannableStringBuilder str = new SpannableStringBuilder(author_username);
         StyleSpan bold_italicText = new StyleSpan(Typeface.BOLD_ITALIC);
+        StyleSpan italicText = new StyleSpan(Typeface.ITALIC);
         str.setSpan(bold_italicText, 0, str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         if(type == NotificationType.NEW_FOLLOWER){
             str.append(" has just followed you");
@@ -48,17 +88,10 @@ public class Notification {
         else if(type == NotificationType.COMMENT_POST){
             str.append(" has just put a new comment on your post");
         }
+        str.setSpan(bold_italicText, author_username.length(), str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         return str;
     }
-    public String getDate(){
-        return date.toString();
-    }
 
-    public String getPostTriggered(){
-        return postTriggeredID;
-    }
 
-    public MediaEntity getAuthorPic(){
-        return author.getProfilePic();
-    }
+
 }

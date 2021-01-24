@@ -3,6 +3,7 @@ package com.example.tintok;
 import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Activity_ViewProfile_ViewModel extends AndroidViewModel {
+public class Activity_ViewProfile_ViewModel extends MainPages_Posts_ViewModel {
 
     private RestAPI api;
 
@@ -47,7 +48,20 @@ public class Activity_ViewProfile_ViewModel extends AndroidViewModel {
             @Override
             public void onResponse(Call<UserForm> call, Response<UserForm> response) {
                 if(response.isSuccessful()){
-                    new GetUserProfileTask().execute(response.body());
+                    UserForm userForm = response.body();
+                    List<PostForm> posts = userForm.getPosts();
+                    String name = userForm.getUsername();
+                    ArrayList<Post> new_posts = new ArrayList<>();
+                    for(PostForm post : posts){
+                        MediaEntity media = new MediaEntity(post.getImageUrl());
+                        new_posts.add(new Post(post.getId(), post.getStatus(), post.getAuthor_id(), media));
+                    }
+                    UserProfile result = new UserProfile();
+                    result.setUserName(name);
+                    result.setProfilePic(new MediaEntity(userForm.getImageUrl()));
+                    Log.e("Activity_VIewProfile_ViewModel", "img: "+userForm.getImageUrl());
+                    result.myPosts.postValue(new_posts);
+                    profile.postValue(result);
                 }
                 else{
                     Toast.makeText(Activity_ViewProfile_ViewModel.this.getApplication(), "Cannot get the user", Toast.LENGTH_LONG).show();
@@ -65,28 +79,10 @@ public class Activity_ViewProfile_ViewModel extends AndroidViewModel {
         });
     }
 
-
-    private class GetUserProfileTask extends AsyncTask<UserForm, Void, UserProfile> {
-
-        @Override
-        protected UserProfile doInBackground(UserForm... dataForms) {
-            List<PostForm> posts = dataForms[0].getPosts();
-            String name = dataForms[0].getUsername();
-            ArrayList<Post> new_posts = new ArrayList<>();
-            for(PostForm post : posts){
-                MediaEntity media = new MediaEntity(post.getImageUrl());
-                new_posts.add(new Post(post.getId(), post.getStatus(), post.getAuthor_id(), name, media));
-            }
-            UserProfile result = new UserProfile();
-            result.setUserName(name);
-            result.myPosts.postValue(new_posts);
-            return result;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected void onPostExecute(UserProfile user) {
-            profile.postValue(user);
-        }
+    @Override
+    public MutableLiveData<ArrayList<Post>> getPosts() {
+        if(this.profile == null)
+            return null;
+        return this.profile.getValue().getMyPosts();
     }
 }

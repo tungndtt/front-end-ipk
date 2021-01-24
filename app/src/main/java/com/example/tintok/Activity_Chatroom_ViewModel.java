@@ -21,9 +21,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.tintok.DataLayer.DataRepositoryController;
+import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.MessageEntity;
+import com.example.tintok.Model.UserSimple;
 import com.example.tintok.Utils.EmoticonHandler;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class Activity_Chatroom_ViewModel extends AndroidViewModel {
 
     private EmoticonHandler mEmoiconHandler = null;
     private MutableLiveData<ArrayList<MessageEntity>> messageEntities = null;
+    private ArrayList<String> participants;
 
     public Activity_Chatroom_ViewModel(@NonNull Application application) {
         super(application);
@@ -46,32 +49,61 @@ public class Activity_Chatroom_ViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<ArrayList<MessageEntity>> getMessEntity(String roomID){
-        if(messageEntities == null)
-            messageEntities = this.getChatRoomByID(roomID).getMessageEntities();
+        if(messageEntities == null){
+            ChatRoom r = this.getChatRoomByID(roomID);
+            messageEntities = r.getMessageEntities();
+            participants = r.getMemberIDs();
+        }
+
         return messageEntities;
     }
 
-    public ChatRoom getChatRoomByID(String id){
+    public String getOtherUser(){
+        if(participants == null)
+            return null;
+        for(String s: participants){
+            if(s.compareTo(DataRepositoryController.getInstance().getUser().getValue().getUserID())!= 0)
+                return s;
+        }
+        return null;
+    }
+
+    public UserSimple getUserbyID(String id){
+        return DataRepositoryController.getInstance().getUserSimpleProfile(id);
+    }
+
+    public void registerUserSimpleListener(DataRepository_UserSimple.OnUserProfileChangeListener mListener){
+        DataRepositoryController.getInstance().AddUserProfileChangeListener(mListener);
+
+    }
+
+    public void removeUserSimpleListener(DataRepository_UserSimple.OnUserProfileChangeListener mListener){
+        DataRepositoryController.getInstance().RemoveUserProfileChangeListener(mListener);
+
+    }
+
+
+    protected ChatRoom getChatRoomByID(String id){
         return DataRepositoryController.getInstance().getChatRoomByID(id);
     }
 
     void handleSendImg(String roomID, ArrayList<Uri> imgs) {
         Date now = Calendar.getInstance().getTime();
         for (Uri img : imgs) {
-            DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID,new MessageEntity(DataRepositoryController.getInstance().getUser().getUserID(), new MediaEntity(img, null), now), "" );
+            DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID,
+                    new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), new MediaEntity(img, null), now), "" );
         }
-
     }
 
     void handleSendImgFromCamera(String roomID, Bitmap m) {
-        DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID, new MessageEntity(DataRepositoryController.getInstance().getUser().getUserID(), new MediaEntity(m), Calendar.getInstance().getTime()), "" );
+        DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID,
+                new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), new MediaEntity(m), Calendar.getInstance().getTime()), "" );
     }
 
     void handleSendMessage(String roomID) {
         Pair<String, SpannableStringBuilder> newMsg = mEmoiconHandler.parseMessage();
 
-        DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID,new MessageEntity(DataRepositoryController.getInstance().getUser().getUserID(), newMsg.second, Calendar.getInstance().getTime()), newMsg.first );
+        DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID,
+                new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), newMsg.second, Calendar.getInstance().getTime()), newMsg.first );
     }
-
-
 }

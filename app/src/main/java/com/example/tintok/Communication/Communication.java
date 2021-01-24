@@ -8,6 +8,8 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -44,7 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Communication {
     private static Communication instance;
     //ublic static arrayList<String> registeredEvent
-    public static final String myLink ="https://192.168.2.5:3000";
+    public static final String myLink ="https://192.168.1.116:3000";
 
     public OkHttpClient getHttpsClient() {
         return httpsClient;
@@ -65,8 +67,6 @@ public class Communication {
     }
 
     private Socket _socket;
-    private RestAPI_Entity.LoginService loginService;
-    private RestAPI_Entity.SignUpService signUpService;
 
     private Communication() {
         try{
@@ -114,13 +114,14 @@ public class Communication {
 
 
             httpsClient = clientBuilder.build();
+            Gson gson = new GsonBuilder()
+                    .setDateFormat("yyyy-mm-dd'T'hh:mm:ss'Z'")
+                    .create();
             retrofit = new Retrofit.Builder()
                     .baseUrl(myLink)
                     .client(httpsClient)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
-            loginService = retrofit.create(RestAPI_Entity.LoginService.class);
-            signUpService = retrofit.create(RestAPI_Entity.SignUpService.class);
             api = retrofit.create(RestAPI.class);
 
         } catch (NoSuchAlgorithmException e) {
@@ -232,26 +233,6 @@ public class Communication {
                         JSONObject data = (JSONObject)(args[0]);
                         Log.d("Got Data", data.toString());
                     }
-                }).on("public_key", new Emitter.Listener() {
-                    @Override
-                    public void call(Object... args) {
-                        SecureConnection myIns = SecureConnection.getInstance();
-
-                        myIns.setServerpubKey(args[0].toString());
-
-                        String data = myIns.EncodeDataToSend("DYt Me tutor");
-
-                        _socket.emit("Got Data", data);
-
-
-                    }
-                }).on("TestServerkey", new Emitter.Listener() {
-                    @Override
-                    public void call(Object... args) {
-                        String data = (String)args[0];
-
-
-                    }
                 });
 
 
@@ -270,30 +251,9 @@ public class Communication {
         return PacketFactory.getInstance().mToken;
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void emitEvent(String event, JSONObject data){
-        String packet = PacketFactory.getInstance().createPacket(data);
-        Log.e("Object ", "status: " +this._socket.connected());
-
-        Log.e("Object", _socket.toString());
-        _socket.emit(event, packet);
-        Log.e("Object after ", "status: " + _socket.io().reconnection());
-        _socket.send("hi");
-
-    }
-
-    public  void listentoEvent(String event, CustomEmitterListener listener){
-        _socket.on(event, listener);
-    }
-
-    public void removeEvent(String event){
-        _socket.off(event);
-    }
-
+    /*
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void LoginRequest(JsonObject jo, RestAPI_Entity.RestApiListener mListener){
-        //String data = PacketFactory.getInstance().createPacket(jo);
         Call<RestAPI_Entity.StatusResponseEntity> res= loginService.login(jo);
         res.enqueue(new Callback<RestAPI_Entity.StatusResponseEntity>() {
             @Override
@@ -301,13 +261,10 @@ public class Communication {
                 RestAPI_Entity.StatusResponseEntity res = response.body();
                 mListener.onSuccess(res);
             }
-
             @Override
             public void onFailure(Call<RestAPI_Entity.StatusResponseEntity> call, Throwable t) {
                 mListener.onFailure();
             }
-
-
         });
     }
 
@@ -326,8 +283,7 @@ public class Communication {
             public void onFailure(Call<RestAPI_Entity.StatusResponseEntity> call, Throwable t) {
                 mListener.onFailure();
             }
-
-
         });
     }
+     */
 }

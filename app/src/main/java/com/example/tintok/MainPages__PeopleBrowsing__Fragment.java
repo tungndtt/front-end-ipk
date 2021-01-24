@@ -62,17 +62,27 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment {
         initFragment();
         this.setRetainInstance(true);
         // TODO: Use the ViewModel
-        mViewModel.getMatchingPeople().observe(this.getViewLifecycleOwner(), new Observer<ArrayList<UserSimple>>() {
-            @Override
-            public void onChanged(ArrayList<UserSimple> userSimples) {
-                int currentPos = manager.getTopPosition();
-                adapter.setItems(userSimples);
-                cardStackView.smoothScrollToPosition(currentPos);
-            }
+        mViewModel.getMatchingPeople().observe(this.getViewLifecycleOwner(), userSimples -> {
+            int currentPos = manager.getTopPosition();
+            adapter.setItems(userSimples);
+            cardStackView.smoothScrollToPosition(currentPos);
         });
 
     }
 
+    int currentPos = 0;
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("People_Frag", "at :"+ this.currentPos);
+        manager.setTopPosition(this.currentPos);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        currentPos = manager.getTopPosition();
+    }
 
     void initFragment(){
         cardStackView = getView().findViewById(R.id.card_stack_view);
@@ -83,8 +93,8 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment {
         UserSimple user_2 = new UserSimple();
         user_2.setUserName("2");
         user_2.setDescription("im 2");
-        models.add(user_1);
-        models.add(user_2);
+       // models.add(user_1);
+        //models.add(user_2);
 
         final String TAG ="Test";
         manager = new CardStackLayoutManager(getContext(), new CardStackListener() {
@@ -148,7 +158,7 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment {
         manager.setScaleInterval(0.95f);
         manager.setSwipeThreshold(0.6f);
         manager.setMaxDegree(20.0f);
-        manager.setDirections(Direction.FREEDOM);
+        manager.setDirections(Direction.HORIZONTAL);
         manager.setCanScrollHorizontal(true);
         manager.setSwipeableMethod(SwipeableMethod.Manual);
         manager.setOverlayInterpolator(new LinearInterpolator());

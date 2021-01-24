@@ -5,19 +5,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.tintok.DataLayer.DataRepositoryController;
+import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.MessageEntity;
 import com.example.tintok.Model.UserSimple;
 import com.example.tintok.R;
 
-public class ChatroomViewHolder extends BaseViewHolder<ChatRoom> implements View.OnClickListener {
+public class ChatroomViewHolder extends BaseViewHolder<ChatRoom> implements View.OnClickListener, DataRepository_UserSimple.OnUserProfileChangeListener{
     ImageView profilepic;
     TextView name, date, lastmsg;
     ChatroomAdapter.onChatRoomClickListener mListener;
+    String userID;
     public ChatroomViewHolder(@NonNull View itemView, BaseAdapter mAdapter, ChatroomAdapter.onChatRoomClickListener mListener) {
         super(itemView, mAdapter);
         this.mListener = mListener;
@@ -35,29 +38,41 @@ public class ChatroomViewHolder extends BaseViewHolder<ChatRoom> implements View
     @Override
     public void bindData(ChatRoom itemData) {
         DataRepositoryController data = DataRepositoryController.getInstance();
-        String thisUserID = data.getUser().getUserID();
+        String thisUserID = data.getUser().getValue().getUserID();
         UserSimple another = null;
-/*        for(String id : itemData.getMemberIDs()){
+        for(String id : itemData.getMemberIDs()){
             if(id.compareTo(thisUserID)!= 0){
+                this.userID = id;
                 another = data.getUserSimpleProfile(id);
                 break;
             }
-        }*/
-        if(another!=null){
-            Glide.with(mAdapter.getContext()).load(another.getProfilePic().url).diskCacheStrategy(DiskCacheStrategy.DATA).into(profilepic);
-            name.setText(another.getUserName());
-            String dateModified = itemData.getMessageEntities().getValue().get(itemData.getMessageEntities().getValue().size()-1).getDatePosted().toString();
-            date.setText(dateModified);
-            MessageEntity mess = itemData.getMessageEntities().getValue().get(itemData.getMessageEntities().getValue().size()-1);
-            if(mess.getBuilder() == null)
-                lastmsg.setText("IMG");
-            else
-                lastmsg.setText(mess.getBuilder());
         }
+        if(another!=null){
+           this.onProfileChange(another);
+        }
+
+        MessageEntity mess = itemData.getMessageEntities().getValue().get(itemData.getMessageEntities().getValue().size()-1);
+        this.date.setText(mess.getDatePosted().toString());
+        if(mess.getBuilder() == null)
+            lastmsg.setText("IMG");
+        else
+            lastmsg.setText(mess.getBuilder());
+    }
+
+    void onLiveDataChange(){
+
     }
 
     @Override
     public void onClick(View v) {
         mListener.OnClick(getAdapterPosition());
+    }
+
+    public void onProfileChange(UserSimple user) {
+        if(this.userID.compareTo(user.getUserID()) == 0){
+            Glide.with(mAdapter.getContext()).load(user.getProfilePic().url).diskCacheStrategy(DiskCacheStrategy.DATA).into(profilepic);
+            name.setText(user.getUserName());
+
+        }
     }
 }

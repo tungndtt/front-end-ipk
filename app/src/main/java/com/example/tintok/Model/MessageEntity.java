@@ -2,6 +2,8 @@ package com.example.tintok.Model;
 
 import android.text.SpannableStringBuilder;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 public class MessageEntity {

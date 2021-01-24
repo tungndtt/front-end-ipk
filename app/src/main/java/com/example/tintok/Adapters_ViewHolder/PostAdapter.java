@@ -15,6 +15,9 @@ import androidx.core.view.GestureDetectorCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.tintok.DataLayer.DataRepositoryController;
+import com.example.tintok.DataLayer.DataRepository_UserSimple;
+import com.example.tintok.Model.UserSimple;
 import  com.example.tintok.R;
 import  com.example.tintok.Model.Post;
 import com.google.android.material.button.MaterialButton;
@@ -49,8 +52,20 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
         return this.items.size();
     }
 
+    @Override
+    public void onViewAttachedToWindow(@NonNull PostAdapter.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        DataRepositoryController.getInstance().AddUserProfileChangeListener(holder);
+    }
 
-    public class ViewHolder extends BaseViewHolder<Post> implements View.OnClickListener {
+    @Override
+    public void onViewDetachedFromWindow(@NonNull PostAdapter.ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        DataRepositoryController.getInstance().RemoveUserProfileChangeListener(holder);
+
+    }
+
+    public class ViewHolder extends BaseViewHolder<Post> implements View.OnClickListener, DataRepository_UserSimple.OnUserProfileChangeListener {
         private TextView nComment, nLike, status, author;
         private ImageView iv, notificationIcon, profile;
 
@@ -92,6 +107,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
         }
 
 
+        String id;
         @Override
         public void bindData(Post itemData) {
             /*
@@ -122,7 +138,13 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
 
             this.status.setText(itemData.getStatus());
             Glide.with(mAdapter.getContext()).load(itemData.getImage().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(iv);
-            this.author.setText(itemData.getAuthor_name());
+            this.id = itemData.getAuthor_id();
+            UserSimple user = DataRepositoryController.getInstance().getUserSimpleProfile(this.id) ;
+            if(user != null){
+                Glide.with(mAdapter.getContext()).load(user.getProfilePic().url)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profile);
+                this.author.setText(user.getUserName());
+            }
         }
 
         @Override
@@ -136,12 +158,21 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
                 mListener.onClickComment(v, getAdapterPosition());
             }
         }
+
+        @Override
+        public void onProfileChange(UserSimple user) {
+            if(this.id.compareTo(user.getUserID()) == 0){
+                Glide.with(mAdapter.getContext()).load(user.getProfilePic().url)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profile);
+                this.author.setText(user.getUserName());
+            }
+        }
     }
 
     onPostListener mListener;
 
-    public void setListener(onPostListener lister){
-        this.mListener = lister;
+    public void setListener(onPostListener listener){
+        this.mListener = listener;
     }
     public interface onPostListener{
         public void onClickAvatar(View v, int position);

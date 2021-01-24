@@ -39,11 +39,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TinTok"
-        android:usesCleartextTraffic="true">
-        <activity
-            android:name=".Activity_View_Profile"
-            android:label="@string/title_activity__view__profile"
-            android:theme="@style/Theme.TinTok.NoActionBar"></activity>
+        android:usesCleartextTraffic="true"
+        >
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.

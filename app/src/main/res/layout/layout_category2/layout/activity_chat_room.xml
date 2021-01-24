@@ -9,6 +9,7 @@
     android:background="@drawable/chatroom_background">
 
     <RelativeLayout
+        android:layout_marginTop="10dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/messageView"
@@ -20,21 +21,17 @@
         >
 
         <androidx.cardview.widget.CardView
-            android:layout_marginEnd="10dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_gravity="center"
             app:cardCornerRadius="50dp"
             app:cardElevation="5dp"
             android:layout_centerHorizontal="true">
-
-            <ImageButton
+            <ImageView
                 android:id="@+id/profileImg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="true">
-            </ImageButton>
+                android:scaleType="fitXY">
+            </ImageView>
 
         </androidx.cardview.widget.CardView>
 
@@ -116,7 +113,9 @@
                         android:id="@+id/sendImgbtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"></ImageButton>
+                        android:scaleType="center"
+                        android:src="@drawable/ic_photo"
+                        android:background="@color/transparent"></ImageButton>
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -155,7 +154,9 @@
                         android:id="@+id/openEmojibtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"></ImageButton>
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_smile"
+                        android:background="@color/transparent"></ImageButton>
                 </androidx.cardview.widget.CardView>
 
 
@@ -167,12 +168,15 @@
             app:cardCornerRadius="50dp"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="10dp"
-            app:cardElevation="0dp">
+            app:cardElevation="0dp"
+            android:background="@color/transparent">
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/sendButton"
-                android:scaleType="fitXY"></ImageButton>
+                android:scaleType="center"
+                android:src="@drawable/ic_send"
+                android:background="@color/transparent"></ImageButton>
 
         </androidx.cardview.widget.CardView>
 

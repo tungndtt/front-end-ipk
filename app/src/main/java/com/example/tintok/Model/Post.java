@@ -9,15 +9,13 @@ public class Post {
     private String id;
     private String status;
     private String author_id;
-    private String author_name;
     private MediaEntity image;
     public boolean isSubscription;
 
-    public Post(String id, String status, String author_id, String author_name, MediaEntity image) {
+    public Post(String id, String status, String author_id, MediaEntity image) {
         this.id = id;
         this.status = status;
         this.author_id = author_id;
-        this.author_name = author_name;
         this.image = image;
     }
 
@@ -45,13 +43,6 @@ public class Post {
         this.author_id = author_id;
     }
 
-    public String getAuthor_name() {
-        return author_name;
-    }
-
-    public void setAuthor_name(String author_name) {
-        this.author_name = author_name;
-    }
 
     public MediaEntity getImage() {
         return image;

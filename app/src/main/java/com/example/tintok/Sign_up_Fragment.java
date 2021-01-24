@@ -26,17 +26,21 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Sign_up_Fragment extends Fragment {
+public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel.requestListener {
 
     private SignUpViewModel mViewModel;
     private Button registerButton, backBtn;
     private ProgressBar loadingBar;
     private TextView status;
     private EditText name, email,password, retypepassword, day,month,year;
-    Communication communication;
+    private Login_SignUp_ViewModel viewModel;
 
-    public static Sign_up_Fragment newInstance() {
-        return new Sign_up_Fragment();
+    public static Sign_up_Fragment newInstance(Login_SignUp_ViewModel viewModel) {
+        return new Sign_up_Fragment(viewModel);
+    }
+
+    public Sign_up_Fragment(Login_SignUp_ViewModel viewModel){
+        this.viewModel = viewModel;
     }
 
     @Override
@@ -60,7 +64,6 @@ public class Sign_up_Fragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     void init(){
-        communication = Communication.getInstance();
         registerButton = getView().findViewById(R.id.sign_upButton);
         backBtn = getView().findViewById(R.id.back_to_login_button);
         status = getView().findViewById(R.id.status);
@@ -139,19 +142,19 @@ public class Sign_up_Fragment extends Fragment {
         data.addProperty("month_ofBirth", monthInt);
         data.addProperty("year_ofBirth", yearInt);
         data.addProperty("name", name.getText().toString());
+        String birthday = dayInt+"/"+monthInt+"/"+yearInt;
+        this.viewModel.signUpRequest(name.getText().toString(), email.getText().toString(), birthday, password.getText().toString(), this);
+        /*
         communication.LoginRequest(data, new RestAPI_Entity.RestApiListener(){
 
             @Override
             public void onSuccess(RestAPI_Entity.AbstractResponseEntity response) {
                 RestAPI_Entity.StatusResponseEntity res = (RestAPI_Entity.StatusResponseEntity)response;
                 if(((RestAPI_Entity.StatusResponseEntity) res).status ){
-                    status.setVisibility(View.VISIBLE);
-                    status.setText("Signing up sucessfull. Please press return to Login");
+
                 }
                 else{
-                    status.setVisibility(View.VISIBLE);
-                    status.setText("Signing up failed: "+ res.reason);
-                    loadingBar.setVisibility(View.INVISIBLE);
+
                 }
             }
 
@@ -161,5 +164,26 @@ public class Sign_up_Fragment extends Fragment {
                 status.setText("Signing up failed");
             }
         });
+         */
+    }
+
+
+    @Override
+    public void requestSuccess() {
+        status.setVisibility(View.VISIBLE);
+        status.setText("Signing up sucessfull. Please press return to Login");
+    }
+
+    @Override
+    public void requestFail(String reason) {
+        status.setVisibility(View.VISIBLE);
+        status.setText("Signing up failed: "+ reason);
+        loadingBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void connectionFail() {
+        status.setVisibility(View.VISIBLE);
+        status.setText("Signing up failed");
     }
 }

@@ -20,7 +20,7 @@ public class MainPages_Chatroom_ViewModel extends ViewModel {
         if(filter.isEmpty())
             return this.getChatrooms().getValue();
         DataRepositoryController data = DataRepositoryController.getInstance();
-        String thisUserID = data.getUser().getUserID();
+        String thisUserID = data.getUser().getValue().getUserID();
         ArrayList<ChatRoom> result = new ArrayList<>();
         ArrayList<ChatRoom> original = this.getChatrooms().getValue();
         for(ChatRoom room:original){

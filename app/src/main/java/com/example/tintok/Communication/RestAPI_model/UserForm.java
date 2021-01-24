@@ -4,41 +4,22 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class UserForm {
-    @SerializedName("username")
-    private String username;
-    @SerializedName("email")
-    private String email;
-    @SerializedName("password")
-    private String password;
+public class UserForm extends UnknownUserForm{
     @SerializedName("id")
     private String id;
-    @SerializedName("profile_path")
+    @SerializedName("profile_pic")
     private String url;
-
-
-    public List<PostForm> getPosts() {
-        return posts;
-    }
-
     @SerializedName("posts")
     private List<PostForm> posts;
 
-
     public UserForm(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
+        super(username, email, password);
     }
-
+    public List<PostForm> getPosts() {
+        return posts;
+    }
     public String getId(){
         return this.id;
-    }
-    public String getUsername(){
-        return this.username;
-    }
-    public String getEmail() {
-        return email;
     }
     public String getImageUrl(){ return url; }
 }

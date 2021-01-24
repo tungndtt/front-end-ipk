@@ -16,4 +16,7 @@
     <dimen name="fragment_horizontal_margin">16dp</dimen>
     <dimen name="fragment_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="textSize_16">16sp</dimen>
+    <dimen name="textSize_12">12sp</dimen>
+    <dimen name="textSize_18">18sp</dimen>
 </resources>

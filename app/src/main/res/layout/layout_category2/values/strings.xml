@@ -29,6 +29,11 @@
     <string name="title_activity__init_data">Activity_InitData</string>
     <string name="title_activity__comment">Activity_Comment</string>
     <string name="title_activity__view__profile">Activity_View_Profile</string>
-
-    <string name="forget_account"><u>Forget your account ?</u></string>
+    <string name="Gender">Gender</string>
+    <string name="options">Options</string>
+    <string name="inspirational_quote">insert inspirational quote here</string>
+    <string name="password_length">Password must be at least ... characters</string>
+    <string name="password_retype_error">Passwords are not the same</string>
+    <string name="password_empty">Please enter your current password</string>
+    <string name="password_wrong">Your password was incorrect</string>
 </resources>

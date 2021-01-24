@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/profile_update_layout"
+    tools:context=".Update_Profile_Fragment">
+
+    <TextView
+        android:id="@+id/account_username_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Username"
+
+        android:textSize="16sp"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toTopOf="@+id/account_username_edittext"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/account_username_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:inputType="textPersonName"
+        android:text=""
+        android:maxLength="20"
+
+        android:layout_marginStart="8dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/account_gender_textview"
+        app:layout_constraintStart_toStartOf="@+id/account_username_textview"
+
+        app:layout_constraintTop_toBottomOf="@+id/account_username_textview" />
+
+    <TextView
+        android:id="@+id/account_gender_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="@string/Gender"
+
+        android:textSize="16sp"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toTopOf="@+id/account_gender_spinner"
+        app:layout_constraintStart_toStartOf="@+id/account_username_textview"
+
+        app:layout_constraintTop_toBottomOf="@+id/account_username_edittext" />
+
+    <Spinner
+        android:id="@+id/account_gender_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/account_location_textview"
+        app:layout_constraintStart_toStartOf="@+id/account_gender_textview"
+        app:layout_constraintTop_toBottomOf="@+id/account_gender_textview" />
+
+    <TextView
+        android:id="@+id/account_location_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+
+        android:textSize="@dimen/textSize_16"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toTopOf="@+id/account_location_edittext"
+        app:layout_constraintStart_toStartOf="@+id/account_gender_textview"
+        app:layout_constraintTop_toBottomOf="@+id/account_gender_spinner" />
+
+    <EditText
+        android:id="@+id/account_location_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:hint="your location"
+        android:inputType="text"
+
+        android:layout_marginStart="8dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/account_description_textview"
+        app:layout_constraintStart_toStartOf="@+id/account_location_textview"
+        app:layout_constraintTop_toBottomOf="@+id/account_location_textview" />
+
+    <TextView
+        android:id="@+id/account_description_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Description"
+        android:textSize="@dimen/textSize_16"
+        android:textStyle="bold"
+
+
+        app:layout_constraintBottom_toTopOf="@+id/account_description_edittext"
+        app:layout_constraintStart_toStartOf="@+id/account_location_textview"
+        app:layout_constraintTop_toBottomOf="@+id/account_location_edittext" />
+
+    <EditText
+        android:id="@+id/account_description_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/inspirational_quote"
+        android:inputType="text"
+
+        android:layout_marginStart="8dp"
+
+        app:layout_constraintBottom_toTopOf="@id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/account_description_textview"
+        app:layout_constraintTop_toBottomOf="@+id/account_description_textview" />
+
+    <ProgressBar
+        android:id="@+id/account_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/account_description_edittext"
+        android:visibility="invisible"
+
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/account_save_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="save"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline5" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/account_delete_Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+
+        android:text="delete profile"
+        android:textSize="10dp"
+
+
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_save_Button" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/account_password_Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+
+        android:text="change password"
+        android:textSize="10dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/account_save_Button" />
+
+    <TextView
+        android:id="@+id/account_wrongInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textColor="@android:color/holo_red_light"
+
+        android:visibility="invisible"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_delete_Button" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

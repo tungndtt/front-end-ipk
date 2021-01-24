@@ -23,19 +23,23 @@ import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI_Entity;
 import com.google.gson.JsonObject;
 
-public class Login_Fragment extends Fragment {
+public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.requestListener {
 
 
-    public static Login_Fragment newInstance() {
-        return new Login_Fragment();
+    public static Login_Fragment newInstance(Login_SignUp_ViewModel viewModel) {
+        return new Login_Fragment(viewModel);
     }
 
-    private Communication communication;
+    public Login_Fragment(Login_SignUp_ViewModel viewModel){
+        this.viewModel = viewModel;
+    }
+
     private Button loginButton, registerButton;
     private ProgressBar loadingBar;
     private TextView status;
     private EditText email,password;
     private TextView forget;
+    private Login_SignUp_ViewModel viewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -43,6 +47,7 @@ public class Login_Fragment extends Fragment {
         return inflater.inflate(R.layout.login_fragment, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onStart() {
         super.onStart();
@@ -51,7 +56,6 @@ public class Login_Fragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     void init(){
-        communication = Communication.getInstance();
         loginButton = getView().findViewById(R.id.sign_inButton);
         registerButton = getView().findViewById(R.id.sign_upButton);
         status = getView().findViewById(R.id.status);
@@ -70,13 +74,13 @@ public class Login_Fragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getParentFragmentManager().beginTransaction().replace(R.id.fragment, Sign_up_Fragment.newInstance()).addToBackStack("Login").commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.fragment, Sign_up_Fragment.newInstance(viewModel)).addToBackStack("Login").commit();
             }
         });
         forget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getParentFragmentManager().beginTransaction().replace(R.id.fragment, ForgetPasswordFragment.newInstance()).addToBackStack("Login").commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.fragment, ForgetPasswordFragment.newInstance(viewModel)).addToBackStack("Login").commit();
             }
         });
     }
@@ -99,38 +103,29 @@ public class Login_Fragment extends Fragment {
         status.setVisibility(View.VISIBLE);
         status.setText("Signing in...");
         loadingBar.setVisibility(View.VISIBLE);
-        JsonObject data = new JsonObject();
-        data.addProperty("email", email.getText().toString());
-        data.addProperty("password", password.getText().toString());
         // Communication.getInstance().emitEvent("login", data);
-        communication.LoginRequest(data, new RestAPI_Entity.RestApiListener(){
-
-            @Override
-            public void onSuccess(RestAPI_Entity.AbstractResponseEntity response) {
-                RestAPI_Entity.StatusResponseEntity res = (RestAPI_Entity.StatusResponseEntity)response;
-                if(((RestAPI_Entity.StatusResponseEntity) res).status ){
-
-                    communication.setToken(((RestAPI_Entity.StatusResponseEntity) res).mToken);
-                    Intent intent = new Intent(getActivity(), Activity_InitData.class);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
-                    getActivity().finish();
-                }
-                else{
-                    status.setVisibility(View.VISIBLE);
-                    status.setText("Signing in failed: "+ res.reason);
-                    loadingBar.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure() {
-                status.setVisibility(View.VISIBLE);
-                status.setText("Signing in failed");
-            }
-        });
+        viewModel.loginRequest(email.getText().toString(), password.getText().toString(), this);
     }
 
 
+    @Override
+    public void requestSuccess() {
+        Intent intent = new Intent(getActivity(), Activity_InitData.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
+        getActivity().finish();
+    }
 
+    @Override
+    public void requestFail(String reason) {
+        status.setVisibility(View.VISIBLE);
+        status.setText("Signing in failed: "+ reason);
+        loadingBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void connectionFail() {
+        status.setVisibility(View.VISIBLE);
+        status.setText("Signing in failed");
+    }
 }

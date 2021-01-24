@@ -81,7 +81,7 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
     }
 
     void initChatRoom(){
-        this.adapter = new ChatroomAdapter(this.getContext(), mViewModel.getChatrooms().getValue(),this);
+        this.adapter = new ChatroomAdapter(this.getContext(), new ArrayList<>(),this);
         chatrooms.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView.ItemDecoration decoration= new NoSpaceRecyclerViewDecoration();

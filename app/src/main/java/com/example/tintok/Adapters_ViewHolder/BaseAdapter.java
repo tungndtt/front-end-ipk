@@ -1,8 +1,10 @@
 package com.example.tintok.Adapters_ViewHolder;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,17 +18,11 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder<T>> extends Recyc
     Context context;
     ArrayList<T> items;
 
-    int lastIndexAnimated;
-
 
     public BaseAdapter(Context context, ArrayList<T> models){
         this.context = context;
         this.items = models;
-        this.lastIndexAnimated = -1;
     }
-
-
-
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
@@ -59,8 +55,14 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder<T>> extends Recyc
     }
 
     public void setItems(ArrayList<T> items) {
-        this.items = items;
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        Log.e("base adapter", "called: old:"+ this.items+" new:" + items );
+
+        DiffUtil.DiffResult r =DiffUtil.calculateDiff(new MyDiffCallback<T>(this.items, items));
+        this.items.clear();
+        this.items.addAll(items);
+        r.dispatchUpdatesTo(this);
+        //this.items = items;
     }
 
     public Context getContext(){

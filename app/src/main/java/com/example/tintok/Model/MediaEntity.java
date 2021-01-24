@@ -15,6 +15,10 @@ public class MediaEntity {
         this.bitmap = null;
     }
 
+    public MediaEntity(Uri uri){
+        this.uri = uri;
+    }
+
     public MediaEntity(String url){
         this.url = url;
     }
