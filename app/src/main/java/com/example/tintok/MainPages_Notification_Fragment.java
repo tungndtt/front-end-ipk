@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class MainPages_Notification_Fragment extends Fragment implements Notific
     public void onNotificationClick(int position) {
         Intent intent = new Intent(this.getContext(), Activity_Comment.class);
         Notification notification =  adapter.getItems().get(position);
+        Log.e("Notif_Fra_Main", notification.getPostID());
         intent.putExtra("post_id", notification.getPostID());
         intent.putExtra("status", notification.getPost_status());
         intent.putExtra("author_id", notification.getPost_author_id());

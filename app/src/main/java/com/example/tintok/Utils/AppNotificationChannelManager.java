@@ -21,7 +21,7 @@ public class AppNotificationChannelManager {
     private AppNotificationChannelManager(){
         createdChannels = new ArrayList<>();
     }
-    public static AppNotificationChannelManager getInstance(){
+    public static synchronized AppNotificationChannelManager getInstance(){
         if(instance == null)
             instance = new AppNotificationChannelManager();
         return instance;

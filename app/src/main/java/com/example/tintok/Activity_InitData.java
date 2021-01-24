@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tintok.DataLayer.DataRepositoryController;
+import com.example.tintok.Utils.AppNotificationChannelManager;
 import com.example.tintok.Utils.AsynTaskRunner;
 import com.example.tintok.Utils.CustomCallable;
 
@@ -22,6 +23,9 @@ public class Activity_InitData extends AppCompatActivity implements CustomCallab
         setContentView(R.layout.activity_init_data);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setMax(100);
+
+        AppNotificationChannelManager.getInstance().createNotificationChannel("Message");
+        AppNotificationChannelManager.getInstance().createNotificationChannel("Notifications");
 
         DataRepositoryController.getInstance().initDataFromServer();
     }

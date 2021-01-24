@@ -18,13 +18,6 @@ public class NotificationForm {
         return date;
     }
 
-    public String getAuthor_username() {
-        return author_username;
-    }
-
-    public String getAuthor_profile_pic() {
-        return author_profile_pic;
-    }
 
     public String getUrl() {
         return url;
@@ -42,14 +35,16 @@ public class NotificationForm {
         return post_author_id;
     }
 
+    public String getAuthor_id() {
+        return author_id;
+    }
+
     @SerializedName("type")
     String type;
     @SerializedName("time")
     Date date;
-    @SerializedName("author_username")
-    String author_username;
-    @SerializedName("author_profile_pic")
-    String author_profile_pic;
+    @SerializedName("author_id")
+    String author_id;
     @SerializedName("post_img")
     String url;
     @SerializedName("post_id")

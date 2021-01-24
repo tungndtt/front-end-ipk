@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,10 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
         // TODO: Use the ViewModel
         init();
         initChatRoom();
-       mViewModel.getChatrooms().observe(this.getViewLifecycleOwner(), chatRooms -> adapter.setItems(chatRooms));
+       mViewModel.getChatrooms().observe(this.getViewLifecycleOwner(), chatRooms -> {
+           adapter.setItems(chatRooms);
+           Log.e("ChatRoom_Frag", "rooms:"+chatRooms);
+       });
        ArrayList<ChatRoom> mChatRooms = mViewModel.getChatrooms().getValue();
        for(int i = 0 ; i < mChatRooms.size();i++){
            int finalI = i;

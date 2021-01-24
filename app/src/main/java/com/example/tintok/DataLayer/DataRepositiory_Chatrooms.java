@@ -1,10 +1,12 @@
 package com.example.tintok.DataLayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.tintok.Activity_ChatRoom;
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.Communication.RestAPI;
@@ -16,6 +18,7 @@ import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.MessageEntity;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserSimple;
+import com.example.tintok.Utils.AppNotificationChannelManager;
 import com.example.tintok.Utils.EmoticonHandler;
 import com.example.tintok.Utils.FileUtil;
 
@@ -67,11 +70,23 @@ public class DataRepositiory_Chatrooms {
                     ArrayList<MessageEntity> msgs = r.getMessageEntities().getValue();
                     msgs.add(newMsg);
                     r.postMessageEntities(msgs);
+                    rooms.remove(r);
+                    rooms.add(0,r);
                     chatrooms.postValue(rooms);
+                    if(newMsg.getAuthorID().compareTo(controller.getUser().getValue().getUserID()) != 0)
+                        AppNotificationChannelManager.getInstance().pushNotificationBasic("Message", "New unread message", "Click to view unread messages", OpenChatRoomIntent(r));
                 }
 
             }
         });
+    }
+
+    private Intent OpenChatRoomIntent(ChatRoom r){
+        Intent t = new Intent(DataRepositoryController.applicationContext, Activity_ChatRoom.class);
+        t.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        t.putExtra("roomID", r.getChatRoomID());
+        //DataRepositoryController.applicationContext.startActivity(t);
+        return t;
     }
 
     public MutableLiveData<ArrayList<ChatRoom>> getChatrooms(){

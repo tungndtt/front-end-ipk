@@ -120,7 +120,7 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
         });
 
         //Testing only
-        AppNotificationChannelManager.getInstance().createNotificationChannel("Message");
+
     }
 
     void initPostComponents() {
@@ -366,7 +366,6 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e("ActivityCmt ", "calledStart");
         this.mViewModel.joinPost(this.postID);
     }
 
@@ -374,7 +373,6 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e("ActivityCmt ", "calledStop");
         this.mViewModel.leavePost(this.postID);
     }
 }

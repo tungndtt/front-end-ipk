@@ -89,7 +89,7 @@
         <activity
             android:name=".Activity_AppMainPages"
             android:label="@string/title_activity_app_main_pages"
-            android:launchMode="singleTop">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

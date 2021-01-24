@@ -11,7 +11,10 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.tintok.DataLayer.DataRepositoryController;
+import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.Notification;
+import com.example.tintok.Model.UserSimple;
 import com.example.tintok.R;
 
 import java.util.ArrayList;
@@ -28,6 +31,17 @@ public class NotificationsAdapter extends BaseAdapter<Notification, Notification
         return new NotificationViewHolder(view, this);
     }
 
+    public void onViewAttachedToWindow(@NonNull  NotificationViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        DataRepositoryController.getInstance().AddUserProfileChangeListener(holder);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull  NotificationViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        DataRepositoryController.getInstance().RemoveUserProfileChangeListener(holder);
+    }
+
     public void setNotificationClickListener(onNotificationClickListener mListener) {
         this.mListener = mListener;
     }
@@ -36,7 +50,7 @@ public class NotificationsAdapter extends BaseAdapter<Notification, Notification
     public interface onNotificationClickListener{
         void onNotificationClick(int position);
     }
-    public class NotificationViewHolder extends BaseViewHolder<Notification> implements View.OnClickListener  {
+    public class NotificationViewHolder extends BaseViewHolder<Notification> implements View.OnClickListener, DataRepository_UserSimple.OnUserProfileChangeListener {
 
         ImageView profilePic, contentPic;
         TextView content, date;
@@ -50,18 +64,31 @@ public class NotificationsAdapter extends BaseAdapter<Notification, Notification
 
         }
 
+        Notification current;
         @Override
         public void bindData(Notification itemData) {
-            this.content.setText(itemData.toTextViewString());
+            current = itemData;
             this.date.setText(itemData.getDate().toString());
             Glide.with(mAdapter.getContext()).load(itemData.getUrl()).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(contentPic);
-            Glide.with(mAdapter.getContext()).load(itemData.getAuthor_profile_pic()).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
+            UserSimple user = DataRepositoryController.getInstance().getUserSimpleProfile(itemData.getAuthor_id());
+            if (user != null) {
+                this.onProfileChange(user);
+            }
+
         }
 
         @Override
         public void onClick(View v) {
             if(mListener!=null)
                 mListener.onNotificationClick(this.getAdapterPosition());
+        }
+
+        @Override
+        public void onProfileChange(UserSimple user) {
+            if(current.getAuthor_id().compareTo(user.getUserID()) == 0){
+                this.content.setText(current.toTextViewString());
+                Glide.with(mAdapter.getContext()).load(user.getProfilePic().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
+            }
         }
     }
 }

@@ -131,8 +131,20 @@ public class Activity_AppMainPages extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(intent != null){
+            int currentTab = intent.getIntExtra("currentTab",-1);
+            if(currentTab!=-1)
+                this.navBar.setSelectedItemId(currentTab);
+        }
+    }
+
+
+    @Override
     public void onRestoreInstanceState(@Nullable Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
         navBar.setSelectedItemId(savedInstanceState.getInt("navBarID"));
     }
 

@@ -4,8 +4,10 @@ import android.graphics.Typeface;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 
 
+import com.example.tintok.DataLayer.DataRepositoryController;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -19,32 +21,27 @@ public class Notification {
 
     Date date;
 
-    public Notification(NotificationType type, Date date, String author_username, String author_profile_pic, String url, String postID,  String post_author_id, String post_status) {
+    public Notification(NotificationType type, Date date, String author_id, String url, String postID,  String post_author_id, String post_status) {
         this.type = type;
         this.date = date;
-        this.author_username = author_username;
-        this.author_profile_pic = author_profile_pic;
+        this.author_id = author_id;
         this.url = url;
         this.postID = postID;
         this.post_author_id = post_author_id;
         this.post_status = post_status;
     }
 
-    String author_username;
-    String author_profile_pic;
+    public String getAuthor_id() {
+        return author_id;
+    }
+
+    String author_id;
     String url;
 
     public Date getDate() {
         return date;
     }
 
-    public String getAuthor_username() {
-        return author_username;
-    }
-
-    public String getAuthor_profile_pic() {
-        return author_profile_pic;
-    }
 
     public String getUrl() {
         return url;
@@ -72,6 +69,8 @@ public class Notification {
 
 
     public SpannableStringBuilder toTextViewString() {
+        UserSimple user = (DataRepositoryController.getInstance().getUserSimpleProfile(this.author_id));
+        String author_username = (user == null)?"":user.getUserName();
         SpannableStringBuilder str = new SpannableStringBuilder(author_username);
         StyleSpan bold_italicText = new StyleSpan(Typeface.BOLD_ITALIC);
         StyleSpan italicText = new StyleSpan(Typeface.ITALIC);
@@ -89,6 +88,8 @@ public class Notification {
             str.append(" has just put a new comment on your post");
         }
         str.setSpan(bold_italicText, author_username.length(), str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        for (UnderlineSpan span : str.getSpans(0, str.length(), UnderlineSpan.class))
+            str.removeSpan(span);
         return str;
     }
 

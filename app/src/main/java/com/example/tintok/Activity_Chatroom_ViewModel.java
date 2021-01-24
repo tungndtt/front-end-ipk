@@ -20,6 +20,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.tintok.Communication.Communication;
+import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.ChatRoom;
@@ -105,5 +107,13 @@ public class Activity_Chatroom_ViewModel extends AndroidViewModel {
 
         DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID,
                 new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), newMsg.second, Calendar.getInstance().getTime()), newMsg.first );
+    }
+
+    public void joinChatRoom(String roomID) {
+        Communication.getInstance().get_socket().emit(CommunicationEvent.JOIN_CHAT_ROOM, roomID);
+    }
+
+    public void leaveChatRoom(String roomID) {
+        Communication.getInstance().get_socket().emit(CommunicationEvent.LEAVE_CHAT_ROOM, roomID);
     }
 }

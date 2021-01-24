@@ -83,17 +83,15 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
         initEmoji();
         initMessages();
         askpermission();
-        final Intent intent = new Intent(this, Activity_AppMainPages.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
 
         mViewModel.getMessEntity(roomID).observe(this, messageEntities -> {
             msgAdapter.setItems(messageEntities);
             messages.smoothScrollToPosition(msgAdapter.getItemCount());
-            AppNotificationChannelManager.getInstance().pushNotificationBasic("Message", "Message" , "new Message Received", intent );
         });
 
         //Testing only
-        AppNotificationChannelManager.getInstance().createNotificationChannel("Message");
+
     }
 
 
@@ -294,11 +292,20 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
         UserSimple user = mViewModel.getUserbyID(mViewModel.getOtherUser());
         Glide.with(this).load(user.getProfilePic().url)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profileImg);
+        this.mViewModel.joinChatRoom(this.roomID);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mViewModel.removeUserSimpleListener(this);
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this.mViewModel.leaveChatRoom(this.roomID);
     }
 }
