@@ -46,7 +46,7 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if(mViewModel == null)
-            mViewModel = new ViewModelProvider(this).get(MainPages_Posts_ViewModel.class);
+            mViewModel = new ViewModelProvider(this.getActivity()).get(MainPages_Posts_ViewModel.class);
         // TODO: Use the ViewMode
         this.postAdapter = new PostAdapter(getContext(), new ArrayList<>());
         this.postAdapter.setListener(this);
@@ -93,9 +93,18 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
         Intent intent = new Intent(this.getContext(), Activity_Comment.class);
         Post post =  postAdapter.getItems().get(position);
         intent.putExtra("post_id", post.getId());
-        intent.putExtra("status", post.getStatus());
-        intent.putExtra("author_id", post.getAuthor_id());
-        intent.putExtra("imgUrl", post.getImage().url);
         v.getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onClickLike(View v, int position) {
+        Post post =  postAdapter.getItems().get(position);
+        mViewModel.UserPressLike(post);
+    }
+
+    @Override
+    public void onNotificationChange(int position) {
+        Post post =  postAdapter.getItems().get(position);
+        mViewModel.UserPressSubscribe(post);
     }
 }

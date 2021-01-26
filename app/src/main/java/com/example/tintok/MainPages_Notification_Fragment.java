@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import com.example.tintok.Adapters_ViewHolder.ChatroomAdapter;
 import com.example.tintok.Adapters_ViewHolder.NotificationsAdapter;
 import com.example.tintok.CustomView.NoSpaceRecyclerViewDecoration;
+import com.example.tintok.DataLayer.DataRepository_Notificaitons;
 import com.example.tintok.Model.Notification;
 import com.example.tintok.Model.Post;
 
@@ -63,18 +64,33 @@ public class MainPages_Notification_Fragment extends Fragment implements Notific
         RecyclerView.ItemDecoration decoration= new NoSpaceRecyclerViewDecoration();
         notifications.setLayoutManager(manager);
         notifications.addItemDecoration(decoration);
+
+    }
+
+
+
+    private void NotifyActivityOnNotiClicked(Notification noti){
+        try{
+            Activity_AppMainPages a = (Activity_AppMainPages)getActivity();
+            a.OnNotificationClicked(noti);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void onNotificationClick(int position) {
+    public void onPostClick(int position) {
         Intent intent = new Intent(this.getContext(), Activity_Comment.class);
         Notification notification =  adapter.getItems().get(position);
-        Log.e("Notif_Fra_Main", notification.getPostID());
         intent.putExtra("post_id", notification.getPostID());
-        intent.putExtra("status", notification.getPost_status());
-        intent.putExtra("author_id", notification.getPost_author_id());
-        intent.putExtra("imgUrl", notification.getUrl());
         startActivity(intent);
+        NotifyActivityOnNotiClicked(notification);
+    }
 
+    @Override
+    public void onProfileClick(int position) {
+        Intent intent = new Intent(this.getContext(), Activity_ViewProfile.class);
+        intent.putExtra("author_id", adapter.getItems().get(position).getAuthor_id());
+        startActivity(intent);
     }
 }

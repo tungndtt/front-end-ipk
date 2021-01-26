@@ -2,15 +2,15 @@ package com.example.tintok.Model;
 
 import android.text.SpannableStringBuilder;
 
+import com.example.tintok.Utils.DateTimeUtil;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
+import java.time.LocalDateTime;
 public class MessageEntity {
     private String authorID;
     MediaEntity media;
     private SpannableStringBuilder builder;
-    private Date datePosted;
+    private LocalDateTime datePosted;
 
     public String getAuthorID() {
         return authorID;
@@ -21,8 +21,8 @@ public class MessageEntity {
         return builder;
     }
 
-    public Date getDatePosted() {
-        return datePosted;
+    public String getDatePosted() {
+        return DateTimeUtil.ConvertTimeToString(this.datePosted);
     }
 
     public MediaEntity getMedia() {
@@ -30,12 +30,12 @@ public class MessageEntity {
     }
 
 
-    public MessageEntity(String authorID, MediaEntity media, Date date){
+    public MessageEntity(String authorID, MediaEntity media, LocalDateTime date){
         this.authorID = authorID;
         this.media = media;
         this.datePosted = date;
     }
-    public MessageEntity(String authorID, SpannableStringBuilder builder, Date date){
+    public MessageEntity(String authorID, SpannableStringBuilder builder, LocalDateTime date){
         this.authorID = authorID;
         this.media = null;
         this.builder = builder;

@@ -2,7 +2,7 @@ package com.example.tintok.Communication.RestAPI_model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class CommentForm {
     @SerializedName("id")
@@ -18,7 +18,7 @@ public class CommentForm {
     @SerializedName("image_path")
     private String image_path;
     @SerializedName("date")
-    private Date date;
+    private long date;
     public String getAuthor_id() {
         return author_id;
     }
@@ -42,7 +42,7 @@ public class CommentForm {
         return image_path;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 }

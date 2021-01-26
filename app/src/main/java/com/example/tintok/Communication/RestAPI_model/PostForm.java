@@ -17,14 +17,14 @@ public class PostForm {
     @SerializedName("imageUrl")
     private String imageUrl;
 
-    @SerializedName("author_name")
-    private String author_name;
-
     @SerializedName("author_id")
     private String author_id;
 
     @SerializedName("comments")
     private ArrayList<CommentForm> comments;
+
+    @SerializedName("likes")
+    private ArrayList<String> likes;
 
     public ArrayList<CommentForm> getComments() {
         return comments;
@@ -42,8 +42,10 @@ public class PostForm {
         return imageUrl;
     }
 
-    public String getAuthor_name(){ return this.author_name; }
-
     public String getAuthor_id(){ return this.author_id; }
+
+    public ArrayList<String> getLikes() {
+        return likes;
+    }
 
 }

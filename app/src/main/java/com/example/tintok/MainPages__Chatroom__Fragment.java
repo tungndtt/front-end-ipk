@@ -21,7 +21,10 @@ import android.widget.EditText;
 
 import com.example.tintok.Adapters_ViewHolder.ChatroomAdapter;
 import com.example.tintok.CustomView.NoSpaceRecyclerViewDecoration;
+import com.example.tintok.DataLayer.DataRepositiory_Chatrooms;
 import com.example.tintok.Model.ChatRoom;
+import com.example.tintok.Model.MessageEntity;
+import com.example.tintok.Model.Notification;
 
 import java.util.ArrayList;
 
@@ -32,9 +35,7 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
     ChatroomAdapter adapter;
     private MainPages_Chatroom_ViewModel mViewModel;
 
-    public static MainPages__Chatroom__Fragment newInstance() {
-        return new MainPages__Chatroom__Fragment();
-    }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -61,6 +62,8 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
            });
        }
     }
+
+
 
     void init(){
         searchBar = getView().findViewById(R.id.search_text);
@@ -93,11 +96,22 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
         chatrooms.addItemDecoration(decoration);
     }
 
+
     @Override
     public void OnClick(int pos) {
         Intent mIntent = new Intent(this.requireActivity(), Activity_ChatRoom.class);
         requireActivity().overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
         mIntent.putExtra("roomID", adapter.getItems().get(pos).getChatRoomID());
         startActivity(mIntent);
+        NotifyActivityOnChatroomClicked(adapter.getItems().get(pos));
     }
+    private void NotifyActivityOnChatroomClicked(ChatRoom r){
+        try{
+            Activity_AppMainPages a = (Activity_AppMainPages)getActivity();
+            a.OnChatromClicked(r);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }

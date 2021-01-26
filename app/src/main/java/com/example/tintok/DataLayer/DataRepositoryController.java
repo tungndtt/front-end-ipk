@@ -54,6 +54,7 @@ public class DataRepositoryController {
 
     public void initDataFromServer(){
         Communication.getInstance().initScoket();
+        Log.e("DataInitRepo", "at: "+ Communication.getInstance().get_socket());
         dataRepository_currentUser.initData();
         dataRepositiory_chatrooms.initData();
         dataRepository_matchingPeople.initData();
@@ -86,15 +87,17 @@ public class DataRepositoryController {
     public MutableLiveData<ArrayList<ChatRoom>> getChatRooms() {
         return dataRepositiory_chatrooms.getChatrooms();
     }
-
     public ChatRoom getChatRoomByID(String id){
         return dataRepositiory_chatrooms.getChatRoomByID(id);
     }
-
     public void emitNewMessage(Context mContext, String roomID, MessageEntity newMsg, String encoded){
-
         dataRepositiory_chatrooms.emitNewMessage( mContext, roomID, newMsg, encoded);
-
+    }
+    public void addNewMessageListener(DataRepositiory_Chatrooms.OnNewMessagesListener mListener){
+        dataRepositiory_chatrooms.addNewMessageListener(mListener);
+    }
+    public void removeNewMessageListener(DataRepositiory_Chatrooms.OnNewMessagesListener mListener){
+       dataRepositiory_chatrooms.removeNewMessageListener(mListener);
     }
 //endregion
 
@@ -103,6 +106,15 @@ public class DataRepositoryController {
 //region CurrentUser
     public MutableLiveData<UserProfile> getUser() {
         return  dataRepository_currentUser.currentUser;
+    }
+    public boolean isThisUserLikedPost(Post p){
+        if(p.likers == null)
+            return false;
+        return p.likers.contains(getUser().getValue().getUserID());
+    }
+    public boolean isThisUserSubscribedPost(Post p){
+        return false;
+        //To Do
     }
 //endregion
 
@@ -118,6 +130,12 @@ public class DataRepositoryController {
 //region Notifications
     public MutableLiveData<ArrayList<Notification>> getNotifications() {
         return dataRepository_notificaitons.getNotifications();
+    }
+    public void addNotificationListener(DataRepository_Notificaitons.OnNewNotificationListener mListener){
+       dataRepository_notificaitons.addNotificationListener(mListener);
+    }
+    public void removeNotificationListener(DataRepository_Notificaitons.OnNewNotificationListener mListener){
+        dataRepository_notificaitons.removeNotificationListener(mListener);
     }
 //endregion
 

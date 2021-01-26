@@ -48,9 +48,11 @@ public class NotificationsAdapter extends BaseAdapter<Notification, Notification
 
     onNotificationClickListener mListener;
     public interface onNotificationClickListener{
-        void onNotificationClick(int position);
+        void onPostClick(int position);
+        void onProfileClick(int position);
+
     }
-    public class NotificationViewHolder extends BaseViewHolder<Notification> implements View.OnClickListener, DataRepository_UserSimple.OnUserProfileChangeListener {
+    public class NotificationViewHolder extends BaseViewHolder<Notification> implements DataRepository_UserSimple.OnUserProfileChangeListener {
 
         ImageView profilePic, contentPic;
         TextView content, date;
@@ -60,7 +62,14 @@ public class NotificationsAdapter extends BaseAdapter<Notification, Notification
             contentPic = itemView.findViewById(R.id.contentPic);
             content = itemView.findViewById(R.id.content);
             date = itemView.findViewById(R.id.date);
-            itemView.setOnClickListener(this);
+            profilePic.setOnClickListener(v -> {
+                if(mListener!= null)
+                    mListener.onProfileClick(getAdapterPosition());
+            });
+            contentPic.setOnClickListener(v -> {
+                if(mListener!= null)
+                    mListener.onPostClick(getAdapterPosition());
+            });
 
         }
 
@@ -75,12 +84,6 @@ public class NotificationsAdapter extends BaseAdapter<Notification, Notification
                 this.onProfileChange(user);
             }
 
-        }
-
-        @Override
-        public void onClick(View v) {
-            if(mListener!=null)
-                mListener.onNotificationClick(this.getAdapterPosition());
         }
 
         @Override

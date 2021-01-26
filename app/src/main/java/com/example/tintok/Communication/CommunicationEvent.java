@@ -26,4 +26,10 @@ public class CommunicationEvent {
     public static final String JOIN_CHAT_ROOM = "JOIN_CHAT_ROOM";
     public static final String LEAVE_CHAT_ROOM = "LEAVE_CHAT_ROOM";
 
+    public static final String LIKE_POST =  "LIKE_POST";
+    public static final String UNLIKE_POST = "UNLIKE_POST";
+
+    public static final String FOLLOW_POST = "FOLLOW_POST";
+    public static final String UNFOLLOW_POST = "UNFOLLOW_POST";
+
 }

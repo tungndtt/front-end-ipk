@@ -8,9 +8,10 @@ import android.text.style.UnderlineSpan;
 
 
 import com.example.tintok.DataLayer.DataRepositoryController;
+import com.example.tintok.Utils.DateTimeUtil;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Notification {
     public enum NotificationType{
@@ -19,9 +20,9 @@ public class Notification {
     NotificationType type;
 
 
-    Date date;
+    LocalDateTime date;
 
-    public Notification(NotificationType type, Date date, String author_id, String url, String postID,  String post_author_id, String post_status) {
+    public Notification(NotificationType type, LocalDateTime date, String author_id, String url, String postID,  String post_author_id, String post_status) {
         this.type = type;
         this.date = date;
         this.author_id = author_id;
@@ -38,8 +39,8 @@ public class Notification {
     String author_id;
     String url;
 
-    public Date getDate() {
-        return date;
+    public String getDate() {
+        return DateTimeUtil.ConvertTimeToString(this.date);
     }
 
 

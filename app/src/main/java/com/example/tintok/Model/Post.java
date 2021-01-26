@@ -5,18 +5,23 @@ import java.util.Date;
 
 import android.graphics.Bitmap;
 
+import androidx.lifecycle.MutableLiveData;
+
 public class Post {
     private String id;
     private String status;
     private String author_id;
     private MediaEntity image;
     public boolean isSubscription;
+    public ArrayList<String> likers;
+    public MutableLiveData<ArrayList<Comment>> comments;
 
     public Post(String id, String status, String author_id, MediaEntity image) {
         this.id = id;
         this.status = status;
         this.author_id = author_id;
         this.image = image;
+        comments = null;
     }
 
     public String getId() {

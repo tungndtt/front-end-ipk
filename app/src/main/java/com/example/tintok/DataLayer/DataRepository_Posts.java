@@ -59,6 +59,8 @@ public class DataRepository_Posts {
                     ArrayList<Post> posts = newfeedPosts.getValue();
                     for(PostForm postForm: body){
                         Post e = new Post(postForm.getId(), postForm.getStatus(),postForm.getAuthor_id(), new MediaEntity(postForm.getImageUrl()));
+                        e.likers = postForm.getLikes() == null?new ArrayList<>():postForm.getLikes();
+                        Log.e("DataRepo_Post", "likers:"+postForm.getLikes());
                         posts.add(e);
                     }
                     newfeedPosts.postValue(posts);

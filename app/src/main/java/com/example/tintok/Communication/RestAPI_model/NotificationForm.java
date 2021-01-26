@@ -2,7 +2,8 @@ package com.example.tintok.Communication.RestAPI_model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.sql.Date;
+
+import java.time.LocalDateTime;
 
 public class NotificationForm {
 
@@ -14,7 +15,7 @@ public class NotificationForm {
         return type;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
@@ -42,7 +43,7 @@ public class NotificationForm {
     @SerializedName("type")
     String type;
     @SerializedName("time")
-    Date date;
+    long date;
     @SerializedName("author_id")
     String author_id;
     @SerializedName("post_img")

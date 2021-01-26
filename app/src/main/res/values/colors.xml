@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="background_black">#FF251F1E</color>
-    <color name="red">#EC7777</color>
+    <color name="red">#D63131</color>
     <color name="light_pink">#EAB0EC</color>
+    <color name = "blue">#3B56DC</color>
 </resources>

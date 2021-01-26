@@ -24,7 +24,7 @@
             android:lines="7"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:hint="Write your status ..."
+            android:hint="   Write your status ..."
             android:textSize="15dp"
             android:layout_below="@id/new_post_activity_toolbar"
             android:layout_marginTop="10dp"/>
@@ -40,17 +40,33 @@
             android:scaleType="fitXY"
             app:srcCompat="@drawable/choose_image" />
 
-        <Button
-            android:id="@+id/new_post_submit"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Post"
             android:layout_below="@+id/new_post_image"
             android:layout_centerHorizontal="true"
-            android:drawableRight="@drawable/ic_send"
-            android:textSize="10dp"
-            android:layout_marginTop="30dp"
-            android:backgroundTint="@color/black"/>
+            android:gravity="center"
+            android:layout_marginTop="30dp">
+            <Button
+                android:id="@+id/new_post_submit"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Post"
+                android:drawableRight="@drawable/ic_send"
+                android:textSize="10dp"
+                android:layout_marginHorizontal="20dp"
+                android:backgroundTint="@color/black"/>
+            <Button
+                android:id="@+id/cancelPost"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:drawableRight="@drawable/ic_send"
+                android:textSize="10dp"
+                android:layout_marginHorizontal="20dp"
+                android:backgroundTint="@color/red"/>
+        </LinearLayout>
+
 
 
     </RelativeLayout>

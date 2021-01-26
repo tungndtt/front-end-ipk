@@ -54,7 +54,9 @@ public class Activity_ViewProfile_ViewModel extends MainPages_Posts_ViewModel {
                     ArrayList<Post> new_posts = new ArrayList<>();
                     for(PostForm post : posts){
                         MediaEntity media = new MediaEntity(post.getImageUrl());
-                        new_posts.add(new Post(post.getId(), post.getStatus(), post.getAuthor_id(), media));
+                        Post p = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), media);
+                        p.likers = post.getLikes() == null ? new ArrayList<>():post.getLikes();
+                        new_posts.add(p);
                     }
                     UserProfile result = new UserProfile();
                     result.setUserName(name);

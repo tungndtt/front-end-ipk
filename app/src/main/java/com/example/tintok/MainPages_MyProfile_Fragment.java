@@ -108,6 +108,7 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
         return view;
     }
 
+    PostUploadFragment post = null;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -116,8 +117,12 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
         newPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PostUploadFragment post = new PostUploadFragment(MainPages_MyProfile_Fragment.this::onNewPost);
-                post.show(getChildFragmentManager(), "New Post");
+
+                if(post == null){
+                    post = new PostUploadFragment(MainPages_MyProfile_Fragment.this::onNewPost);
+                    post.show(getChildFragmentManager(), "New Post");
+                }
+
             }
         });
 
@@ -157,7 +162,9 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
 
     @Override
     public void onNewPost(Post newPost) {
-        mViewModel.submitNewPost(newPost);
+        post = null;
+        if(newPost != null)
+            mViewModel.submitNewPost(newPost);
     }
 
 

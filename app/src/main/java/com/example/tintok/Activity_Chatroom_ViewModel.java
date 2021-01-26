@@ -93,20 +93,20 @@ public class Activity_Chatroom_ViewModel extends AndroidViewModel {
         Date now = Calendar.getInstance().getTime();
         for (Uri img : imgs) {
             DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID,
-                    new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), new MediaEntity(img, null), now), "" );
+                    new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), new MediaEntity(img, null), null), "" );
         }
     }
 
     void handleSendImgFromCamera(String roomID, Bitmap m) {
         DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID,
-                new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), new MediaEntity(m), Calendar.getInstance().getTime()), "" );
+                new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), new MediaEntity(m), null), "" );
     }
 
     void handleSendMessage(String roomID) {
         Pair<String, SpannableStringBuilder> newMsg = mEmoiconHandler.parseMessage();
 
         DataRepositoryController.getInstance().emitNewMessage(getApplication(), roomID,
-                new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), newMsg.second, Calendar.getInstance().getTime()), newMsg.first );
+                new MessageEntity(DataRepositoryController.getInstance().getUser().getValue().getUserID(), newMsg.second, null), newMsg.first );
     }
 
     public void joinChatRoom(String roomID) {

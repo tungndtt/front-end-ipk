@@ -91,44 +91,44 @@
                 android:layout_below="@id/post_status"
                 android:layout_marginTop="10dp"
                 android:scaleType="fitXY"/>
-            <ImageView
-                android:id="@+id/post_like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/post_image"
-                android:src="@drawable/ic_like"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"/>
             <TextView
                 android:id="@+id/post_numberOfLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/post_image"
-                android:layout_marginTop="8dp"
-                android:text="20"
+                android:text="19"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp" />
+            <TextView
+                android:id="@+id/post_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/post_image"
+                android:layout_marginTop="5dp"
+                android:text="Likes"
                 android:textSize="15dp"
-                android:layout_toRightOf="@id/post_like"
+                android:layout_toRightOf="@id/post_numberOfLike"
                 android:layout_marginLeft="5dp"/>
+            <TextView
+                android:id="@+id/post_numberOfComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/post_image"
+                android:text="50"
+                android:layout_marginLeft="150dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/post_like"/>
             <TextView
                 android:id="@+id/post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/post_image"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="8dp"
-                android:text="comment"
+                android:layout_marginTop="5dp"
+                android:text=" Comments"
                 android:textSize="15dp"
-                android:layout_marginRight="10dp"/>
-            <TextView
-                android:id="@+id/post_numberOfComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/post_comment"
-                android:layout_below="@id/post_image"
-                android:layout_marginTop="8dp"
-                android:text="5"
-                android:layout_marginRight="5dp"
-                android:textSize="15dp"/>
+                android:layout_toRightOf="@id/post_numberOfComment"
+                android:layout_marginLeft="5dp"/>
+
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
@@ -149,7 +149,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="4"
-                android:background="@color/transparent"
+                app:backgroundTint="@color/blue"
                 android:drawableLeft="@drawable/ic_like"
                 android:text="Like"
                 android:textColor="@color/black">

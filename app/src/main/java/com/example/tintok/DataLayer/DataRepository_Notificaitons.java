@@ -18,6 +18,9 @@ import com.example.tintok.Model.UserSimple;
 import com.example.tintok.R;
 import com.example.tintok.Utils.AppNotificationChannelManager;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -66,11 +69,15 @@ public class DataRepository_Notificaitons {
             String post_author_id = (String) args[2];
             String post_status = (String) args[3];
             String post_url= (String) args[4];
-            Notification newNoti = new Notification(Notification.NotificationType.COMMENT_POST, Calendar.getInstance().getTime(), author_id ,
+            Notification newNoti = new Notification(Notification.NotificationType.COMMENT_POST, LocalDateTime.now(), author_id ,
                     post_url, post_id,  post_author_id, post_status);
             ArrayList<Notification> notis = notifications.getValue();
             notis.add(0, newNoti);
             notifications.postValue(notis);
+            if(newNotificationListeners != null){
+                for(OnNewNotificationListener m :newNotificationListeners)
+                    m.onNewNotification(newNoti);
+            }
         });
 
         socket.on(CommunicationEvent.LIKE_NOTIFICATION, args -> {
@@ -79,11 +86,15 @@ public class DataRepository_Notificaitons {
             String post_author_id = (String) args[2];
             String post_status = (String) args[3];
             String post_url= (String) args[4];
-            Notification newNoti = new Notification(Notification.NotificationType.LIKE_POST, Calendar.getInstance().getTime(), author_id ,
+            Notification newNoti = new Notification(Notification.NotificationType.LIKE_POST, LocalDateTime.now(), author_id ,
                     post_url, post_id,  post_author_id, post_status);
             ArrayList<Notification> notis = notifications.getValue();
             notis.add(0, newNoti);
             notifications.postValue(notis);
+            if(newNotificationListeners != null){
+                for(OnNewNotificationListener m :newNotificationListeners)
+                    m.onNewNotification(newNoti);
+            }
         });
 
     }
@@ -100,7 +111,7 @@ public class DataRepository_Notificaitons {
                         m = Notification.NotificationType.COMMENT_POST;
                     else if(noti.getType().compareTo(NotificationForm.NEW_REACTION) == 0)
                         m = Notification.NotificationType.LIKE_POST;
-                    Notification newNoti = new Notification(m, noti.getDate(), noti.getAuthor_id(),
+                    Notification newNoti = new Notification(m, Instant.ofEpochMilli(noti.getDate()).atZone(ZoneId.systemDefault()).toLocalDateTime(), noti.getAuthor_id(),
                             noti.getUrl(), noti.getPostID(), noti.getPost_author_id(), noti.getStatus());
                     clientNoti.add(newNoti);
                 }
@@ -124,5 +135,21 @@ public class DataRepository_Notificaitons {
         return t;
     }
 
+    ArrayList<OnNewNotificationListener> newNotificationListeners;
+    public void addNotificationListener(OnNewNotificationListener mListener){
+        if(newNotificationListeners == null)
+            newNotificationListeners = new ArrayList<>();
+        if(!newNotificationListeners.contains(mListener))
+            newNotificationListeners.add(mListener);
+    }
+    public void removeNotificationListener(OnNewNotificationListener mListener){
+        if(newNotificationListeners == null)
+            return;
+        newNotificationListeners.remove(mListener);
+    }
+
+    public interface OnNewNotificationListener{
+        public void onNewNotification(Notification newNoti);
+    }
     //Server part
 }

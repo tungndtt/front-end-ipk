@@ -1,12 +1,15 @@
 package com.example.tintok;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.tintok.Communication.Communication;
+import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.Model.Post;
 
@@ -22,5 +25,47 @@ public class MainPages_Posts_ViewModel extends AndroidViewModel {
     public MutableLiveData<ArrayList<Post>> getPosts(){
 
         return DataRepositoryController.getInstance().getNewfeedPosts();
+    }
+
+    public String getCurrentUserID() {
+        return DataRepositoryController.getInstance().getUser().getValue().getUserID();
+    }
+
+    private void submitLike(String id) {
+        Communication.getInstance().get_socket().emit(CommunicationEvent.LIKE_POST, getCurrentUserID(), id);
+    }
+
+
+    private void unsubmitLike(String id) {
+        Communication.getInstance().get_socket().emit(CommunicationEvent.UNLIKE_POST, getCurrentUserID(), id);
+    }
+
+    private void subscribePost(String id) {
+        Communication.getInstance().get_socket().emit(CommunicationEvent.FOLLOW_POST, getCurrentUserID(), id);
+    }
+
+    private void unsubscribePost(String id) {
+        Communication.getInstance().get_socket().emit(CommunicationEvent.UNFOLLOW_POST, getCurrentUserID(), id);
+    }
+
+    public void UserPressLike(Post post){
+        if(post.likers.contains(getCurrentUserID())){
+            post.likers.remove(getCurrentUserID());
+            unsubmitLike(post.getId());
+        }
+        else {
+            post.likers.add(getCurrentUserID());
+            submitLike(post.getId());
+        }
+    }
+
+    public void UserPressSubscribe(Post post){
+        post.isSubscription = !post.isSubscription;
+        if(post.isSubscription){
+            subscribePost(post.getId());
+        }
+        else{
+            unsubscribePost(post.getId());
+        }
     }
 }

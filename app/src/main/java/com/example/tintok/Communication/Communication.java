@@ -115,7 +115,7 @@ public class Communication {
 
             httpsClient = clientBuilder.build();
             Gson gson = new GsonBuilder()
-                    .setDateFormat("yyyy-mm-dd'T'hh:mm:ss'Z'")
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                     .create();
             retrofit = new Retrofit.Builder()
                     .baseUrl(myLink)

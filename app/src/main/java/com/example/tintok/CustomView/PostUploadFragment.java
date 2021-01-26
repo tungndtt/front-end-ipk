@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -93,22 +95,28 @@ public class PostUploadFragment extends DialogFragment {
            }
         });
 
+        Button cancelBtn = getView().findViewById(R.id.cancelPost);
+        cancelBtn.setOnClickListener(v -> {
+            mListner.onNewPost(null);
+            getDialog().dismiss();
+        });
+
         status.setKeyBoardInputCallbackListener((inputContentInfo, flags, opts) -> {
             Uri imgUri = inputContentInfo.getContentUri();
             Glide.with(this.getContext()).load(imgUri).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(image);
             chosenImage = new MediaEntity(imgUri, "");
         });
-        this.getDialog().setCanceledOnTouchOutside(true);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         Window window = getDialog().getWindow();
-        window.setGravity(Gravity.CENTER);
+        window.setGravity(Gravity.FILL);
         window.setWindowAnimations(R.style.MyAnimation_Window);
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
     }
 
     private void askForPermission(int requestCode){

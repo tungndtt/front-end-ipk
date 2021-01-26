@@ -49,6 +49,7 @@ public class DataRepository_CurrentUser {
                     ArrayList<Post> photos = currUser.getMyPosts().getValue();
                     for(PostForm post : form.getPosts()){
                         Post tmp = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), new MediaEntity(post.getImageUrl()));
+                        tmp.likers = post.getLikes() == null?new ArrayList<>():post.getLikes();
                         photos.add(tmp);
                     }
                     currUser.myPosts.postValue(photos);
@@ -86,8 +87,8 @@ public class DataRepository_CurrentUser {
                         PostForm form = response.body();
                         newPost.setId(form.getId());
                         newPost.getImage().url = form.getImageUrl();
-                        Log.e("Url image ", form.getImageUrl());
-                        Log.e("Id of post ", form.getId());
+                        newPost.isSubscription = true;
+                        newPost.likers = new ArrayList<>();
 
                         // do something with newPost ...
                         ArrayList<Post> mPosts = currentUser.getValue().myPosts.getValue();

@@ -4,9 +4,9 @@ import android.text.SpannableStringBuilder;
 
 import androidx.annotation.Nullable;
 
-import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 public class Comment extends MessageEntity {
 
@@ -18,7 +18,7 @@ public class Comment extends MessageEntity {
     }
 
 
-    public Comment(String id, String authorID, @Nullable  SpannableStringBuilder builder, @Nullable MediaEntity media, Date date) {
+    public Comment(String id, String authorID, @Nullable  SpannableStringBuilder builder, @Nullable MediaEntity media, LocalDateTime date) {
         super(authorID, builder, date);
         this.id = id;
         this.media = media;

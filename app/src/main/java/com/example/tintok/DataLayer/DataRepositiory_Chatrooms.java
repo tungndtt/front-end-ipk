@@ -12,19 +12,18 @@ import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.Communication.RestAPI;
 import com.example.tintok.Communication.RestAPI_model.ChatForm;
 import com.example.tintok.Communication.RestAPI_model.MessageForm;
-import com.example.tintok.Communication.RestAPI_model.PostForm;
+
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.MessageEntity;
-import com.example.tintok.Model.Post;
-import com.example.tintok.Model.UserSimple;
+
 import com.example.tintok.Utils.AppNotificationChannelManager;
 import com.example.tintok.Utils.EmoticonHandler;
 import com.example.tintok.Utils.FileUtil;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -60,9 +59,9 @@ public class DataRepositiory_Chatrooms {
                 MessageEntity newMsg = null;
                 if(!msg.isEmpty()){
 
-                    newMsg = new MessageEntity(authorID, EmoticonHandler.parseMessageFromString(DataRepositoryController.applicationContext, msg), Calendar.getInstance().getTime());
+                    newMsg = new MessageEntity(authorID, EmoticonHandler.parseMessageFromString(DataRepositoryController.applicationContext, msg), LocalDateTime.now());
                 }else{
-                    newMsg = new MessageEntity(authorID, new MediaEntity(null,url), Calendar.getInstance().getTime());
+                    newMsg = new MessageEntity(authorID, new MediaEntity(null,url), LocalDateTime.now());
                 }
                 ChatRoom r = getChatRoomByID(roomID);
                 if(r != null) {
@@ -75,6 +74,10 @@ public class DataRepositiory_Chatrooms {
                     chatrooms.postValue(rooms);
                     if(newMsg.getAuthorID().compareTo(controller.getUser().getValue().getUserID()) != 0)
                         AppNotificationChannelManager.getInstance().pushNotificationBasic("Message", "New unread message", "Click to view unread messages", OpenChatRoomIntent(r));
+                }
+                if(newMessagesListeners != null){
+                    for(OnNewMessagesListener m : newMessagesListeners)
+                        m.onNewMessage(roomID, newMsg);
                 }
 
             }
@@ -129,11 +132,11 @@ public class DataRepositiory_Chatrooms {
                             for(MessageForm m : msgs){
                                if(m.getMessage() != null){
                                    MessageEntity mm = new MessageEntity(m.getAuthor_id(), EmoticonHandler.parseMessageFromString(DataRepositoryController.applicationContext, m.getMessage()),
-                                           Calendar.getInstance().getTime());
+                                           LocalDateTime.now());
                                    myMSG.add(mm);
                                }
                                else if(m.getImageUrl()!= null){
-                                   MessageEntity mm = new MessageEntity(m.getAuthor_id(), new MediaEntity(null,m.getImageUrl()), Calendar.getInstance().getTime());
+                                   MessageEntity mm = new MessageEntity(m.getAuthor_id(), new MediaEntity(null,m.getImageUrl()), LocalDateTime.now());
                                    myMSG.add(mm);
                                }
                             }
@@ -217,5 +220,23 @@ public class DataRepositiory_Chatrooms {
                 Communication.getInstance().get_socket().emit(CommunicationEvent.EVENT_NEW_MASSAGE, roomID, newMsg.getAuthorID(), receiver, encoded);
             }
         }
+    }
+
+    ArrayList<OnNewMessagesListener> newMessagesListeners;
+    public void addNewMessageListener(OnNewMessagesListener mListener){
+        if(newMessagesListeners == null)
+            newMessagesListeners = new ArrayList<>();
+        if(!newMessagesListeners.contains(mListener))
+            newMessagesListeners.add(mListener);
+        Log.e("notifymsg","called "+newMessagesListeners);
+    }
+    public void removeNewMessageListener(OnNewMessagesListener mListener){
+        if(newMessagesListeners == null)
+            return;
+        newMessagesListeners.remove(mListener);
+    }
+
+    public interface OnNewMessagesListener{
+        public void onNewMessage(String roomID, MessageEntity msg);
     }
 }

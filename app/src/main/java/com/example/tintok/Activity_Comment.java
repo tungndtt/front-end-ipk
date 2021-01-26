@@ -41,6 +41,7 @@ import com.example.tintok.Adapters_ViewHolder.EmojiViewHolder;
 import com.example.tintok.Adapters_ViewHolder.MessageViewHolder;
 import com.example.tintok.Adapters_ViewHolder.MessagesAdapter;
 import com.example.tintok.Adapters_ViewHolder.PostAdapter;
+import com.example.tintok.Communication.Communication;
 import com.example.tintok.CustomView.EditTextSupportIME;
 import com.example.tintok.CustomView.NoSpaceRecyclerViewDecoration;
 import com.example.tintok.DataLayer.DataRepositoryController;
@@ -60,7 +61,6 @@ import java.util.List;
 
 public class Activity_Comment extends AppCompatActivity implements View.OnClickListener{
     private String postID="";
-    private Post post;
     Activity_Comment_ViewModel mViewModel;
 
     private final static int ALL_PERMISSIONS_RESULT = 107;
@@ -79,7 +79,7 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
     private TextView nComment, nLike, status, author;
     private ImageView iv, notificationIcon, profile;
 
-    MaterialButton likeBtn, commentBtn;
+    MaterialButton likeBtn;
     MaterialCardView cardView;
     GestureDetectorCompat mGestureDetector;
 
@@ -98,10 +98,6 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
         this.mViewModel = new ViewModelProvider(this).get( Activity_Comment_ViewModel.class);
         if (getIntent() != null) {
             this.postID = getIntent().getStringExtra("post_id");
-            String status = getIntent().getStringExtra("status");
-            String author_id = getIntent().getStringExtra("author_id");
-            String img_url = getIntent().getStringExtra("imgUrl");
-            post = new Post(this.postID, status, author_id, new MediaEntity(img_url));
         }
 
         initComponents();
@@ -114,8 +110,6 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         mViewModel.getListComments().observe(this, commentEntities -> {
-            Log.e("activity CMT :" , "items old "+mAdapter.getItems());
-            Log.e("activity CMT :" , "items new "+commentEntities);
             mAdapter.setItems(commentEntities );
         });
 
@@ -123,62 +117,10 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
 
     }
 
-    void initPostComponents() {
-        this.nComment = findViewById(R.id.post_numberOfComment);
-        this.nLike = findViewById(R.id.post_numberOfLike);
-        this.status = findViewById(R.id.post_status);
-        this.author = findViewById(R.id.post_name);
-        this.iv = findViewById(R.id.post_image);
-        this.cardView = findViewById(R.id.view);
-        this.notificationIcon = findViewById(R.id.notification_icon);
-
-        cardView.setBackgroundResource(R.drawable.post_background);
-
-            /*cardView.setOnClickListener((v) ->{
-                cardView.toggle();
-                cardView.setBackgroundResource(R.drawable.post_background);
-            });*/
-        cardView.setOnTouchListener((v, event) -> {
-            mGestureDetector.onTouchEvent(event);
-            return true;
-        });
-
-        // set on click listener
-
-        //set on click listener
-        this.profile =findViewById(R.id.post_profile);
-        this.author.setOnClickListener(this);
-        this.profile.setOnClickListener(this);
-        mGestureDetector = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener(){
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                if(post.isSubscription)
-                    notificationIcon.setImageResource(R.drawable.ic_onnoti);
-                else
-                    notificationIcon.setImageResource(R.drawable.ic_offnoti);
-                post.isSubscription = !post.isSubscription;
-
-                return true;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-                cardView.toggle();
-            }
-        });
-        if(!post.isSubscription)
-            notificationIcon.setImageResource(R.drawable.ic_offnoti);
-        else
-            notificationIcon.setImageResource(R.drawable.ic_onnoti);
-
-        this.status.setText(post.getStatus());
-        Glide.with(mAdapter.getContext()).load(post.getImage().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(iv);
-        UserSimple user = DataRepositoryController.getInstance().getUserSimpleProfile(post.getAuthor_id()) ;
-        if(user != null){
-            Glide.with(mAdapter.getContext()).load(user.getProfilePic().url)
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profile);
-            this.author.setText(user.getUserName());
-        }
+    private void initPostComponents() {
+        MainPages_Posts_Fragment postFragment = new MainPages_Posts_Fragment();
+        ((MainPages_Posts_Fragment)postFragment).setViewModel(this.mViewModel);
+        getSupportFragmentManager().beginTransaction().replace(R.id.post_part, postFragment).commit();
     }
 
 
@@ -227,7 +169,7 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(this, Activity_ViewProfile.class);
-        intent.putExtra("author_id", post.getAuthor_id());
+        intent.putExtra("author_id", mViewModel.getPosts().getValue().get(0).getAuthor_id());
         v.getContext().startActivity(intent);
     }
 
