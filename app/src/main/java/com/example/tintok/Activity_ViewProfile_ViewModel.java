@@ -12,9 +12,12 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Communication.Communication;
+import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.Communication.RestAPI;
 import com.example.tintok.Communication.RestAPI_model.PostForm;
 import com.example.tintok.Communication.RestAPI_model.UserForm;
+import com.example.tintok.DataLayer.DataRepositoryController;
+import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
@@ -59,9 +62,16 @@ public class Activity_ViewProfile_ViewModel extends MainPages_Posts_ViewModel {
                         new_posts.add(p);
                     }
                     UserProfile result = new UserProfile();
+                    result.setUserID(id);
                     result.setUserName(name);
                     result.setProfilePic(new MediaEntity(userForm.getImageUrl()));
                     Log.e("Activity_VIewProfile_ViewModel", "img: "+userForm.getImageUrl());
+                    ArrayList<String> dummy = result.getFollowers().getValue();
+                    dummy.addAll(userForm.getFollowers());
+                    result.postFollowers(dummy);
+                    dummy = result.getFollowing().getValue();
+                    dummy.addAll(userForm.getFollowing());
+                    result.postFollowering(dummy);
                     result.myPosts.postValue(new_posts);
                     profile.postValue(result);
                 }
@@ -86,5 +96,32 @@ public class Activity_ViewProfile_ViewModel extends MainPages_Posts_ViewModel {
         if(this.profile == null)
             return null;
         return this.profile.getValue().getMyPosts();
+    }
+
+    public ChatRoom openChatRoomWithUser() {
+        ArrayList<String> userIDs = new ArrayList<>(2);
+        userIDs.add(this.profile.getValue().getUserID());
+        userIDs.add(DataRepositoryController.getInstance().getUser().getValue().getUserID());
+        Log.e("Activity_ViewProf_Model", "at "+ this.profile.getValue().getUserID());
+        return DataRepositoryController.getInstance().getChatRoomByUser(userIDs);
+    }
+
+    public void UserPressFollow() {
+        String currentUser = DataRepositoryController.getInstance().getUser().getValue().getUserID();
+        ArrayList<String> currentFollower = this.profile.getValue().getFollowers().getValue();
+        if(!currentFollower.contains(currentUser)){
+            Communication.getInstance().get_socket().emit(CommunicationEvent.FOLLOW_USER, this.profile.getValue().getUserID(),  currentUser);
+            currentFollower.add(currentUser);
+            this.profile.getValue().getFollowers().postValue(currentFollower);
+        }
+        else{
+            Communication.getInstance().get_socket().emit(CommunicationEvent.UNFOLLOW_USER, this.profile.getValue().getUserID(),  currentUser);
+            currentFollower.remove(currentUser);
+            this.profile.getValue().getFollowers().postValue(currentFollower);
+        }
+        this.profile.postValue(this.profile.getValue());
+    }
+    public String GetCurrentUserID(){
+       return DataRepositoryController.getInstance().getUser().getValue().getUserID();
     }
 }

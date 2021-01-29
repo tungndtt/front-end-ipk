@@ -56,6 +56,29 @@ public class PostUploadFragment extends DialogFragment {
         this.mListner = mListner;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener()
+        {
+            @Override
+            public boolean onKey(android.content.DialogInterface dialog,
+                                 int keyCode,android.view.KeyEvent event)
+            {
+                if ((keyCode ==  android.view.KeyEvent.KEYCODE_BACK))
+                {
+                    // To dismiss the fragment when the back-button is pressed.
+                    dismiss();
+                    if(mListner != null)
+                        mListner.onNewPost(null);
+                    return true;
+                }
+                // Otherwise, do nothing else
+                else return false;
+            }
+        });
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

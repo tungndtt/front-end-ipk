@@ -8,12 +8,9 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 public class CommunicationEvent {
-    public static final String EVENT_GET_CHAT = "get_chat";
-    public static final String EVENT_GET_NOTI = "get_notification";
-    public static final String EVENT_GET_POST = "get_post";
+    public static  final String DISCONNECT = "disconnect";
     public static final String EVENT_NEW_MASSAGE = "new_message";
-    public static final String EVENT_NEW_NOTI = "new_notification";
-    public static final String EVENT_NEW_POST = "new_post";
+
 
     public static final String SEND_COMMENT = "SEND_COMMENT";
     public static final String NEW_COMMENT = "NEW_COMMENT";
@@ -31,5 +28,8 @@ public class CommunicationEvent {
 
     public static final String FOLLOW_POST = "FOLLOW_POST";
     public static final String UNFOLLOW_POST = "UNFOLLOW_POST";
+
+    public static final String FOLLOW_USER = "FOLLOW_USER";
+    public static final String  UNFOLLOW_USER = "UNFOLLOW_USER";
 
 }

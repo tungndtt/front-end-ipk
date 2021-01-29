@@ -17,6 +17,11 @@ public class UserForm extends UnknownUserForm{
     @SerializedName("liked_posts")
     private ArrayList<String> liked_posts;
 
+    @SerializedName("followers")
+    private ArrayList<String> followers;
+    @SerializedName("followees")
+    private ArrayList<String> following;
+
     public UserForm(String username, String email, String password) {
         super(username, email, password);
     }
@@ -33,5 +38,12 @@ public class UserForm extends UnknownUserForm{
 
     public ArrayList<String> getLiked_posts() {
         return liked_posts;
+    }
+    public ArrayList<String> getFollowers() {
+        return followers;
+    }
+
+    public ArrayList<String> getFollowing() {
+        return following;
     }
 }

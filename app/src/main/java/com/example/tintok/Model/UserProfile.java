@@ -17,6 +17,16 @@ public class UserProfile extends UserSimple {
         return mPhotos;
     }
 
+    public MutableLiveData<ArrayList<String>> getFollowingPost() {
+        return followingPost;
+    }
+
+    public void setFollowingPost(MutableLiveData<ArrayList<String>> followingPost) {
+        this.followingPost = followingPost;
+    }
+
+    public MutableLiveData<ArrayList<String>> followingPost;
+
     public void postPhotos(ArrayList<MediaEntity> photos) {
         this.mPhotos.postValue(photos);
     }
@@ -24,6 +34,9 @@ public class UserProfile extends UserSimple {
 
     public UserProfile(){
         this.myPosts = new MutableLiveData<>(new ArrayList<>());
+        this.followers = new MutableLiveData<>(new ArrayList<>());
+        this.following = new MutableLiveData<>(new ArrayList<>());
+        this.followingPost = new MutableLiveData<>(new ArrayList<>());
     }
 
 

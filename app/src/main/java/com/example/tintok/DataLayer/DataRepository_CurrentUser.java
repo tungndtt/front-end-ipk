@@ -45,14 +45,25 @@ public class DataRepository_CurrentUser {
                     currUser.setUserID(form.getId());
                     currUser.setEmail(form.getEmail());
                     currUser.setProfilePic(new MediaEntity(form.getImageUrl()));
-                    Log.e("aaaaaaaaaaaa","number = " + form.getPosts().size());
                     ArrayList<Post> photos = currUser.getMyPosts().getValue();
                     for(PostForm post : form.getPosts()){
                         Post tmp = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), new MediaEntity(post.getImageUrl()));
                         tmp.likers = post.getLikes() == null?new ArrayList<>():post.getLikes();
                         photos.add(tmp);
                     }
+
                     currUser.myPosts.postValue(photos);
+                    ArrayList<String> dummy = currUser.getFollowers().getValue();
+                    dummy.addAll(form.getFollowers());
+                    Log.e("DataRepo_CurrentU","follower = " + form.getFollowers());
+                    currUser.postFollowers(dummy);
+                    dummy = currUser.getFollowing().getValue();
+                    dummy.addAll(form.getFollowing());
+                    currUser.postFollowering(dummy);
+                    dummy = currUser.getFollowingPost().getValue();
+                    dummy.addAll(form.getFollowing_posts());
+                    currUser.getFollowingPost().postValue(dummy);
+
                     currentUser.postValue( currUser);
                 } else {
                     Log.e("Info", "Response fails");
@@ -87,7 +98,6 @@ public class DataRepository_CurrentUser {
                         PostForm form = response.body();
                         newPost.setId(form.getId());
                         newPost.getImage().url = form.getImageUrl();
-                        newPost.isSubscription = true;
                         newPost.likers = new ArrayList<>();
 
                         // do something with newPost ...
@@ -113,5 +123,14 @@ public class DataRepository_CurrentUser {
         } else {
            // Toast.makeText(this.getApplication(), "No file to upload", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void UpdateSubcribedPost(Post p) {
+        ArrayList<String> followingPost = this.currentUser.getValue().getFollowingPost().getValue();
+        if(followingPost.contains(p.getId()))
+            followingPost.remove(p.getId());
+        else
+            followingPost.add(p.getId());
+        this.currentUser.getValue().getFollowingPost().postValue(followingPost);
     }
 }

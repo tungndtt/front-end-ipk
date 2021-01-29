@@ -78,13 +78,14 @@ public interface RestAPI {
 
     @POST("get_all_chat_room_ofUser")
     Call<ArrayList<ChatForm>> getAllChatRooms();
+    
 
     // just to get posts
     @GET("posts")
     Call<ArrayList<PostForm>> getPosts();
 
-    @GET("get_all_users")
-    Call<ArrayList<UserForm>> getAllUsers();
+    @GET("get_recommend_users")
+    Call<ArrayList<UserForm>> getRecommendedUsers();
 
     @GET("get_all_notifications")
     Call<ArrayList<NotificationForm>> getAllNotifications();

@@ -17,8 +17,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
+import com.example.tintok.Communication.Communication;
+import com.example.tintok.Communication.CommunicationEvent;
+import com.example.tintok.CustomView.AfterRefreshCallBack;
+import com.example.tintok.CustomView.Refreshable;
 import com.example.tintok.DataLayer.DataRepositiory_Chatrooms;
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.DataRepository_Notificaitons;
@@ -31,7 +36,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-public class Activity_AppMainPages extends AppCompatActivity implements DataRepositiory_Chatrooms.OnNewMessagesListener, DataRepository_Notificaitons.OnNewNotificationListener {
+public class Activity_AppMainPages extends AppCompatActivity implements DataRepositiory_Chatrooms.OnNewMessagesListener, DataRepository_Notificaitons.OnNewNotificationListener,
+        SwipeRefreshLayout.OnRefreshListener, AfterRefreshCallBack {
 
 
     BottomNavigationView navBar;
@@ -41,6 +47,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     Fragment peopleBrowsing, mediaSurfing, notification, messages, myHomepage;
     Fragment current;
 
+    SwipeRefreshLayout refreshLayout ;
     //GUI state
     int unseenNotifications;
     int unseenChatrooms;
@@ -64,6 +71,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
         drawerLayout = findViewById(R.id.drawerLayout);
         navBar = findViewById(R.id.navBar);
         navView = findViewById(R.id.naviagtion_view);
+        refreshLayout = findViewById(R.id.refreshLayout);
 
         mGestureDetector = new GestureDetector(this, new SwipeGestureDetectorListener());
         drawerLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -124,6 +132,10 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
                     case R.id.logout:
                         current = mediaSurfing;
                         Intent intent = new Intent(Activity_AppMainPages.this, Activity_Login_Signup.class);
+                        Log.e("Acti MainPage", "Disconnected called");
+                        Communication.getInstance().Close();
+                        DataRepositoryController.getInstance().ClearRepository();
+
                         startActivity(intent);
                         overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
                         finish();
@@ -133,6 +145,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
             }
         });
 
+        refreshLayout.setOnRefreshListener(this);
     }
 
     public void ShowBadgeForNavBar(String navBarItem, int number){
@@ -245,6 +258,25 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
         unseenNotifications++;
         this.ShowBadgeForNavBar(ITEM_NOTIFICATIONS, unseenNotifications);
     }
+
+    @Override
+    public void onRefresh() {
+        try{
+            ((Refreshable)current).onRefresh(this);
+            refreshLayout.setRefreshing(true);
+        }catch (Exception e){
+            Log.e("MainPage", "current Fragment cant be refresh");
+        }
+    }
+
+    @Override
+    public void onRefreshingDone() {
+        if(refreshLayout.isRefreshing())
+            refreshLayout.setRefreshing(false);
+    }
+
+
+
 
     public class SwipeGestureDetectorListener extends GestureDetector.SimpleOnGestureListener{
         private static final int SWIPE_DISTANCE_THRESHOLD = 70;

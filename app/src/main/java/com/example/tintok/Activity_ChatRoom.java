@@ -19,6 +19,7 @@ import com.example.tintok.Adapters_ViewHolder.MessageViewHolder;
 import com.example.tintok.Adapters_ViewHolder.MessagesAdapter;
 import com.example.tintok.CustomView.EditTextSupportIME;
 
+import com.example.tintok.DataLayer.DataRepositiory_Chatrooms;
 import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.EmojiModel;
 import com.example.tintok.Model.MessageEntity;
@@ -48,7 +49,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 
-public class Activity_ChatRoom extends AppCompatActivity implements DataRepository_UserSimple.OnUserProfileChangeListener {
+public class Activity_ChatRoom extends AppCompatActivity implements DataRepository_UserSimple.OnUserProfileChangeListener, DataRepositiory_Chatrooms.OnNewMessagesListener {
     //const
     private String roomID="";
     Activity_Chatroom_ViewModel mViewModel;
@@ -220,6 +221,12 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
         startActivityForResult(Intent.createChooser(imgIntent, "Select Gallery"), PICK_FROM_GALLERY);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mViewModel.closeChatRoom(this.roomID);
+    }
+
     void handleImgfromCamera() {
         Intent imgIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (imgIntent.resolveActivity(getPackageManager()) != null) {
@@ -292,7 +299,11 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
         UserSimple user = mViewModel.getUserbyID(mViewModel.getOtherUser());
         Glide.with(this).load(user.getProfilePic().url)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profileImg);
-        this.mViewModel.joinChatRoom(this.roomID);
+        if(!this.roomID.isEmpty())
+            this.mViewModel.joinChatRoom(this.roomID);
+        else{
+            this.mViewModel.addOnNewMessageListener(this);
+        }
     }
 
     @Override
@@ -306,6 +317,19 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
     @Override
     protected void onStop() {
         super.onStop();
-        this.mViewModel.leaveChatRoom(this.roomID);
+        if(!roomID .isEmpty())
+            this.mViewModel.leaveChatRoom(this.roomID);
+        else
+            this.mViewModel.closeChatRoom(this.roomID);
+    }
+
+    @Override
+    public void onNewMessage(String roomID, MessageEntity msg) {
+        if(this.roomID.isEmpty()){
+            if(mViewModel.getChatRoomByID(roomID).getMessageEntities().getValue().size() == 1)
+                this.roomID = roomID;
+        }
+        this.mViewModel.joinChatRoom(this.roomID);
+        mViewModel.removeOnNewMessageListener(this);
     }
 }

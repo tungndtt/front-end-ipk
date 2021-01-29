@@ -124,10 +124,6 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
             this.nComment.setText(itemData.getNumberOfComments()+"");
             this.nLike.setText(itemData.getNumberOfLikes()+"");
              */
-           /* if(isLiked())
-                likeBtn.setBackground(new ColorDrawable(R.color.blue));
-            else
-                likeBtn.setBackground(new ColorDrawable(R.color.transparent));*/
 
 
 
@@ -135,7 +131,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
                     mListener.onNotificationChange(getAdapterPosition());
-                    updateSubscription(itemData.isSubscription);
+                    updateSubscription(itemData);
                     return true;
                 }
 
@@ -169,7 +165,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
 
             }
             updateLikeBtn();
-            updateSubscription(itemData.isSubscription);
+            updateSubscription(itemData);
         }
 
         @Override
@@ -209,7 +205,8 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
             }
         }
 
-        private void updateSubscription(boolean isSubscription){
+        private void updateSubscription(Post itemData){
+            boolean isSubscription = DataRepositoryController.getInstance().isThisUserSubscribedPost(itemData);
             if(!isSubscription)
                 notificationIcon.setImageResource(R.drawable.ic_offnoti);
             else

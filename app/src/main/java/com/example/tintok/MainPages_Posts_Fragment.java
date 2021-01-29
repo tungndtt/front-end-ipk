@@ -21,13 +21,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tintok.Adapters_ViewHolder.PostAdapter;
+import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.CustomView.PostUploadFragment;
+import com.example.tintok.CustomView.Refreshable;
 import com.example.tintok.Model.Post;
 
 import java.util.ArrayList;
 
 
-public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.onPostListener   {
+public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.onPostListener, Refreshable {
 
     private MainPages_Posts_ViewModel mViewModel = null;
 
@@ -83,8 +85,12 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
     }
 
     public void onClickAvatar(View v, int position) {
+        String userID = postAdapter.getItems().get(position).getAuthor_id();
+        if(userID.compareTo( mViewModel.getCurrentUserID()) == 0)
+            return;
         Intent intent = new Intent(this.getContext(), Activity_ViewProfile.class);
-        intent.putExtra("author_id", postAdapter.getItems().get(position).getAuthor_id());
+        intent.putExtra("author_id", userID );
+
         v.getContext().startActivity(intent);
     }
 
@@ -106,5 +112,11 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
     public void onNotificationChange(int position) {
         Post post =  postAdapter.getItems().get(position);
         mViewModel.UserPressSubscribe(post);
+    }
+
+    @Override
+    public void onRefresh(AfterRefreshCallBack e) {
+        mViewModel.refreshData(e);
+
     }
 }

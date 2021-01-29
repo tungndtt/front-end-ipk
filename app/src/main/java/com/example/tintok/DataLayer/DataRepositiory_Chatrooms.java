@@ -64,17 +64,27 @@ public class DataRepositiory_Chatrooms {
                     newMsg = new MessageEntity(authorID, new MediaEntity(null,url), LocalDateTime.now());
                 }
                 ChatRoom r = getChatRoomByID(roomID);
-                if(r != null) {
-                    ArrayList<ChatRoom> rooms = chatrooms.getValue();
-                    ArrayList<MessageEntity> msgs = r.getMessageEntities().getValue();
-                    msgs.add(newMsg);
-                    r.postMessageEntities(msgs);
-                    rooms.remove(r);
-                    rooms.add(0,r);
-                    chatrooms.postValue(rooms);
-                    if(newMsg.getAuthorID().compareTo(controller.getUser().getValue().getUserID()) != 0)
-                        AppNotificationChannelManager.getInstance().pushNotificationBasic("Message", "New unread message", "Click to view unread messages", OpenChatRoomIntent(r));
+                if( r == null){
+                    r = getChatRoomByID("");
+                    if( r == null){
+                        r = new ChatRoom();
+                        ArrayList<String> memberIDs = new ArrayList<>();
+                        memberIDs.add(authorID);
+                        memberIDs.add(controller.getUser().getValue().getUserID());
+                        r.setMemberIDs( memberIDs);
+                    }
+                    r.setChatRoomID(roomID);
                 }
+                ArrayList<ChatRoom> rooms = chatrooms.getValue();
+                ArrayList<MessageEntity> msgs = r.getMessageEntities().getValue();
+                msgs.add(newMsg);
+                r.postMessageEntities(msgs);
+                rooms.remove(r);
+                rooms.add(0,r);
+                chatrooms.postValue(rooms);
+
+                if(newMsg.getAuthorID().compareTo(controller.getUser().getValue().getUserID()) != 0)
+                    AppNotificationChannelManager.getInstance().pushNotificationBasic("Message", "New unread message", "Click to view unread messages", OpenChatRoomIntent(r));
                 if(newMessagesListeners != null){
                     for(OnNewMessagesListener m : newMessagesListeners)
                         m.onNewMessage(roomID, newMsg);
@@ -166,12 +176,55 @@ public class DataRepositiory_Chatrooms {
 
     public ChatRoom getChatRoomByID(String id){
         ArrayList<ChatRoom> chatRooms = DataRepositoryController.getInstance().getChatRooms().getValue();
-
         for(ChatRoom room : chatRooms){
             if(room.getChatRoomID().compareTo(id) == 0)
                 return room;
         }
         return null;
+    }
+
+    public ChatRoom getChatRoomByUser(ArrayList<String> userIDs){
+        Log.e("DataRepo_Chatroom", "at "+userIDs );
+        ArrayList<ChatRoom> chatRooms = DataRepositoryController.getInstance().getChatRooms().getValue();
+
+        for(ChatRoom room : chatRooms){
+            if(isUserMatchRoom(userIDs, room))
+                return room;
+
+        }
+        ChatRoom r = new ChatRoom();
+        r.setMemberIDs( userIDs);
+        r.setChatRoomID("");
+        r.postMessageEntities(new ArrayList<>());
+        chatRooms.add(r);
+        this.chatrooms.postValue(chatRooms);
+        return r;
+    }
+
+    public void closeChatRoom(String id){
+        if(id.isEmpty()){
+            ArrayList<ChatRoom> chatRooms = DataRepositoryController.getInstance().getChatRooms().getValue();
+            ChatRoom toDelete = null;
+            for(ChatRoom room : chatRooms){
+                if(room.getChatRoomID().compareTo(id) == 0){
+                    toDelete = room;
+                    break;
+                }
+            }
+            if(toDelete!= null)
+                chatRooms.remove(toDelete);
+            this.chatrooms.postValue(chatRooms);
+        }
+    }
+
+    private boolean isUserMatchRoom(ArrayList<String> userIDs, ChatRoom room){
+        if(room.getMemberIDs().size() != userIDs.size())
+            return false;
+        for(String id: userIDs){
+            if(!room.getMemberIDs().contains(id))
+                return false;
+        }
+        return true;
     }
 
     //Server part

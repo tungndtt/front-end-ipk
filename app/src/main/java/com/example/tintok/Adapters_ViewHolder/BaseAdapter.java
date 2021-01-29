@@ -56,7 +56,6 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder<T>> extends Recyc
 
     public void setItems(ArrayList<T> items) {
         //notifyDataSetChanged();
-        Log.e("base adapter", "called: old:"+ this.items+" new:" + items );
 
         DiffUtil.DiffResult r =DiffUtil.calculateDiff(new MyDiffCallback<T>(this.items, items));
         this.items.clear();

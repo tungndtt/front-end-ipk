@@ -251,6 +251,10 @@ public class Communication {
         return PacketFactory.getInstance().mToken;
     }
 
+    public void Close(){
+        getInstance().get_socket().disconnect();
+        instance = null;
+    }
     /*
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void LoginRequest(JsonObject jo, RestAPI_Entity.RestApiListener mListener){

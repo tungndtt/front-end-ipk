@@ -12,7 +12,7 @@ public class ChatRoom  {
     public MutableLiveData<ArrayList<MessageEntity>> messageEntities;
 
     public ChatRoom(){
-        messageEntities = new MutableLiveData<>();
+        messageEntities = new MutableLiveData<>(new ArrayList<>());
     }
 
     public String getChatRoomID() {

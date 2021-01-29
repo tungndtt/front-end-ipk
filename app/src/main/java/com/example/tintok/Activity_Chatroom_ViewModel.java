@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.CommunicationEvent;
+import com.example.tintok.DataLayer.DataRepositiory_Chatrooms;
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.ChatRoom;
@@ -115,5 +116,16 @@ public class Activity_Chatroom_ViewModel extends AndroidViewModel {
 
     public void leaveChatRoom(String roomID) {
         Communication.getInstance().get_socket().emit(CommunicationEvent.LEAVE_CHAT_ROOM, roomID);
+    }
+
+    public void closeChatRoom(String roomID) {
+        DataRepositoryController.getInstance().closeChatRoom(roomID);
+    }
+
+    public void addOnNewMessageListener(DataRepositiory_Chatrooms.OnNewMessagesListener mListener){
+        DataRepositoryController.getInstance().addNewMessageListener(mListener);
+    }
+    public void removeOnNewMessageListener(DataRepositiory_Chatrooms.OnNewMessagesListener mListener){
+        DataRepositoryController.getInstance().removeNewMessageListener(mListener);
     }
 }

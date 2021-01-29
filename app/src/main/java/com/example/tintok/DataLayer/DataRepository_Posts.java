@@ -8,8 +8,11 @@ import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI;
 import com.example.tintok.Communication.RestAPI_model.PostForm;
 import com.example.tintok.Communication.RestAPI_model.UserForm;
+import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
+import com.example.tintok.Model.UserSimple;
+import com.example.tintok.Utils.DataConverter;
 
 import java.util.ArrayList;
 
@@ -55,15 +58,8 @@ public class DataRepository_Posts {
             @Override
             public void onResponse(Call<ArrayList<PostForm>> call, Response<ArrayList<PostForm>> response) {
                 if(response.isSuccessful()){
-                    ArrayList<PostForm> body = response.body();
-                    ArrayList<Post> posts = newfeedPosts.getValue();
-                    for(PostForm postForm: body){
-                        Post e = new Post(postForm.getId(), postForm.getStatus(),postForm.getAuthor_id(), new MediaEntity(postForm.getImageUrl()));
-                        e.likers = postForm.getLikes() == null?new ArrayList<>():postForm.getLikes();
-                        Log.e("DataRepo_Post", "likers:"+postForm.getLikes());
-                        posts.add(e);
-                    }
-                    newfeedPosts.postValue(posts);
+                    ArrayList<PostForm> postForms = response.body();
+                   submitNewData(postForms);
                 } else {
                     Log.d("Info", "Response fails");
                 }
@@ -81,6 +77,17 @@ public class DataRepository_Posts {
         });
     }
 
+    public void refreshPost(AfterRefreshCallBack e) {
+
+    }
+
+    protected void submitNewData(ArrayList<PostForm> posts) {
+        ArrayList<Post> current = this.newfeedPosts.getValue();
+        if(current == null)
+            current = new ArrayList<>();
+        current.addAll(DataConverter.ConvertFromPostForm(posts));
+        this.newfeedPosts.postValue(current);
+    }
     //Server part
 
 }

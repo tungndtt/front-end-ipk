@@ -12,7 +12,6 @@ public class Post {
     private String status;
     private String author_id;
     private MediaEntity image;
-    public boolean isSubscription;
     public ArrayList<String> likers;
     public MutableLiveData<ArrayList<Comment>> comments;
 

@@ -1,15 +1,17 @@
 package com.example.tintok.DataLayer;
 
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI;
 import com.example.tintok.Communication.RestAPI_model.UserForm;
+import com.example.tintok.CustomView.FilterDialogFragment;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.UserSimple;
+import com.example.tintok.Utils.DataConverter;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -47,26 +49,23 @@ public class DataRepository_MatchingPeople {
 
     }
 
+    protected void submitNewData(ArrayList<UserForm> users) {
+        ArrayList<UserSimple> current = this.matchingPeople.getValue();
+        if(current == null)
+            current = new ArrayList<>();
+        current.addAll(DataConverter.ConvertFromUserFormToSimple(users));
+        this.matchingPeople.postValue(current);
+    }
+
     public void initData(){
         RestAPI api = Communication.getInstance().getApi();
         if(api != null){
-            api.getAllUsers().enqueue(new Callback<ArrayList<UserForm>>() {
+            api.getRecommendedUsers().enqueue(new Callback<ArrayList<UserForm>>() {
                 @Override
                 public void onResponse(Call<ArrayList<UserForm>> call, Response<ArrayList<UserForm>> response) {
                     if(response.isSuccessful()){
                         ArrayList<UserForm> forms = response.body();
-                        ArrayList<UserSimple> people = new ArrayList<>();
-                        for(UserForm f : forms){
-                            UserSimple user = new UserSimple();
-                            user.setUserID(f.getId());
-                            user.setUserName(f.getUsername());
-                            user.setDescription("");
-                            user.setEmail(f.getEmail());
-                            user.setProfilePic(new MediaEntity(null, f.getImageUrl()));
-                            people.add(user);
-                            Log.e("Mathcingpeeps", f.getImageUrl());
-                        }
-                        postNewPeople(people.toArray(new UserSimple[people.size()]));
+                       submitNewData(forms);
                     } else {
                         Log.e("Info", "Cannot get users");
                     }
@@ -86,5 +85,24 @@ public class DataRepository_MatchingPeople {
         }
     }
 
+    public void FindMatchingByFilter(Filter f){
+
+    }
+
+    public void findNewMatching(FilterDialogFragment.FilterState currentState) {
+
+    }
+
+
+    public interface Filter{
+        public enum Gender{
+            MALE, FEMALE, BOTH
+        }
+        public String getFilterName();
+        public int getMinAge();
+        public int getMaxAge();
+        public Gender getGender();
+        public boolean[] getInterestBitmap();
+    }
     //Server part
 }

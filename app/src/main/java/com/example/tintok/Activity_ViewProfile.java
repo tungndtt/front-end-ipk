@@ -2,6 +2,8 @@ package com.example.tintok;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ import com.example.tintok.CustomView.PostUploadFragment;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -41,7 +44,8 @@ public class Activity_ViewProfile extends AppCompatActivity{
     private Fragment infoFragment, imageFragment;
     private int selected;
     TextView username;
-    private TextView follwingNumber, followerNumber;
+    private TextView followingNumber, followerNumber;
+    private MaterialButton followBtn, messageBtn;
     BottomNavigationView profile_navigation_bar;
     Fragment postFragment;
 
@@ -55,9 +59,10 @@ public class Activity_ViewProfile extends AppCompatActivity{
         //this.viewModel.setFragment(this);
         // info of displayed user. Currently just user name for testing
         username = findViewById(R.id.profile_name);
-        follwingNumber = findViewById(R.id.followingsNumber);
+        followingNumber = findViewById(R.id.followingsNumber);
         followerNumber = findViewById(R.id.follwersNumber);
-
+        followBtn = findViewById(R.id.followBtn);
+        messageBtn = findViewById(R.id.messageBtn);
 
         profile_navigation_bar = findViewById(R.id.profile_navigation_bar);
         profile_navigation_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -87,10 +92,6 @@ public class Activity_ViewProfile extends AppCompatActivity{
         }*/
         this.viewModel.getUserProfile(author_id);
 
-
-
-
-
         profile_pic = findViewById(R.id.profile_picture);
 
         viewModel.getProfile().observe(this, userProfile -> {
@@ -102,13 +103,40 @@ public class Activity_ViewProfile extends AppCompatActivity{
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profile_pic);
             imageFragment = Image_Profile_Fragment.getInstance(viewModel.getProfile().getValue().myPosts.getValue());
             initPosts();
+            followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));
+            followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));
             Log.e("Activity_ViewProfile","profilepic "+userProfile.getProfilePic().url);
         });
 
+        followBtn.setOnClickListener(v -> {
+            viewModel.UserPressFollow();
+            UpdateFollowBtn();
+        });
 
+        messageBtn.setOnClickListener(v -> {
+            Intent mIntent = new Intent(this, Activity_ChatRoom.class);
+            overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
+            mIntent.putExtra("roomID", viewModel.openChatRoomWithUser().getChatRoomID());
+            startActivity(mIntent);
+        });
     }
 
+    private void UpdateFollowBtn(){
+        if(viewModel.getProfile().getValue().getFollowers().getValue().contains(viewModel.getCurrentUserID())){
+            followBtn.setTextColor(Color.parseColor("#03b5fc"));
+        }
 
+        else{
+            followBtn.setTextColor(Color.BLACK);
+            Log.e("ActivityViewPro", "set white");
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     void initPosts(){
         postFragment = new MainPages_Posts_Fragment();

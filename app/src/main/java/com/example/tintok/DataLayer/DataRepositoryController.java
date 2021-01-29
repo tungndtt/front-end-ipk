@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Communication.Communication;
+import com.example.tintok.CustomView.AfterRefreshCallBack;
+import com.example.tintok.CustomView.FilterDialogFragment;
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.MessageEntity;
 import com.example.tintok.Model.Notification;
@@ -32,6 +34,7 @@ public class DataRepositoryController {
     DataRepository_Posts dataRepository_posts;
 
     DataRepository_UserSimple dataRepository_userSimple;
+
 
     public void submitNewPost(Context mContext, Post newPost) {
         this.dataRepository_currentUser.submitNewPost(mContext, newPost);
@@ -90,6 +93,13 @@ public class DataRepositoryController {
     public ChatRoom getChatRoomByID(String id){
         return dataRepositiory_chatrooms.getChatRoomByID(id);
     }
+    public ChatRoom getChatRoomByUser(ArrayList<String> userIDs){
+        return dataRepositiory_chatrooms.getChatRoomByUser(userIDs);
+    }
+    public void closeChatRoom(String roomID) {
+        dataRepositiory_chatrooms.closeChatRoom(roomID);
+    }
+
     public void emitNewMessage(Context mContext, String roomID, MessageEntity newMsg, String encoded){
         dataRepositiory_chatrooms.emitNewMessage( mContext, roomID, newMsg, encoded);
     }
@@ -113,8 +123,11 @@ public class DataRepositoryController {
         return p.likers.contains(getUser().getValue().getUserID());
     }
     public boolean isThisUserSubscribedPost(Post p){
-        return false;
+        return getUser().getValue().getFollowingPost().getValue().contains(p.getId());
         //To Do
+    }
+    public void UpdateFollowingPost(Post p ){
+        dataRepository_currentUser.UpdateSubcribedPost(p);
     }
 //endregion
 
@@ -122,12 +135,22 @@ public class DataRepositoryController {
     public MutableLiveData<ArrayList<UserSimple>> getMatchingPeople() {
         return dataRepository_matchingPeople.getMatchingPeople();
     }
+    public void findNewMatching(FilterDialogFragment.FilterState currentState) {
+        dataRepository_matchingPeople.findNewMatching(currentState);
+    }
 //endregion
+
+    //region NewFeedPosts
     public MutableLiveData<ArrayList<Post>> getNewfeedPosts() {
         return dataRepository_posts.getNewfeedPosts();
     }
 
-//region Notifications
+    public void refreshPost(AfterRefreshCallBack e) {
+        dataRepository_posts.refreshPost(e);
+    }
+    //endregion
+
+    //region Notifications
     public MutableLiveData<ArrayList<Notification>> getNotifications() {
         return dataRepository_notificaitons.getNotifications();
     }
@@ -169,8 +192,16 @@ public class DataRepositoryController {
 
     ArrayList<DataObserver> dataObservers = new ArrayList<>();
 
+
+
+
     public interface DataObserver{
         public void notifyDataChange(DataRepositoryController dataRepositoryController);
     }
 //endregion
+
+    public void ClearRepository(){
+        DataRepositoryController.instance = null;
+    }
 }
+

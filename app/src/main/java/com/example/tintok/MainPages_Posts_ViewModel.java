@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.CommunicationEvent;
+import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.Model.Post;
 
@@ -60,12 +61,16 @@ public class MainPages_Posts_ViewModel extends AndroidViewModel {
     }
 
     public void UserPressSubscribe(Post post){
-        post.isSubscription = !post.isSubscription;
-        if(post.isSubscription){
+        DataRepositoryController.getInstance().UpdateFollowingPost(post);
+        if(DataRepositoryController.getInstance().isThisUserSubscribedPost(post)){
             subscribePost(post.getId());
         }
         else{
             unsubscribePost(post.getId());
         }
+    }
+
+    public void refreshData(AfterRefreshCallBack e) {
+        DataRepositoryController.getInstance().refreshPost(e);
     }
 }

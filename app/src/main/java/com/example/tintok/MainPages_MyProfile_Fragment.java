@@ -43,7 +43,7 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
     private UserProfile user;
     private ImageView profilePic;
     private View newPostBtn;
-    private TextView follwingNumber, followerNumber, username;
+    private TextView followingNumber, followerNumber, username;
     ShapeableImageView menuBtn;
     BottomNavigationView profile_navigation_bar;
 
@@ -84,7 +84,7 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
         username = view.findViewById(R.id.profile_name);
         newPostBtn = view.findViewById(R.id.newPostBtn);
         profilePic = view.findViewById(R.id.post_profile);
-        follwingNumber = view.findViewById(R.id.followingsNumber);
+        followingNumber = view.findViewById(R.id.followingsNumber);
         followerNumber = view.findViewById(R.id.follwersNumber);
         menuBtn = view.findViewById(R.id.openMenuBtn);
 
@@ -147,6 +147,8 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
             username.setText(mViewModel.getUserProfile().getValue().getUserName());
             Glide.with(this.getContext()).load(mViewModel.getUserProfile().getValue().getProfilePic().url)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
+            followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));
+            followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));
         });
         if (profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item)
             getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, infoFragment).commit();
