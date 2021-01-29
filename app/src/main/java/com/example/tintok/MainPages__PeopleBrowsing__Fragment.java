@@ -4,6 +4,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,52 +34,52 @@ import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;
+import com.yuyakaido.android.cardstackview.Duration;
 import com.yuyakaido.android.cardstackview.StackFrom;
+import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.ArrayList;
 
-public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Refreshable {
+public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Refreshable, PeopleBrowsingAdapter.onClickListener {
 
     private MainPages_PeopleBrowsing_ViewModel  mViewModel;
     MaterialButton filterBtn;
-    CardStackView cardStackView;
 
     private int currentItem = 0;
     private int offScreenPageLimit = 2;
 
+    CardStackView cardStackView;
     PeopleBrowsingAdapter adapter;
     CardStackLayoutManager  manager;
 
     DialogFragment filterFragment = null;
     FilterDialogFragment.FilterState currentState ;
 
-    public static MainPages__PeopleBrowsing__Fragment newInstance() {
-        return new MainPages__PeopleBrowsing__Fragment();
+    public MainPages__PeopleBrowsing__Fragment() {
+        currentState = new FilterDialogFragment.FilterState();
+        Log.e("Main_People_Frag", "Constructor");
     }
-
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.mainpages__peoplebrowsing__fragment, container, false);
+        View view =  inflater.inflate(R.layout.mainpages__peoplebrowsing__fragment, container, false);
+        mViewModel = new ViewModelProvider(this).get(MainPages_PeopleBrowsing_ViewModel.class);
+        initFragment(view);
+        return view;
     }
 
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MainPages_PeopleBrowsing_ViewModel.class);
-        initFragment();
+
+    public void initFragment(View view){
+
         this.setRetainInstance(true);
         // TODO: Use the ViewModel
         mViewModel.getMatchingPeople().observe(this.getViewLifecycleOwner(), userSimples -> {
-            int currentPos = manager.getTopPosition();
             adapter.setItems(userSimples);
-            cardStackView.smoothScrollToPosition(currentPos);
         });
-        currentState = new FilterDialogFragment.FilterState();
+        filterBtn = view.findViewById(R.id.filterBtn);
         filterBtn.setOnClickListener(v -> {
             if(filterFragment != null)
                 return;
@@ -88,10 +89,10 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
                     currentState = state;
                     mViewModel.submitFilter(currentState);
                 }
-                Log.e("Main_People_Frag", "ListenerCalled");
             });
             filterFragment.show(getChildFragmentManager(), "Filtering");
         });
+        initCardView(view);
     }
 
     /*int currentPos = 0;
@@ -107,12 +108,10 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
         super.onPause();
         currentPos = manager.getTopPosition();
     }*/
+    
 
-    boolean isLiked;
-
-    void initFragment(){
-        filterBtn = getView().findViewById(R.id.filterBtn);
-        cardStackView = getView().findViewById(R.id.card_stack_view);
+    void initCardView(View view){
+        cardStackView = view.findViewById(R.id.card_stack_view);
         ArrayList<UserSimple> models = new ArrayList<UserSimple>();
         UserSimple user_1 = new UserSimple();
         user_1.setUserName("1");
@@ -135,7 +134,6 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
                 if (direction == Direction.Right){
                     likeImg.setVisibility(View.VISIBLE);
                     dislikeImg.setVisibility(View.INVISIBLE);
-                    isLiked = true;
                 }
                 if (direction == Direction.Top){
 
@@ -143,7 +141,6 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
                 if (direction == Direction.Left){
                     dislikeImg.setVisibility(View.VISIBLE);
                     likeImg.setVisibility(View.INVISIBLE);
-                    isLiked = false;
                 }
                 if (direction == Direction.Bottom){
                 }
@@ -151,12 +148,20 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
 
             @Override
             public void onCardSwiped(Direction direction) {
+                boolean isLiked = false;
+                if (direction == Direction.Right)
+                    isLiked = true;
+                
+                else if (direction == Direction.Left)
+                    isLiked = false;
 
+                mViewModel.submitPeopleReaction(adapter.getItems().get(manager.getTopPosition()-1), isLiked);
             }
 
             @Override
             public void onCardRewound() {
-                Log.d(TAG, "onCardRewound: " + manager.getTopPosition());
+                Log.e(TAG, "onCardRewound: " + manager.getTopPosition());
+
             }
 
             @Override
@@ -170,12 +175,12 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
             @Override
             public void onCardAppeared(View view, int position) {
                 //TextView tv = view.findViewById(R.id.item_name);
-                Log.d(TAG, "onCardAppeared: " + position + ", nama: " );
+                Log.d(TAG, "onCardAppeared: " + position + ", nama: " +adapter.getItems());
             }
 
             @Override
             public void onCardDisappeared(View view, int position) {
-                mViewModel.submitPeopleReaction(adapter.getItems().get(position), isLiked);
+                Log.d(TAG, "onCardDisAppeared: " + position + ", nama: " +adapter.getItems() );
             }
         });
         manager.setStackFrom(StackFrom.None);
@@ -186,19 +191,48 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
         manager.setMaxDegree(20.0f);
         manager.setDirections(Direction.HORIZONTAL);
         manager.setCanScrollHorizontal(true);
-        manager.setCanScrollVertical(false);
-        manager.setSwipeableMethod(SwipeableMethod.Manual);
+        manager.setCanScrollVertical(true);
+        manager.setSwipeableMethod(SwipeableMethod.AutomaticAndManual);
         manager.setOverlayInterpolator(new LinearInterpolator());
         adapter = new PeopleBrowsingAdapter(this.getActivity(), models);
         cardStackView.setLayoutManager(manager);
         cardStackView.setAdapter(adapter);
         cardStackView.setItemAnimator(new DefaultItemAnimator());
-
+        cardStackView.swipe();
+        adapter.setOnClickListener(this);
     }
 
+    private void swipeCard(Direction direction){
+        SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder()
+                .setDirection(direction)
+                .setDuration(Duration.Slow.duration)
+                .build();
+        manager.setSwipeAnimationSetting(setting);
+        cardStackView.swipe();
+    }
 
     @Override
     public void onRefresh(AfterRefreshCallBack e) {
         mViewModel.refreshData(e);
     }
+
+    @Override
+    public void onReactionClick(boolean isLiked) {
+        Direction dir = isLiked?Direction.Right : Direction.Left;
+        this.swipeCard(dir);
+    }
+
+    @Override
+    public void onProfileBtnClick() {
+        UserSimple userSimple = adapter.getItems().get(manager.getTopPosition());
+        String userID = userSimple.getUserID();
+        if(userID.compareTo( mViewModel.getCurrentUserID()) == 0)
+            return;
+        Intent intent = new Intent(this.getContext(), Activity_ViewProfile.class);
+        intent.putExtra("author_id", userID );
+
+        startActivity(intent);
+    }
+
+
 }

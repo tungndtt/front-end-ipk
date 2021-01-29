@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI;
 import com.example.tintok.Communication.RestAPI_model.PostForm;
+import com.example.tintok.Communication.RestAPI_model.PostRequest;
 import com.example.tintok.Communication.RestAPI_model.UserForm;
 import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.Model.MediaEntity;
@@ -14,6 +15,7 @@ import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserSimple;
 import com.example.tintok.Utils.DataConverter;
 
+import java.time.Instant;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -52,14 +54,16 @@ public class DataRepository_Posts {
 
     }
 
+    long timeStamp = 0;
     public void initData(){
 
-        this.api.getPosts().enqueue(new Callback<ArrayList<PostForm>>() {
+        this.api.getPosts(new PostRequest(Instant.now().toEpochMilli(), new ArrayList<>())).enqueue(new Callback<ArrayList<PostForm>>() {
             @Override
             public void onResponse(Call<ArrayList<PostForm>> call, Response<ArrayList<PostForm>> response) {
                 if(response.isSuccessful()){
                     ArrayList<PostForm> postForms = response.body();
                    submitNewData(postForms);
+                    timeStamp = postForms.get(0).getDate();
                 } else {
                     Log.d("Info", "Response fails");
                 }
@@ -78,7 +82,38 @@ public class DataRepository_Posts {
     }
 
     public void refreshPost(AfterRefreshCallBack e) {
+        if(this.getNewfeedPosts().getValue() == null || this.newfeedPosts.getValue().isEmpty()){
+            this.initData();
+            e.onRefreshingDone();
+            return;
+        }
+        ArrayList<String> seenPosts = new ArrayList<>();
+        for(Post p : this.getNewfeedPosts().getValue()){
+            seenPosts.add(p.getId());
+        }
+        this.api.getPosts(new PostRequest(Instant.now().toEpochMilli(), seenPosts)).enqueue(new Callback<ArrayList<PostForm>>() {
+            @Override
+            public void onResponse(Call<ArrayList<PostForm>> call, Response<ArrayList<PostForm>> response) {
+                if(response.isSuccessful()){
+                    ArrayList<PostForm> postForms = response.body();
+                    submitNewData(postForms);
+                    e.onRefreshingDone();
+                } else {
+                    Log.d("Info", "Response fails");
+                    e.onRefreshingDone();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ArrayList<PostForm>> call, Throwable t) {
+                try {
+                    throw t;
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+                Log.e("Error", "Connection error");
+            }
+        });
     }
 
     protected void submitNewData(ArrayList<PostForm> posts) {

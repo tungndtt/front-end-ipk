@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.tintok.Communication.Communication;
+import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.CustomView.FilterDialogFragment;
 import com.example.tintok.DataLayer.DataRepositoryController;
@@ -27,7 +29,7 @@ public class MainPages_PeopleBrowsing_ViewModel extends AndroidViewModel {
     }
 
     public void submitPeopleReaction(UserSimple userSimple, boolean isLiked) {
-        Log.e("PeopelBrVM", "new Reaction "+isLiked );
+        DataRepositoryController.getInstance().submitPeopleReaction(userSimple, isLiked);
     }
 
     public void submitFilter(FilterDialogFragment.FilterState currentState) {
@@ -36,6 +38,11 @@ public class MainPages_PeopleBrowsing_ViewModel extends AndroidViewModel {
             if(currentState.getInterestBitmap()[i]) toPrint+="1";
             else toPrint+="0";
         Log.e("PeopelBrVM", "new State: " + toPrint);
-        DataRepositoryController.getInstance().findNewMatching(currentState);
+        DataRepositoryController.getInstance().findPeoplewithFilter(currentState);
+    }
+
+
+    public String getCurrentUserID() {
+        return DataRepositoryController.getInstance().getUser().getValue().getUserID();
     }
 }

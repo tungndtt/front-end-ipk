@@ -59,7 +59,7 @@ public class FilterDialogFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         nameCheckBox = view.findViewById(R.id.checkbox_byname);
-        name = view.findViewById(R.id.name);
+        name = view.findViewById(R.id.filterByName);
         genderGroup = view.findViewById(R.id.gender_group);
         ageSlider = view.findViewById(R.id.rangeSlider);
         interestTag = view.findViewById(R.id.interestTag);
@@ -79,7 +79,13 @@ public class FilterDialogFragment extends DialogFragment {
         window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
     }
 
+    public void ResetFilter(){
+        currentFilterState = new FilterState();
+        initComponents();
+    }
+
     public void initComponents(){
+        Log.e("FilterFrag", "at "+currentFilterState.getFilterName());
         if(!currentFilterState.getFilterName().isEmpty()){
             nameCheckBox.setChecked(true);
             name.setText(currentFilterState.getFilterName());

@@ -1,10 +1,8 @@
 package com.example.tintok.Communication.RestAPI_model;
 
-import com.example.tintok.Model.Comment;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PostForm {
     // post id
@@ -25,6 +23,10 @@ public class PostForm {
 
     @SerializedName("likes")
     private ArrayList<String> likes;
+
+
+    @SerializedName("date")
+    private long date;
 
     public ArrayList<CommentForm> getComments() {
         return comments;
@@ -47,5 +49,10 @@ public class PostForm {
     public ArrayList<String> getLikes() {
         return likes;
     }
+
+    public long getDate() {
+        return date;
+    }
+
 
 }

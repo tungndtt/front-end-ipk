@@ -5,7 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Communication.Communication;
+import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.Communication.RestAPI;
+import com.example.tintok.Communication.RestAPI_model.PeopleFilterRequest;
 import com.example.tintok.Communication.RestAPI_model.UserForm;
 import com.example.tintok.CustomView.FilterDialogFragment;
 import com.example.tintok.Model.MediaEntity;
@@ -53,6 +55,7 @@ public class DataRepository_MatchingPeople {
         ArrayList<UserSimple> current = this.matchingPeople.getValue();
         if(current == null)
             current = new ArrayList<>();
+        current.clear();
         current.addAll(DataConverter.ConvertFromUserFormToSimple(users));
         this.matchingPeople.postValue(current);
     }
@@ -86,11 +89,34 @@ public class DataRepository_MatchingPeople {
     }
 
     public void FindMatchingByFilter(Filter f){
+        RestAPI api = Communication.getInstance().getApi();
+        if(api != null){
+            api.getFilteredUser(PeopleFilterRequest.fromFilterState(f)).enqueue(new Callback<ArrayList<UserForm>>() {
+                @Override
+                public void onResponse(Call<ArrayList<UserForm>> call, Response<ArrayList<UserForm>> response) {
+                    if(response.isSuccessful()){
+                        ArrayList<UserForm> forms = response.body();
+                        submitNewData(forms);
+                    } else {
+                        Log.e("Info", "Cannot get users");
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<ArrayList<UserForm>> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
-    public void findNewMatching(FilterDialogFragment.FilterState currentState) {
-
+    public void submitPeopleReaction(UserSimple userSimple, boolean isLiked) {
+        ArrayList<UserSimple> users = this.getMatchingPeople().getValue();
+        users.remove(userSimple);
+        this.getMatchingPeople().postValue(users);
+        if(isLiked)
+            Communication.getInstance().get_socket().emit(CommunicationEvent.LIKE_USER, controller.getUser().getValue().getUserID(), userSimple.getUserID());
+        else Communication.getInstance().get_socket().emit(CommunicationEvent.UNLIKE_USER, controller.getUser().getValue().getUserID(), userSimple.getUserID());
     }
 
 

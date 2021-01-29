@@ -22,8 +22,20 @@ public class PeopleBrowsingAdapter extends BaseAdapter<UserSimple, PeopleBrowsin
     @NonNull
     @Override
     public PeopleBrowsingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mainpages__peoplebrowsing__item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mainpages__peoplebrowsing, parent, false);
         return new PeopleBrowsingViewHolder(view, this);
+    }
+
+    onClickListener mListener ;
+    public void setOnClickListener(onClickListener mListener){
+        this.mListener = mListener;
+    }
+    public onClickListener getOnClickListener(){
+        return mListener;
+    }
+    public interface onClickListener{
+        public void onReactionClick(boolean isLiked);
+        public void onProfileBtnClick();
     }
 
 }

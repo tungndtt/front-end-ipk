@@ -4,7 +4,9 @@ import com.example.tintok.Communication.RestAPI_model.ChatForm;
 import com.example.tintok.Communication.RestAPI_model.LoginResponseForm;
 import com.example.tintok.Communication.RestAPI_model.MessageForm;
 import com.example.tintok.Communication.RestAPI_model.NotificationForm;
+import com.example.tintok.Communication.RestAPI_model.PeopleFilterRequest;
 import com.example.tintok.Communication.RestAPI_model.PostForm;
+import com.example.tintok.Communication.RestAPI_model.PostRequest;
 import com.example.tintok.Communication.RestAPI_model.UnknownUserForm;
 import com.example.tintok.Communication.RestAPI_model.UserForm;
 
@@ -16,6 +18,8 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -81,11 +85,14 @@ public interface RestAPI {
     
 
     // just to get posts
-    @GET("posts")
-    Call<ArrayList<PostForm>> getPosts();
+    @POST("get_post_for_user")
+    Call<ArrayList<PostForm>> getPosts(@Body PostRequest req);
 
     @GET("get_recommend_users")
     Call<ArrayList<UserForm>> getRecommendedUsers();
+
+    @POST("get_filtered_users")
+    Call<ArrayList<UserForm>> getFilteredUser(@Body PeopleFilterRequest req);
 
     @GET("get_all_notifications")
     Call<ArrayList<NotificationForm>> getAllNotifications();

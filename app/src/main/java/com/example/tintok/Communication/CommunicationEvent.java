@@ -32,4 +32,7 @@ public class CommunicationEvent {
     public static final String FOLLOW_USER = "FOLLOW_USER";
     public static final String  UNFOLLOW_USER = "UNFOLLOW_USER";
 
+    public static final String LIKE_USER ="LIKE_USER";
+    public static final String UNLIKE_USER = "UNLIKE_USER";
+
 }

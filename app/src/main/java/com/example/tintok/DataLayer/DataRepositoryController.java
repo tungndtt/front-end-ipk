@@ -135,8 +135,11 @@ public class DataRepositoryController {
     public MutableLiveData<ArrayList<UserSimple>> getMatchingPeople() {
         return dataRepository_matchingPeople.getMatchingPeople();
     }
-    public void findNewMatching(FilterDialogFragment.FilterState currentState) {
-        dataRepository_matchingPeople.findNewMatching(currentState);
+    public void findPeoplewithFilter(DataRepository_MatchingPeople.Filter currentState) {
+        dataRepository_matchingPeople.FindMatchingByFilter(currentState);
+    }
+    public void submitPeopleReaction(UserSimple userSimple, boolean isLiked) {
+        dataRepository_matchingPeople.submitPeopleReaction(userSimple,isLiked);
     }
 //endregion
 
