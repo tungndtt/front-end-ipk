@@ -60,7 +60,6 @@ public class Activity_Comment_ViewModel extends MainPages_Posts_ViewModel{
             String comment = (String) args[1];
             String post_id = (String) args[2];
             String image_path = (String) args[3];
-            String date = (String) args[4];
             ArrayList<Comment> comments = listComments.getValue();
             Log.e("Act_Comment_ViewModel", "new cmt content: "+ comment);
             if(!image_path.isEmpty())
