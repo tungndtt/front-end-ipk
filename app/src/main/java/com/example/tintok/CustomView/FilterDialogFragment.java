@@ -85,7 +85,6 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
     public void initComponents(){
-        Log.e("FilterFrag", "at "+currentFilterState.getFilterName());
         if(!currentFilterState.getFilterName().isEmpty()){
             nameCheckBox.setChecked(true);
             name.setText(currentFilterState.getFilterName());

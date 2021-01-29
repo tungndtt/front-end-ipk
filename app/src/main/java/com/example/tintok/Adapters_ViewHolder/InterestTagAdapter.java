@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class InterestTagAdapter extends BaseAdapter<DataRepository_Interest.InterestTag, InterestTagAdapter.ViewHolder> {
     public InterestTagAdapter(Context context, ArrayList<DataRepository_Interest.InterestTag> models) {
         super(context, models);
-        Log.e("InterestAdapter", "gotdata:"+models);
     }
 
     @NonNull
@@ -46,7 +45,6 @@ public class InterestTagAdapter extends BaseAdapter<DataRepository_Interest.Inte
 
         @Override
         public void bindData(DataRepository_Interest.InterestTag itemData) {
-            Log.e("InterestAdapter", "bind data:"+ itemData.tag);
             tag.setText(itemData.tag);
             tag.setOnClickListener(v -> {
                 if(mListener != null)
