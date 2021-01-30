@@ -43,6 +43,7 @@ import android.provider.MediaStore;
 
 import android.view.View;
 
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -75,6 +76,7 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         if (getIntent() != null) {
             this.roomID = getIntent().getStringExtra("roomID");
         }
