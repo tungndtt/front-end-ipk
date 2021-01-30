@@ -260,6 +260,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
             refreshLayout.setRefreshing(true);
         }catch (Exception e){
             Log.e("MainPage", "current Fragment cant be refresh");
+            onRefreshingDone();
         }
     }
 

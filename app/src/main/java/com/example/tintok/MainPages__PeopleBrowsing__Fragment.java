@@ -42,7 +42,7 @@ import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.ArrayList;
 
-public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Refreshable {
+public class MainPages__PeopleBrowsing__Fragment extends Fragment {
 
     private MainPages_PeopleBrowsing_ViewModel  mViewModel;
     MaterialButton filterBtn;
@@ -223,10 +223,6 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
         cardStackView.swipe();
     }
 
-    @Override
-    public void onRefresh(AfterRefreshCallBack e) {
-        mViewModel.refreshData(e);
-    }
 
     private void initButtonGroup(View view) {
         likeBtn = view.findViewById(R.id.likeBtn);

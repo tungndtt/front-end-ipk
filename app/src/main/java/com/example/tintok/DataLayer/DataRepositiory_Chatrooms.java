@@ -21,7 +21,9 @@ import com.example.tintok.Utils.AppNotificationChannelManager;
 import com.example.tintok.Utils.EmoticonHandler;
 import com.example.tintok.Utils.FileUtil;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -142,11 +144,11 @@ public class DataRepositiory_Chatrooms {
                             for(MessageForm m : msgs){
                                if(m.getMessage() != null){
                                    MessageEntity mm = new MessageEntity(m.getAuthor_id(), EmoticonHandler.parseMessageFromString(DataRepositoryController.applicationContext, m.getMessage()),
-                                           LocalDateTime.now());
+                                           Instant.ofEpochMilli(m.getDateTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
                                    myMSG.add(mm);
                                }
                                else if(m.getImageUrl()!= null){
-                                   MessageEntity mm = new MessageEntity(m.getAuthor_id(), new MediaEntity(null,m.getImageUrl()), LocalDateTime.now());
+                                   MessageEntity mm = new MessageEntity(m.getAuthor_id(), new MediaEntity(null,m.getImageUrl()),  Instant.ofEpochMilli(m.getDateTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
                                    myMSG.add(mm);
                                }
                             }
