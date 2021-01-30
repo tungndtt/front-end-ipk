@@ -124,4 +124,8 @@ public class Activity_ViewProfile_ViewModel extends MainPages_Posts_ViewModel {
     public String GetCurrentUserID(){
        return DataRepositoryController.getInstance().getUser().getValue().getUserID();
     }
+
+    public boolean isFollowing(){
+        return getProfile().getValue().getFollowers().getValue().contains(getCurrentUserID());
+    }
 }

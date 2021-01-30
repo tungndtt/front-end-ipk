@@ -24,7 +24,6 @@ import com.yuyakaido.android.cardstackview.Direction;
 public class PeopleBrowsingViewHolder extends BaseViewHolder<UserSimple> {
     TextView name, description;
     ImageView imageView, likeImg, dislikeImg;
-    ImageButton likeBtn, dislikeBtn, profileBtn, followBtn;
     ScaleGestureDetector gestureDetector;
     Matrix mMatrix = new Matrix();
     float scale = 1f;
@@ -35,9 +34,7 @@ public class PeopleBrowsingViewHolder extends BaseViewHolder<UserSimple> {
         imageView = itemView.findViewById(R.id.profileimage);
         likeImg = itemView.findViewById(R.id.likeImg);
         dislikeImg = itemView.findViewById(R.id.dislikeImg);
-        likeBtn = itemView.findViewById(R.id.likeBtn);
-        dislikeBtn = itemView.findViewById(R.id.dislikeBtn);
-        profileBtn = itemView.findViewById(R.id.profileBtn);
+
         gestureDetector = new ScaleGestureDetector(itemView.getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener(){
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
@@ -59,19 +56,6 @@ public class PeopleBrowsingViewHolder extends BaseViewHolder<UserSimple> {
             }
         });
 
-        likeBtn.setOnClickListener(v -> {
-            likeImg.setVisibility(View.VISIBLE);
-            dislikeImg.setVisibility(View.INVISIBLE);
-            ((PeopleBrowsingAdapter)mAdapter).getOnClickListener().onReactionClick(true);
-        });
-        dislikeBtn.setOnClickListener(v -> {
-            likeImg.setVisibility(View.INVISIBLE);
-            dislikeImg.setVisibility(View.VISIBLE);
-            ((PeopleBrowsingAdapter)mAdapter).getOnClickListener().onReactionClick(false);
-        });
-        profileBtn.setOnClickListener(v -> {
-            ((PeopleBrowsingAdapter)mAdapter).getOnClickListener().onProfileBtnClick();
-        });
 
     }
 

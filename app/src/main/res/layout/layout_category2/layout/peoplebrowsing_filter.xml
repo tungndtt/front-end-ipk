@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_close"
             android:background="@color/transparent"
-            android:textColor="@color/black"
             android:drawableTint="@color/black"
             app:strokeColor="@color/black"
             app:strokeWidth="10dp"
@@ -29,6 +28,18 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true">
         </com.google.android.material.textview.MaterialTextView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/resetBtn"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_key"
+            android:background="@color/transparent"
+            android:drawableTint="@color/black"
+            app:strokeColor="@color/black"
+            app:strokeWidth="10dp"
+            android:layout_alignParentEnd="true"
+            />
     </RelativeLayout>
 
     <View

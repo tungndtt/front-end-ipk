@@ -87,7 +87,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
         messages = new MainPages__Chatroom__Fragment();
         notification = new MainPages_Notification_Fragment();
 
-        mediaSurfing = new MainPages_Posts_Fragment();
+        mediaSurfing = new MainPages_Posts_Fragment(true, true);
         myHomepage = new MainPages_MyProfile_Fragment(DataRepositoryController.getInstance().getUser().getValue());
 
 
@@ -131,13 +131,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
                         break;
                     case R.id.logout:
                         current = mediaSurfing;
-                        Intent intent = new Intent(Activity_AppMainPages.this, Activity_Login_Signup.class);
-                        Log.e("Acti MainPage", "Disconnected called");
-                        Communication.getInstance().Close();
-                        DataRepositoryController.getInstance().ClearRepository();
-
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
+                        App.Logout(Activity_AppMainPages.this);
                         finish();
                         break;
                 }

@@ -33,6 +33,14 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
 
     private MainPages_Posts_ViewModel mViewModel = null;
 
+    boolean allowViewCmt, allowViewAuthorProfile;
+
+    public MainPages_Posts_Fragment(boolean allowViewCmt, boolean allowViewAuthorProfile){
+        this.allowViewCmt = allowViewCmt;
+        this.allowViewAuthorProfile = allowViewAuthorProfile;
+    }
+
+
     public void setViewModel(MainPages_Posts_ViewModel mViewModel){
         this.mViewModel = mViewModel;
     }
@@ -74,32 +82,21 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
 
     //private ViewModel viewModel;
 
-    public MainPages_Posts_Fragment() {
-        Log.i("Init", "Initialize post fragment...");
-        //this.viewModel = ViewModel.getInstance();
-    }
 
-    public static MainPages_Posts_Fragment getInstance() {
-        MainPages_Posts_Fragment fragment = new MainPages_Posts_Fragment();
-        return fragment;
-    }
 
     public void onClickAvatar(View v, int position) {
-        String userID = postAdapter.getItems().get(position).getAuthor_id();
-        if(userID.compareTo( mViewModel.getCurrentUserID()) == 0)
+        if(!allowViewAuthorProfile)
             return;
-        Intent intent = new Intent(this.getContext(), Activity_ViewProfile.class);
-        intent.putExtra("author_id", userID );
-
-        v.getContext().startActivity(intent);
+        String userID = postAdapter.getItems().get(position).getAuthor_id();
+        App.startActivityViewProfile(this.requireContext(), userID, mViewModel.getCurrentUserID());
     }
 
     @Override
     public void onClickComment(View v, int position) {
-        Intent intent = new Intent(this.getContext(), Activity_Comment.class);
+        if(!allowViewCmt )
+            return;
         Post post =  postAdapter.getItems().get(position);
-        intent.putExtra("post_id", post.getId());
-        v.getContext().startActivity(intent);
+        App.startActivityComment(this.requireContext(), post.getId());
     }
 
     @Override

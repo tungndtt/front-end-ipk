@@ -53,7 +53,7 @@ public class FilterDialogFragment extends DialogFragment {
     RangeSlider ageSlider;
     RecyclerView interestTag;
     FilterState currentFilterState;
-    MaterialButton cancelBtn, applyBtn;
+    MaterialButton cancelBtn, applyBtn, resetBtn;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -65,7 +65,12 @@ public class FilterDialogFragment extends DialogFragment {
         interestTag = view.findViewById(R.id.interestTag);
         applyBtn = view.findViewById(R.id.applyFilterBtn);
         cancelBtn = view.findViewById(R.id.cancelBtn);
+        resetBtn = view.findViewById(R.id.resetBtn);
         initComponents();
+
+        resetBtn.setOnClickListener(v -> {
+            resetFilter();
+        });
     }
 
     @Override
@@ -79,7 +84,7 @@ public class FilterDialogFragment extends DialogFragment {
         window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
     }
 
-    public void ResetFilter(){
+    public void resetFilter(){
         currentFilterState = new FilterState();
         initComponents();
     }

@@ -132,7 +132,7 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
     }
 
     void initPosts(){
-        postFragment = new MainPages_Posts_Fragment();
+        postFragment = new MainPages_Posts_Fragment(true,false);
         ((MainPages_Posts_Fragment)postFragment).setViewModel(this.mViewModel);
         getChildFragmentManager().beginTransaction().replace(R.id.my_posts, postFragment).commit();
 

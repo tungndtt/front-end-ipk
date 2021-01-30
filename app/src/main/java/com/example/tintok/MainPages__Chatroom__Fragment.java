@@ -99,10 +99,7 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
 
     @Override
     public void OnClick(int pos) {
-        Intent mIntent = new Intent(this.requireActivity(), Activity_ChatRoom.class);
-        requireActivity().overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
-        mIntent.putExtra("roomID", adapter.getItems().get(pos).getChatRoomID());
-        startActivity(mIntent);
+        App.startActivityChatroom(this.requireContext(), adapter.getItems().get(pos).getChatRoomID());
         NotifyActivityOnChatroomClicked(adapter.getItems().get(pos));
     }
     private void NotifyActivityOnChatroomClicked(ChatRoom r){

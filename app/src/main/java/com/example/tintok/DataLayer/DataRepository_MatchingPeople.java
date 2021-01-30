@@ -89,6 +89,11 @@ public class DataRepository_MatchingPeople {
     }
 
     public void FindMatchingByFilter(Filter f){
+        if( f == null){
+            this.initData();
+            return;
+        }
+
         RestAPI api = Communication.getInstance().getApi();
         if(api != null){
             api.getFilteredUser(PeopleFilterRequest.fromFilterState(f)).enqueue(new Callback<ArrayList<UserForm>>() {

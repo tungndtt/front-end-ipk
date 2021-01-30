@@ -122,13 +122,13 @@ public class Activity_ViewProfile extends AppCompatActivity{
     }
 
     private void UpdateFollowBtn(){
-        if(viewModel.getProfile().getValue().getFollowers().getValue().contains(viewModel.getCurrentUserID())){
+        if(viewModel.isFollowing()){
             followBtn.setTextColor(Color.parseColor("#03b5fc"));
         }
 
         else{
             followBtn.setTextColor(Color.BLACK);
-            Log.e("ActivityViewPro", "set white");
+
         }
     }
 
@@ -139,7 +139,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
     }
 
     void initPosts(){
-        postFragment = new MainPages_Posts_Fragment();
+        postFragment = new MainPages_Posts_Fragment(true, true);
         ((MainPages_Posts_Fragment)postFragment).setViewModel(this.viewModel);
         getSupportFragmentManager().beginTransaction().replace(R.id.my_posts, postFragment).commit();
     }

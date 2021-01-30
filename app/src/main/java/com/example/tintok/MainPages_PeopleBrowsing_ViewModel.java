@@ -33,11 +33,8 @@ public class MainPages_PeopleBrowsing_ViewModel extends AndroidViewModel {
     }
 
     public void submitFilter(FilterDialogFragment.FilterState currentState) {
-        String toPrint = "";
-        for(int i  = 0; i<currentState.getInterestBitmap().length;i++)
-            if(currentState.getInterestBitmap()[i]) toPrint+="1";
-            else toPrint+="0";
-        Log.e("PeopelBrVM", "new State: " + toPrint);
+        if(currentState.equals(new FilterDialogFragment.FilterState()))
+            currentState = null;
         DataRepositoryController.getInstance().findPeoplewithFilter(currentState);
     }
 

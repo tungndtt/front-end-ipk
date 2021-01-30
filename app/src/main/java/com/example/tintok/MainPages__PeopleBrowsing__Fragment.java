@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.ArrayList;
 
-public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Refreshable, PeopleBrowsingAdapter.onClickListener {
+public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Refreshable {
 
     private MainPages_PeopleBrowsing_ViewModel  mViewModel;
     MaterialButton filterBtn;
@@ -55,6 +56,8 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
 
     DialogFragment filterFragment = null;
     FilterDialogFragment.FilterState currentState ;
+
+    ImageButton likeBtn, dislikeBtn, profileBtn;
 
     public MainPages__PeopleBrowsing__Fragment() {
         currentState = new FilterDialogFragment.FilterState();
@@ -81,33 +84,43 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
         });
         filterBtn = view.findViewById(R.id.filterBtn);
         filterBtn.setOnClickListener(v -> {
-            if(filterFragment != null)
-                return;
-            filterFragment = new FilterDialogFragment(currentState, state -> {
-                filterFragment = null;
-                if(state != null){
-                    currentState = state;
-                    mViewModel.submitFilter(currentState);
-                }
-            });
-            filterFragment.show(getChildFragmentManager(), "Filtering");
+            handleFilterBtnClicked();
         });
         initCardView(view);
+        initButtonGroup(view);
     }
 
-    /*int currentPos = 0;
+
+
+
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("People_Frag", "at :"+ this.currentPos);
-        manager.setTopPosition(this.currentPos);
+        updateFilterBtn();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        currentPos = manager.getTopPosition();
-    }*/
+    public void handleFilterBtnClicked(){
+        if(filterFragment != null)
+            return;
+        filterFragment = new FilterDialogFragment(currentState, state -> {
+            filterFragment = null;
+            if(state != null){
+                currentState = state;
+                mViewModel.submitFilter(currentState);
+            }
+            updateFilterBtn();
+        });
+        filterFragment.show(getChildFragmentManager(), "Filtering");
+    }
+
+    void updateFilterBtn(){
+        if(currentState.equals(new FilterDialogFragment.FilterState()))
+            filterBtn.setText("ADD NEW FILTER");
+        else
+            filterBtn.setText("MODIFY CURRENT FILTER");
+    }
+
+
     
 
     void initCardView(View view){
@@ -199,7 +212,6 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
         cardStackView.setAdapter(adapter);
         cardStackView.setItemAnimator(new DefaultItemAnimator());
         cardStackView.swipe();
-        adapter.setOnClickListener(this);
     }
 
     private void swipeCard(Direction direction){
@@ -216,22 +228,45 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment implements Ref
         mViewModel.refreshData(e);
     }
 
-    @Override
+    private void initButtonGroup(View view) {
+        likeBtn = view.findViewById(R.id.likeBtn);
+        dislikeBtn = view.findViewById(R.id.dislikeBtn);
+        profileBtn = view.findViewById(R.id.profileBtn);
+        likeBtn.setOnClickListener(v -> {
+            onReactionClick(true);
+        });
+        dislikeBtn.setOnClickListener(v -> {
+            onReactionClick(false);
+        });
+        profileBtn.setOnClickListener(v -> {
+            onProfileBtnClick();
+        });
+    }
+
     public void onReactionClick(boolean isLiked) {
+        if(adapter.getItems().isEmpty())
+            return;
         Direction dir = isLiked?Direction.Right : Direction.Left;
+        ImageView likeImg = manager.getTopView().findViewById(R.id.likeImg),
+                dislikeImg = manager.getTopView().findViewById(R.id.dislikeImg);
+
+        if (dir == Direction.Right){
+            likeImg.setVisibility(View.VISIBLE);
+            dislikeImg.setVisibility(View.INVISIBLE);
+        }
+        else if (dir == Direction.Left){
+            dislikeImg.setVisibility(View.VISIBLE);
+            likeImg.setVisibility(View.INVISIBLE);
+        }
         this.swipeCard(dir);
     }
 
-    @Override
     public void onProfileBtnClick() {
+        if(adapter.getItems().isEmpty())
+            return;
         UserSimple userSimple = adapter.getItems().get(manager.getTopPosition());
         String userID = userSimple.getUserID();
-        if(userID.compareTo( mViewModel.getCurrentUserID()) == 0)
-            return;
-        Intent intent = new Intent(this.getContext(), Activity_ViewProfile.class);
-        intent.putExtra("author_id", userID );
-
-        startActivity(intent);
+        App.startActivityViewProfile(this.requireContext(), userID, mViewModel.getCurrentUserID());
     }
 
 

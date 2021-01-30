@@ -118,7 +118,7 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
     }
 
     private void initPostComponents() {
-        MainPages_Posts_Fragment postFragment = new MainPages_Posts_Fragment();
+        MainPages_Posts_Fragment postFragment = new MainPages_Posts_Fragment(false,true);
         ((MainPages_Posts_Fragment)postFragment).setViewModel(this.mViewModel);
         getSupportFragmentManager().beginTransaction().replace(R.id.post_part, postFragment).commit();
     }

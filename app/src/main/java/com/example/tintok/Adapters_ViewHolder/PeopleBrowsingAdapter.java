@@ -26,16 +26,4 @@ public class PeopleBrowsingAdapter extends BaseAdapter<UserSimple, PeopleBrowsin
         return new PeopleBrowsingViewHolder(view, this);
     }
 
-    onClickListener mListener ;
-    public void setOnClickListener(onClickListener mListener){
-        this.mListener = mListener;
-    }
-    public onClickListener getOnClickListener(){
-        return mListener;
-    }
-    public interface onClickListener{
-        public void onReactionClick(boolean isLiked);
-        public void onProfileBtnClick();
-    }
-
 }
