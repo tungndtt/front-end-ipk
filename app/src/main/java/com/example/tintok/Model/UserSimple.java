@@ -1,5 +1,7 @@
 package com.example.tintok.Model;
 
+import androidx.annotation.Nullable;
+
 public class UserSimple  {
     private String userID;
     private String userName;
@@ -47,5 +49,14 @@ public class UserSimple  {
 
     public void setProfilePic(MediaEntity profilePic) {
         this.profilePic = profilePic;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        try{
+            return ((UserSimple)obj).getUserID().compareTo(this.getUserID()) == 0;
+        }catch (Exception e){
+            return super.equals(obj);
+        }
     }
 }

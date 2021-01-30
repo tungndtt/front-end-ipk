@@ -5,6 +5,7 @@ import java.util.Date;
 
 import android.graphics.Bitmap;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 public class Post {
@@ -54,6 +55,14 @@ public class Post {
 
     public void setImage(MediaEntity image) {
         this.image = image;
+    }
+
+    public boolean equals(@Nullable Object obj) {
+        try{
+            return ((Post)obj).getId().compareTo(this.getId()) == 0;
+        }catch (Exception e){
+            return super.equals(obj);
+        }
     }
 
 }
