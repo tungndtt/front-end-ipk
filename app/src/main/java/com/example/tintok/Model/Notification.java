@@ -20,7 +20,7 @@ public class Notification {
     NotificationType type;
 
 
-    LocalDateTime date;
+    public  LocalDateTime date;
 
     public Notification(NotificationType type, LocalDateTime date, String author_id, String url, String postID,  String post_author_id, String post_status) {
         this.type = type;
@@ -53,13 +53,7 @@ public class Notification {
     }
 
 
-    public String getPost_author_id() {
-        return post_author_id;
-    }
 
-    public String getPost_status() {
-        return post_status;
-    }
 
     String postID;
     String post_author_id;

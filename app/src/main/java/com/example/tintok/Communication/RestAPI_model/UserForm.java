@@ -22,6 +22,9 @@ public class UserForm extends UnknownUserForm{
     @SerializedName("followees")
     private ArrayList<String> following;
 
+    @SerializedName("last_online_time")
+    private long time;
+
     public UserForm(String username, String email, String password) {
         super(username, email, password);
     }
@@ -46,4 +49,8 @@ public class UserForm extends UnknownUserForm{
     public ArrayList<String> getFollowing() {
         return following;
     }
+    public long getTime() {
+        return time;
+    }
+
 }

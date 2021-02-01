@@ -10,7 +10,7 @@ public class MessageEntity {
     private String authorID;
     MediaEntity media;
     private SpannableStringBuilder builder;
-    private LocalDateTime datePosted;
+    public LocalDateTime datePosted;
 
     public String getAuthorID() {
         return authorID;

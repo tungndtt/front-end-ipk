@@ -19,7 +19,9 @@ import com.example.tintok.Adapters_ViewHolder.MessageViewHolder;
 import com.example.tintok.Adapters_ViewHolder.MessagesAdapter;
 import com.example.tintok.CustomView.EditTextSupportIME;
 
+import com.example.tintok.CustomView.NoSpaceRecyclerViewDecoration;
 import com.example.tintok.DataLayer.DataRepositiory_Chatrooms;
+import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.EmojiModel;
 import com.example.tintok.Model.MessageEntity;
@@ -27,6 +29,7 @@ import com.example.tintok.Model.UserSimple;
 import com.example.tintok.Utils.AppNotificationChannelManager;
 import com.example.tintok.Utils.CustomItemAnimator;
 import com.example.tintok.Utils.EmoticonHandler;
+import com.example.tintok.Utils.FileUtil;
 
 
 import androidx.annotation.NonNull;
@@ -41,6 +44,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 
+import android.util.Log;
 import android.view.View;
 
 import android.view.WindowManager;
@@ -66,7 +70,7 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
     ImageView profileImg;
     EmoticonHandler mEmoHandler;
     //Data
-    ArrayList<EmojiModel> emojis;
+
     BaseAdapter<MessageEntity, MessageViewHolder> msgAdapter;
 
     private ArrayList<String> permissionsToRequest = new ArrayList<>();
@@ -107,7 +111,6 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
         galleryImgButton = findViewById(R.id.sendImgbtn);
         profileImg = findViewById(R.id.profileImg);
         sendBtn = findViewById(R.id.sendButton);
-        emojis = new ArrayList<>();
 
         nextMsg.requestFocus();
 
@@ -153,24 +156,15 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
         msgAdapter = new MessagesAdapter(this, new ArrayList<>());
         messages.setAdapter(msgAdapter);
         messages.setItemAnimator(new CustomItemAnimator());
-        messages.addItemDecoration(new DividerItemDecoration( this, LinearLayoutManager.VERTICAL ));
+        messages.addItemDecoration(new NoSpaceRecyclerViewDecoration());
     }
 
     void initEmoji() {
 
 
         //SampleData
-        String dataname = "sample";
-        int emojiID;
-        int i = 1;
-        do {
-            String imgName = dataname + i;
-            emojiID = this.getResources().getIdentifier(imgName, "drawable", this.getPackageName());
-            if (emojiID == 0)
-                break;
-            emojis.add(new EmojiModel(imgName, emojiID));
-            i++;
-        } while (true);
+
+        ArrayList<EmojiModel> emojis = EmojiModel.getEmojis(this);
         //endSampleData
 
         BaseAdapter<EmojiModel, EmojiViewHolder> emojidapter = new EmojiAdapter(this, emojis, position -> mEmoHandler.insertEmoji(emojis.get(position).getResourceImgName()));
@@ -178,7 +172,6 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
 
         GridLayoutManager gridView = new GridLayoutManager(this, 5);
         emoji.setLayoutManager(gridView);
-
     }
 
     void askpermission() {

@@ -79,7 +79,8 @@ public class App extends Application implements Application.ActivityLifecycleCal
         context.startActivity(mIntent, options.toBundle());
     }
 
-    public static void startActivityViewProfile(Context context, String profileID, String currentUserID){
+    public static void startActivityViewProfile(Context context, String profileID){
+        String currentUserID = DataRepositoryController.getInstance().getUser().getValue().getUserID();
         if(profileID.compareTo(currentUserID) == 0)
             return;
         Intent mIntent = new Intent(context, Activity_ViewProfile.class);

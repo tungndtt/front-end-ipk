@@ -88,7 +88,7 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
         if(!allowViewAuthorProfile)
             return;
         String userID = postAdapter.getItems().get(position).getAuthor_id();
-        App.startActivityViewProfile(this.requireContext(), userID, mViewModel.getCurrentUserID());
+        App.startActivityViewProfile(this.requireContext(), userID);
     }
 
     @Override

@@ -86,7 +86,6 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
 
     //Data
     Uri currentCmtImg;
-    ArrayList<EmojiModel> emojis;
     BaseAdapter<Comment, CommentAdapter.ViewHolder> mAdapter;
 
     private ArrayList<String> permissionsToRequest = new ArrayList<>();
@@ -139,7 +138,6 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
 
         deleteChoosenImg.setOnClickListener(v -> onImageRemove());
 
-        emojis = new ArrayList<>();
 
         nextMsg.requestFocus();
 
@@ -188,19 +186,7 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
     void initEmoji() {
 
 
-        //SampleData
-        String dataname = "sample";
-        int emojiID;
-        int i = 1;
-        do {
-            String imgName = dataname + i;
-            emojiID = this.getResources().getIdentifier(imgName, "drawable", this.getPackageName());
-            if (emojiID == 0)
-                break;
-            emojis.add(new EmojiModel(imgName, emojiID));
-            i++;
-        } while (true);
-        //endSampleData
+        ArrayList<EmojiModel> emojis = EmojiModel.getEmojis(this);
 
         BaseAdapter<EmojiModel, EmojiViewHolder> emojidapter = new EmojiAdapter(this, emojis, position -> mEmoHandler.insertEmoji(emojis.get(position).getResourceImgName()));
         emoji.setAdapter(emojidapter);

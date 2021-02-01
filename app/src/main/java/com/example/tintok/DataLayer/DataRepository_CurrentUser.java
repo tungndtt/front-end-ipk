@@ -28,10 +28,12 @@ import retrofit2.Response;
 public class DataRepository_CurrentUser {
     MutableLiveData<UserProfile> currentUser;
     DataRepositoryController controller;
+    public long lastSeen;
     public DataRepository_CurrentUser(DataRepositoryController controller){
         this.controller = controller;
         currentUser = new MutableLiveData<>();
     }
+
 
     public void initData() {
         RestAPI api = Communication.getInstance().getApi();
@@ -65,6 +67,7 @@ public class DataRepository_CurrentUser {
                     currUser.getFollowingPost().postValue(dummy);
 
                     currentUser.postValue( currUser);
+                    lastSeen = form.getTime();
                 } else {
                     Log.e("Info", "Response fails");
                 }

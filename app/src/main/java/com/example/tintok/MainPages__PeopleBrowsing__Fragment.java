@@ -262,7 +262,7 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment {
             return;
         UserSimple userSimple = adapter.getItems().get(manager.getTopPosition());
         String userID = userSimple.getUserID();
-        App.startActivityViewProfile(this.requireContext(), userID, mViewModel.getCurrentUserID());
+        App.startActivityViewProfile(this.requireContext(), userID);
     }
 
 

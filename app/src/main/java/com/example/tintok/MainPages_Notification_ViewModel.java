@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.DataLayer.DataRepositoryController;
-import com.example.tintok.DataLayer.DataRepository_Notificaitons;
 import com.example.tintok.Model.Notification;
 
 import java.util.ArrayList;

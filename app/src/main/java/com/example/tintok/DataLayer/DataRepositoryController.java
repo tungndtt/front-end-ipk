@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.CustomView.AfterRefreshCallBack;
-import com.example.tintok.CustomView.FilterDialogFragment;
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.MessageEntity;
 import com.example.tintok.Model.Notification;
@@ -15,8 +14,8 @@ import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 import com.example.tintok.Model.UserSimple;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DataRepositoryController {
     public static Context applicationContext;
@@ -30,7 +29,7 @@ public class DataRepositoryController {
     DataRepositiory_Chatrooms dataRepositiory_chatrooms;
     DataRepository_CurrentUser dataRepository_currentUser;
     DataRepository_MatchingPeople dataRepository_matchingPeople;
-    DataRepository_Notificaitons dataRepository_notificaitons;
+    DataRepository_Notifications dataRepository_notifications;
     DataRepository_Posts dataRepository_posts;
 
     DataRepository_UserSimple dataRepository_userSimple;
@@ -51,7 +50,7 @@ public class DataRepositoryController {
         dataRepositiory_chatrooms = new DataRepositiory_Chatrooms(this);
         dataRepository_currentUser = new DataRepository_CurrentUser(this);
         dataRepository_matchingPeople = new DataRepository_MatchingPeople(this);
-        dataRepository_notificaitons = new DataRepository_Notificaitons(this);
+        dataRepository_notifications = new DataRepository_Notifications(this);
         dataRepository_posts = new DataRepository_Posts(this);
     }
 
@@ -61,7 +60,7 @@ public class DataRepositoryController {
         dataRepository_currentUser.initData();
         dataRepositiory_chatrooms.initData();
         dataRepository_matchingPeople.initData();
-        dataRepository_notificaitons.initData();
+        dataRepository_notifications.initData();
         dataRepository_posts.initData();
 
         /*ArrayList<ChatRoom> mChatRooms = new ArrayList<>();
@@ -109,6 +108,17 @@ public class DataRepositoryController {
     public void removeNewMessageListener(DataRepositiory_Chatrooms.OnNewMessagesListener mListener){
        dataRepositiory_chatrooms.removeNewMessageListener(mListener);
     }
+
+    public int getNumberOfUnseenChatrooms(){
+        int i = 0;
+        for(ChatRoom r: getChatRooms().getValue()){
+            ArrayList<MessageEntity> messages = r.getMessageEntities().getValue();
+            if(messages.get(messages.size()-1).datePosted.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() > getLastSeen()){
+                i++;
+            }
+        }
+        return i;
+    }
 //endregion
 
 
@@ -116,6 +126,9 @@ public class DataRepositoryController {
 //region CurrentUser
     public MutableLiveData<UserProfile> getUser() {
         return  dataRepository_currentUser.currentUser;
+    }
+    public long getLastSeen(){
+        return dataRepository_currentUser.lastSeen;
     }
     public boolean isThisUserLikedPost(Post p){
         if(p.likers == null)
@@ -155,13 +168,23 @@ public class DataRepositoryController {
 
     //region Notifications
     public MutableLiveData<ArrayList<Notification>> getNotifications() {
-        return dataRepository_notificaitons.getNotifications();
+        return dataRepository_notifications.getNotifications();
     }
-    public void addNotificationListener(DataRepository_Notificaitons.OnNewNotificationListener mListener){
-       dataRepository_notificaitons.addNotificationListener(mListener);
+    public void addNotificationListener(DataRepository_Notifications.OnNewNotificationListener mListener){
+       dataRepository_notifications.addNotificationListener(mListener);
     }
-    public void removeNotificationListener(DataRepository_Notificaitons.OnNewNotificationListener mListener){
-        dataRepository_notificaitons.removeNotificationListener(mListener);
+    public void removeNotificationListener(DataRepository_Notifications.OnNewNotificationListener mListener){
+        dataRepository_notifications.removeNotificationListener(mListener);
+    }
+
+    public int getNumberOfUnseenNotifications(){
+        int i = 0;
+        for(Notification notification:getNotifications().getValue()){
+            if(notification.date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() > getLastSeen()){
+                i++;
+            }
+        }
+        return i;
     }
 //endregion
 

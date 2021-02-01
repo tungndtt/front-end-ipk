@@ -2,17 +2,23 @@ package com.example.tintok.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
+import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.Model.MediaEntity;
+import com.example.tintok.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -76,5 +82,29 @@ public class FileUtil {
             e.printStackTrace();
         }
         return file;
+    }
+
+    public static File[] getAllFileWithRegex(String regex){
+        String myDirectory = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+        Log.e("GetFileName: " , " at package: "+DataRepositoryController.applicationContext.getPackageName());
+        Log.e("GetFileName: " , " at directory: "+Uri.parse("android.resource://"+DataRepositoryController.applicationContext.getPackageName()+"/"+ R.drawable.sample1).getPath());
+        File f = new File(Uri.parse("android.resource://"+DataRepositoryController.applicationContext.getPackageName()+"/"+ R.drawable.sample1).toString());
+        Log.e("GetFileName: " , " fodler f: "+f.exists());
+        if (true ) {
+            final Pattern p = Pattern.compile(regex);
+            File[] flists = f.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File file) {
+                    p.matcher(file.getName()).matches();
+                    Log.e("GetFileName", "at:" + file.getName()+" res:" + p.matcher(file.getName()).matches());
+
+                    return p.matcher(file.getName()).matches();
+
+                }
+            });
+            return flists;
+        }
+        return null;
     }
 }

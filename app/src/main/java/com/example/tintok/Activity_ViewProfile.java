@@ -114,10 +114,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
         });
 
         messageBtn.setOnClickListener(v -> {
-            Intent mIntent = new Intent(this, Activity_ChatRoom.class);
-            overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
-            mIntent.putExtra("roomID", viewModel.openChatRoomWithUser().getChatRoomID());
-            startActivity(mIntent);
+           App.startActivityChatroom(Activity_ViewProfile.this, viewModel.openChatRoomWithUser().getChatRoomID());
         });
     }
 

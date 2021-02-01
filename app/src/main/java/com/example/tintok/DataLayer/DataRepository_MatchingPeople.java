@@ -56,7 +56,11 @@ public class DataRepository_MatchingPeople {
         if(current == null)
             current = new ArrayList<>();
         current.clear();
-        current.addAll(DataConverter.ConvertFromUserFormToSimple(users));
+        ArrayList<UserSimple> newData = DataConverter.ConvertFromUserFormToSimple(users);
+        for(UserSimple user : newData){
+            if(!current.contains(user))
+                current.add(user);
+        }
         this.matchingPeople.postValue(current);
     }
 

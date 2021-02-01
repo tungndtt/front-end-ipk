@@ -1,29 +1,22 @@
 package com.example.tintok;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tintok.Adapters_ViewHolder.ChatroomAdapter;
 import com.example.tintok.Adapters_ViewHolder.NotificationsAdapter;
 import com.example.tintok.CustomView.NoSpaceRecyclerViewDecoration;
-import com.example.tintok.DataLayer.DataRepository_Notificaitons;
 import com.example.tintok.Model.Notification;
-import com.example.tintok.Model.Post;
 
 import java.util.ArrayList;
 
@@ -60,7 +53,7 @@ public class MainPages_Notification_Fragment extends Fragment implements Notific
         this.adapter = new NotificationsAdapter(this.getContext(), new ArrayList<>());
         notifications.setAdapter(adapter);
         adapter.setNotificationClickListener(this);
-        LinearLayoutManager manager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager manager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, true);
         RecyclerView.ItemDecoration decoration= new NoSpaceRecyclerViewDecoration();
         notifications.setLayoutManager(manager);
         notifications.addItemDecoration(decoration);
@@ -80,17 +73,14 @@ public class MainPages_Notification_Fragment extends Fragment implements Notific
 
     @Override
     public void onPostClick(int position) {
-        Intent intent = new Intent(this.getContext(), Activity_Comment.class);
         Notification notification =  adapter.getItems().get(position);
-        intent.putExtra("post_id", notification.getPostID());
-        startActivity(intent);
+        if(notification.getPostID() != null && !notification.getPostID().isEmpty())
+            App.startActivityComment(getContext(), notification.getPostID());
         NotifyActivityOnNotiClicked(notification);
     }
 
     @Override
     public void onProfileClick(int position) {
-        Intent intent = new Intent(this.getContext(), Activity_ViewProfile.class);
-        intent.putExtra("author_id", adapter.getItems().get(position).getAuthor_id());
-        startActivity(intent);
+        App.startActivityViewProfile(this.getContext(),adapter.getItems().get(position).getAuthor_id());
     }
 }

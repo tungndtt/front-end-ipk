@@ -24,7 +24,7 @@
             app:showDividers="middle"
             app:divider="@drawable/divider"
             android:id="@+id/leftSide"
-            android:visibility="gone">
+            android:visibility="visible">
             <com.google.android.material.card.MaterialCardView
                 android:layout_height="40dp"
                 android:layout_width="40dp"
@@ -33,7 +33,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/leftprofilePic"
                     android:layout_width="match_parent"
-                    android:layout_height="26dp"
+                    android:layout_height="match_parent"
                     android:scaleType="fitXY"
                     android:adjustViewBounds="true">
 
@@ -95,23 +95,25 @@
             app:showDividers="middle"
             app:divider="@drawable/divider"
             android:id="@+id/rightSide"
-            android:visibility="visible"
+            android:visibility="gone"
             android:gravity="right">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <ImageView
                     android:id="@+id/rightImg"
                     android:layout_width="150dp"
                     android:layout_height="200dp"
+                    android:layout_gravity="right"
+                    android:adjustViewBounds="true"
                     android:maxWidth="150dp"
                     android:maxHeight="200dp"
-                    android:adjustViewBounds="true"
-                    android:visibility="visible"
-                    android:layout_gravity="right">
+                    android:visibility="visible">
 
                 </ImageView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

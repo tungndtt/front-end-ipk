@@ -6,9 +6,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,29 +15,26 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
-import com.example.tintok.Communication.Communication;
-import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.CustomView.Refreshable;
 import com.example.tintok.DataLayer.DataRepositiory_Chatrooms;
 import com.example.tintok.DataLayer.DataRepositoryController;
-import com.example.tintok.DataLayer.DataRepository_Notificaitons;
+import com.example.tintok.DataLayer.DataRepository_Notifications;
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.MessageEntity;
 import com.example.tintok.Model.Notification;
 import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-public class Activity_AppMainPages extends AppCompatActivity implements DataRepositiory_Chatrooms.OnNewMessagesListener, DataRepository_Notificaitons.OnNewNotificationListener,
+public class Activity_AppMainPages extends AppCompatActivity implements DataRepositiory_Chatrooms.OnNewMessagesListener, DataRepository_Notifications.OnNewNotificationListener,
         SwipeRefreshLayout.OnRefreshListener, AfterRefreshCallBack {
 
-
+    Activity_AppMainPages_ViewModel mViewModel;
     BottomNavigationView navBar;
     NavigationView navView;
     DrawerLayout drawerLayout;
@@ -62,7 +57,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_main_pages);
-
+        mViewModel = new ViewModelProvider(this).get(Activity_AppMainPages_ViewModel.class);
         initActivity();
 
     }
@@ -106,11 +101,13 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
                         break;
                     case R.id.notification:
                         current = notification;
-                        ShowBadgeForNavBar(ITEM_NOTIFICATIONS, 0);
+                        unseenNotifications = 0;
+                        ShowBadgeForNavBar(ITEM_NOTIFICATIONS, unseenNotifications);
                         break;
                     case R.id.messagers:
                         current = messages;
-                        ShowBadgeForNavBar(ITEM_MESSENGER, 0);
+                        unseenChatrooms = 0;
+                        ShowBadgeForNavBar(ITEM_MESSENGER, unseenChatrooms);
                         break;
                     case R.id.myProfile:
                         current = myHomepage;
@@ -140,6 +137,8 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
         });
 
         refreshLayout.setOnRefreshListener(this);
+        ShowBadgeForNavBar(ITEM_NOTIFICATIONS, mViewModel.getUnseenNotifications());
+        ShowBadgeForNavBar(ITEM_MESSENGER, mViewModel.getUnseenChatrooms());
     }
 
     public void ShowBadgeForNavBar(String navBarItem, int number){
@@ -172,7 +171,10 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
             badge.setVisible(true);
             badge.clearNumber();
         }
-        else badge.setNumber(number);
+        else{
+            badge.setVisible(true);
+            badge.setNumber(number);
+        }
     }
 
     @Override
@@ -213,16 +215,15 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     protected void onStart() {
         super.onStart();
         Log.e("Ac_mainpage", "called "+this.messages + this.notification);
-        DataRepositoryController.getInstance().addNewMessageListener(this);
-        DataRepositoryController.getInstance().addNotificationListener(this);
+        mViewModel.addNewMessageListener(this);
+        mViewModel.addNewNotificationListener(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        DataRepositoryController.getInstance().removeNewMessageListener(this);
-        DataRepositoryController.getInstance().removeNotificationListener(this);
-    }
+        mViewModel.removeNewMessageListener(this);
+        mViewModel.removeNewNotificationListener(this); }
 
     public void showNavView(){
         drawerLayout.openDrawer(GravityCompat.START);
@@ -244,11 +245,11 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     public void onNewMessage(String roomID, MessageEntity msg) {
         unseenChatrooms++;
         this.ShowBadgeForNavBar(ITEM_MESSENGER, unseenChatrooms);
-        Log.e("Ac_mainpage", "new msg");
     }
 
     @Override
     public void onNewNotification(Notification newNoti) {
+        Log.e("Activity_Main", "at :"+newNoti.getPostID() + unseenNotifications);
         unseenNotifications++;
         this.ShowBadgeForNavBar(ITEM_NOTIFICATIONS, unseenNotifications);
     }

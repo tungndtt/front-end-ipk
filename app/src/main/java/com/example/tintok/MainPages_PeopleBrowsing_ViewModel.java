@@ -39,7 +39,4 @@ public class MainPages_PeopleBrowsing_ViewModel extends AndroidViewModel {
     }
 
 
-    public String getCurrentUserID() {
-        return DataRepositoryController.getInstance().getUser().getValue().getUserID();
-    }
 }

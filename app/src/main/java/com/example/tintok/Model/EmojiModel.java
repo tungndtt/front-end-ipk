@@ -1,5 +1,9 @@
 package com.example.tintok.Model;
 
+import android.content.Context;
+
+import java.util.ArrayList;
+
 public class EmojiModel {
 
     private final String resourceImgName;
@@ -18,4 +22,19 @@ public class EmojiModel {
         return resourceID;
     }
 
+    public static ArrayList<EmojiModel> getEmojis(Context context){
+        ArrayList<EmojiModel> emojis = new ArrayList<>();
+        String dataname = "sample";
+        int emojiID;
+        int i = 1;
+        do {
+            String imgName = dataname + i;
+            emojiID = context.getResources().getIdentifier(imgName, "drawable", context.getPackageName());
+            if (emojiID == 0)
+                break;
+            emojis.add(new EmojiModel(imgName, emojiID));
+            i++;
+        } while (true);
+        return emojis;
+    }
 }
