@@ -97,7 +97,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_send);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         ShapeableImageView matchingBtn, myprofileBtn;
         matchingBtn = findViewById(R.id.matchingBtn);
         myprofileBtn = findViewById(R.id.profileBtn);
