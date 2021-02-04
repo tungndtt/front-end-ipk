@@ -1,3 +1,5 @@
 <resources>
     <string name="hello_world">Hello Round World!</string>
+    <string name="text_spaces">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+
 </resources>

@@ -1,15 +1,9 @@
 package com.example.tintok.Adapters_ViewHolder;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +20,6 @@ import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.MessageEntity;
 import com.example.tintok.Model.UserSimple;
 import com.example.tintok.R;
-import com.example.tintok.R.color;
 
 public class MessageViewHolder extends BaseViewHolder<MessageEntity> implements DataRepository_UserSimple.OnUserProfileChangeListener {
 
@@ -60,7 +53,7 @@ public class MessageViewHolder extends BaseViewHolder<MessageEntity> implements 
         this.userID = itemData.getAuthorID();
 
         if(!itemData.getAuthorID().equals(DataRepositoryController.getInstance().getUser().getValue().getUserID())){
-            view.setBackgroundColor(Color.WHITE);
+            view.setBackgroundResource(R.drawable.message_background_other);
 
             leftSide.setVisibility(View.VISIBLE);
             messageLayout.setGravity(Gravity.LEFT);
@@ -87,7 +80,7 @@ public class MessageViewHolder extends BaseViewHolder<MessageEntity> implements 
         }
 
         else{
-            view.setBackgroundResource(R.drawable.message_background);
+            view.setBackgroundResource(R.drawable.message_background_me);
 
             leftSide.setVisibility(View.GONE);
             messageLayout.setGravity(Gravity.RIGHT);

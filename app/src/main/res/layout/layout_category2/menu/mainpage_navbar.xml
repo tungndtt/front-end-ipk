@@ -4,21 +4,13 @@
     <item
         android:id="@+id/mediasurfing"
         android:icon="@android:drawable/ic_dialog_info"
-        android:title="Posts"/>
-    <item
-        android:id="@+id/peoplebrowsing"
-        android:icon="@android:drawable/ic_dialog_map"
-        android:title="SuggestFr"/>
+        android:title="@string/text_spaces"/>
     <item
         android:id="@+id/notification"
         android:icon="@android:drawable/ic_dialog_email"
-        android:title="Noti"/>
+        android:title="@string/text_spaces"/>
     <item
         android:id="@+id/messagers"
-        android:icon="@android:drawable/ic_popup_reminder"
-        android:title="Mess"/>
-    <item
-        android:id="@+id/myProfile"
-        android:icon="@android:drawable/ic_popup_reminder"
-        android:title="myProfile"/>
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="@string/text_spaces"/>
 </menu>

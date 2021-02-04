@@ -91,7 +91,8 @@
         <activity
             android:name=".Activity_AppMainPages"
             android:label="@string/title_activity_app_main_pages"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/MainPageTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

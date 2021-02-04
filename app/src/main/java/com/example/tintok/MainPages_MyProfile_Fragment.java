@@ -4,10 +4,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -16,10 +19,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +33,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.tintok.Adapters_ViewHolder.PostAdapter;
+import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.CustomView.PostUploadFragment;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
@@ -35,7 +42,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 
-public class MainPages_MyProfile_Fragment extends Fragment implements PostUploadFragment.onNewPostListener {
+public class MainPages_MyProfile_Fragment extends MyDialogFragment implements PostUploadFragment.onNewPostListener {
 
     private Fragment infoFragment, imageFragment, postFragment;
     private int selected;
@@ -44,7 +51,7 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
     private ImageView profilePic;
     private View newPostBtn;
     private TextView followingNumber, followerNumber, username;
-    ShapeableImageView menuBtn;
+    ShapeableImageView backBtn;
     BottomNavigationView profile_navigation_bar;
 
     MainPages_MyProfile_ViewModel mViewModel;
@@ -73,6 +80,8 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
         setRetainInstance(true);
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,7 +95,7 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
         profilePic = view.findViewById(R.id.post_profile);
         followingNumber = view.findViewById(R.id.followingsNumber);
         followerNumber = view.findViewById(R.id.follwersNumber);
-        menuBtn = view.findViewById(R.id.openMenuBtn);
+        backBtn = view.findViewById(R.id.backBtn);
 
         profile_navigation_bar = view.findViewById(R.id.profile_navigation_bar);
         profile_navigation_bar.setSelectedItemId(this.selected);
@@ -102,9 +111,10 @@ public class MainPages_MyProfile_Fragment extends Fragment implements PostUpload
             }
         });
 
-        menuBtn.setOnClickListener(v -> {
-            ((Activity_AppMainPages)this.getActivity()).showNavView();
+        backBtn.setOnClickListener(v -> {
+            getDialog().dismiss();
         });
+        setupFullscreen();
         return view;
     }
 

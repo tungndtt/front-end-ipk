@@ -22,7 +22,7 @@ public class UserForm extends UnknownUserForm{
     @SerializedName("followees")
     private ArrayList<String> following;
 
-    @SerializedName("last_online_time")
+    @SerializedName("lastLogout")
     private long time;
 
     public UserForm(String username, String email, String password) {

@@ -14,6 +14,7 @@ import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 import com.example.tintok.Model.UserSimple;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
@@ -114,6 +115,7 @@ public class DataRepositoryController {
         for(ChatRoom r: getChatRooms().getValue()){
             ArrayList<MessageEntity> messages = r.getMessageEntities().getValue();
             if(messages.get(messages.size()-1).datePosted.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() > getLastSeen()){
+                Log.e("DataRepo_Control_mess", "lastseen: "+getLastSeen() + " time: "+messages.get(messages.size()-1).datePosted.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
                 i++;
             }
         }
@@ -181,6 +183,8 @@ public class DataRepositoryController {
         int i = 0;
         for(Notification notification:getNotifications().getValue()){
             if(notification.date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() > getLastSeen()){
+                Log.e("DataRepo_Control_noti", "lastseen: "+getLastSeen() + " time: "+notification.date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+
                 i++;
             }
         }

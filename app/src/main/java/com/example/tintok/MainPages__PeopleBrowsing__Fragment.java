@@ -28,9 +28,11 @@ import android.widget.Toast;
 import com.example.tintok.Adapters_ViewHolder.PeopleBrowsingAdapter;
 import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.CustomView.FilterDialogFragment;
+import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.CustomView.Refreshable;
 import com.example.tintok.Model.UserSimple;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -42,7 +44,7 @@ import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.ArrayList;
 
-public class MainPages__PeopleBrowsing__Fragment extends Fragment {
+public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
 
     private MainPages_PeopleBrowsing_ViewModel  mViewModel;
     MaterialButton filterBtn;
@@ -56,6 +58,7 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment {
 
     DialogFragment filterFragment = null;
     FilterDialogFragment.FilterState currentState ;
+    ShapeableImageView backBtn;
 
     ImageButton likeBtn, dislikeBtn, profileBtn;
 
@@ -86,12 +89,18 @@ public class MainPages__PeopleBrowsing__Fragment extends Fragment {
         filterBtn.setOnClickListener(v -> {
             handleFilterBtnClicked();
         });
+        backBtn = view.findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(v -> {
+            getDialog().dismiss();
+        });
         initCardView(view);
         initButtonGroup(view);
     }
 
-
-
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
     @Override
     public void onResume() {

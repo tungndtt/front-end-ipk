@@ -20,4 +20,30 @@
         <item name="android:layout_marginTop">24dp</item>
         <item name="android:layout_marginEnd">24dp</item>
     </style>
+
+    <style name="MainPageTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">#212121</item>
+        <item name="colorPrimaryVariant">#000000</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#FAFAFA</item>
+        <item name="colorSecondaryVariant">#0039CB</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorError">#F44336</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#212121</item>
+        <item name="android:colorBackground">#FFFFFF</item>
+
+    </style>
+
+    <style name="MyActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="titleTextStyle">@style/MyActionBarTitle</item>
+    </style>
+    <style name="MyActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/red</item>
+    </style>
 </resources>

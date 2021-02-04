@@ -38,7 +38,7 @@ import com.example.tintok.R;
 
 import java.util.ArrayList;
 
-public class PostUploadFragment extends DialogFragment {
+public class PostUploadFragment extends MyDialogFragment {
 
     private EditTextSupportIME status;
     private ImageView image;
@@ -134,12 +134,6 @@ public class PostUploadFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Window window = getDialog().getWindow();
-        window.setGravity(Gravity.FILL);
-        window.setWindowAnimations(R.style.MyAnimation_Window);
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
     }
 
     private void askForPermission(int requestCode){

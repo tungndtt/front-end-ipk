@@ -1,18 +1,27 @@
 package com.example.tintok;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,6 +29,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import com.example.tintok.CustomView.AfterRefreshCallBack;
+import com.example.tintok.CustomView.DummyGestureDetectView;
 import com.example.tintok.CustomView.Refreshable;
 import com.example.tintok.DataLayer.DataRepositiory_Chatrooms;
 import com.example.tintok.DataLayer.DataRepositoryController;
@@ -27,22 +37,28 @@ import com.example.tintok.DataLayer.DataRepository_Notifications;
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.MessageEntity;
 import com.example.tintok.Model.Notification;
+import com.example.tintok.Utils.NavBarUntil;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 
 public class Activity_AppMainPages extends AppCompatActivity implements DataRepositiory_Chatrooms.OnNewMessagesListener, DataRepository_Notifications.OnNewNotificationListener,
-        SwipeRefreshLayout.OnRefreshListener, AfterRefreshCallBack {
+        SwipeRefreshLayout.OnRefreshListener, AfterRefreshCallBack, DialogInterface.OnDismissListener {
 
     Activity_AppMainPages_ViewModel mViewModel;
     BottomNavigationView navBar;
     NavigationView navView;
     DrawerLayout drawerLayout;
     GestureDetector mGestureDetector;
-    Fragment peopleBrowsing, mediaSurfing, notification, messages, myHomepage;
+    Fragment mediaSurfing, notification, messages;
+    DialogFragment peopleBrowsing, myHomepage;
+    boolean isOnDialogFragment;
     Fragment current;
 
-    SwipeRefreshLayout refreshLayout ;
+
+    SwipeRefreshLayout refreshLayout;
     //GUI state
     int unseenNotifications;
     int unseenChatrooms;
@@ -59,8 +75,47 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
         setContentView(R.layout.activity_app_main_pages);
         mViewModel = new ViewModelProvider(this).get(Activity_AppMainPages_ViewModel.class);
         initActivity();
-
+        initActionBar();
     }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                showNavView();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initActionBar() {
+        setSupportActionBar(findViewById(R.id.actionBar));
+
+        getSupportActionBar()/* or getSupportActionBar() */.setTitle(HtmlCompat.fromHtml("<font color=\"black\"><b>"+getString(R.string.app_name) + "</b></font>",HtmlCompat.FROM_HTML_MODE_LEGACY));
+
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_send);
+        ShapeableImageView matchingBtn, myprofileBtn;
+        matchingBtn = findViewById(R.id.matchingBtn);
+        myprofileBtn = findViewById(R.id.profileBtn);
+        matchingBtn.setOnClickListener(v -> {
+            if(!isOnDialogFragment){
+                peopleBrowsing.show(getSupportFragmentManager(),"Matching");
+                isOnDialogFragment = true;
+            }
+
+        });
+        myprofileBtn.setOnClickListener(v -> {
+            if(!isOnDialogFragment) {
+                myHomepage.show(getSupportFragmentManager(), "MyProfile");
+                isOnDialogFragment = true;
+            }
+        });
+    }
+
 
     private void initActivity() {
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -78,7 +133,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
             }
         });
 
-        peopleBrowsing =  new MainPages__PeopleBrowsing__Fragment();
+        peopleBrowsing = new MainPages__PeopleBrowsing__Fragment();
         messages = new MainPages__Chatroom__Fragment();
         notification = new MainPages_Notification_Fragment();
 
@@ -87,66 +142,55 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
 
         current = mediaSurfing;
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainPageContent, current).commit();
-        navBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction().replace(R.id.mainPageContent, peopleBrowsing);
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.peoplebrowsing:
-                        current = peopleBrowsing;
-                        break;
-                    case R.id.mediasurfing:
-                        current = mediaSurfing;
-                        break;
-                    case R.id.notification:
-                        current = notification;
-                        unseenNotifications = 0;
-                        ShowBadgeForNavBar(ITEM_NOTIFICATIONS, unseenNotifications);
-                        break;
-                    case R.id.messagers:
-                        current = messages;
-                        unseenChatrooms = 0;
-                        ShowBadgeForNavBar(ITEM_MESSENGER, unseenChatrooms);
-                        break;
-                    case R.id.myProfile:
-                        current = myHomepage;
-                        break;
-                }
-                FragmentTransaction fragmentTransaction =getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.animation_in, R.anim.animation_out);
-                fragmentTransaction.addToBackStack(current.getTag()).replace(R.id.mainPageContent, current).commit();
-                return true;
+        navBar.setOnNavigationItemSelectedListener(item -> {
+            NavBarUntil.removeItemsUnderline(navBar);
+            NavBarUntil.underlineMenuItem(item);
+            switch (item.getItemId()) {
+                case R.id.mediasurfing:
+                    current = mediaSurfing;
+                    break;
+                case R.id.notification:
+                    current = notification;
+                    unseenNotifications = 0;
+                    ShowBadgeForNavBar(ITEM_NOTIFICATIONS, unseenNotifications);
+                    break;
+                case R.id.messagers:
+                    current = messages;
+                    unseenChatrooms = 0;
+                    ShowBadgeForNavBar(ITEM_MESSENGER, unseenChatrooms);
+                    break;
+                default:
+                    break;
             }
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.animation_in, R.anim.animation_out)
+                    .addToBackStack(current.getTag()).replace(R.id.mainPageContent, current).commit();
+            return true;
+        });
+        navBar.setSelectedItemId(R.id.mediasurfing);
+
+        navView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.refresh:
+
+                    break;
+                case R.id.logout:
+                    current = mediaSurfing;
+                    App.Logout(Activity_AppMainPages.this);
+                    finish();
+                    break;
+            }
+            return true;
         });
 
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.refresh:
-
-                        break;
-                    case R.id.logout:
-                        current = mediaSurfing;
-                        App.Logout(Activity_AppMainPages.this);
-                        finish();
-                        break;
-                }
-                return true;
-            }
-        });
-
+        isOnDialogFragment = false;
         refreshLayout.setOnRefreshListener(this);
         ShowBadgeForNavBar(ITEM_NOTIFICATIONS, mViewModel.getUnseenNotifications());
         ShowBadgeForNavBar(ITEM_MESSENGER, mViewModel.getUnseenChatrooms());
     }
 
-    public void ShowBadgeForNavBar(String navBarItem, int number){
+    public void ShowBadgeForNavBar(String navBarItem, int number) {
         int menuItemID;
-        switch (navBarItem){
-            case ITEM_MATCHING_PEOPLE:
-                menuItemID = R.id.peoplebrowsing;
-                break;
+        switch (navBarItem) {
             case ITEM_POSTS:
                 menuItemID = R.id.mediasurfing;
                 break;
@@ -156,22 +200,17 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
             case ITEM_MESSENGER:
                 menuItemID = R.id.messagers;
                 break;
-            case ITEM_MYPROFILE:
-                menuItemID = R.id.myProfile;
-                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + navBarItem);
         }
         BadgeDrawable badge = navBar.getOrCreateBadge(menuItemID);
-        if(number == 0){
+        if (number == 0) {
             badge.setVisible(false);
             badge.clearNumber();
-        }
-        else if(number == -1){
+        } else if (number == -1) {
             badge.setVisible(true);
             badge.clearNumber();
-        }
-        else{
+        } else {
             badge.setVisible(true);
             badge.setNumber(number);
         }
@@ -179,9 +218,9 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
     @Override
     public void onBackPressed() {
-        if(navBar.getSelectedItemId() == R.id.mediasurfing)
+        if (navBar.getSelectedItemId() == R.id.mediasurfing)
             super.onBackPressed();
-        else{
+        else {
             current = mediaSurfing;
             navBar.setSelectedItemId(R.id.mediasurfing);
         }
@@ -190,15 +229,15 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("navBarID",navBar.getSelectedItemId());
+        outState.putInt("navBarID", navBar.getSelectedItemId());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if(intent != null){
-            int currentTab = intent.getIntExtra("currentTab",-1);
-            if(currentTab!=-1)
+        if (intent != null) {
+            int currentTab = intent.getIntExtra("currentTab", -1);
+            if (currentTab != -1)
                 this.navBar.setSelectedItemId(currentTab);
         }
     }
@@ -214,23 +253,28 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e("Ac_mainpage", "called "+this.messages + this.notification);
+
         mViewModel.addNewMessageListener(this);
         mViewModel.addNewNotificationListener(this);
     }
+
 
     @Override
     protected void onStop() {
         super.onStop();
         mViewModel.removeNewMessageListener(this);
-        mViewModel.removeNewNotificationListener(this); }
-
-    public void showNavView(){
-        drawerLayout.openDrawer(GravityCompat.START);
+        mViewModel.removeNewNotificationListener(this);
     }
 
-    public void hideNavView(){
+    public void showNavView() {
+        drawerLayout.openDrawer(GravityCompat.START);
+        hideNavBars();
+    }
+
+    public void hideNavView() {
+        showNavBars();
         drawerLayout.closeDrawer(GravityCompat.START);
+        drawerLayout.close();
     }
 
     public void OnNotificationClicked(Notification noti) {
@@ -249,17 +293,17 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
     @Override
     public void onNewNotification(Notification newNoti) {
-        Log.e("Activity_Main", "at :"+newNoti.getPostID() + unseenNotifications);
+        Log.e("Activity_Main", "at :" + newNoti.getPostID() + unseenNotifications);
         unseenNotifications++;
         this.ShowBadgeForNavBar(ITEM_NOTIFICATIONS, unseenNotifications);
     }
 
     @Override
     public void onRefresh() {
-        try{
-            ((Refreshable)current).onRefresh(this);
+        try {
+            ((Refreshable) current).onRefresh(this);
             refreshLayout.setRefreshing(true);
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("MainPage", "current Fragment cant be refresh");
             onRefreshingDone();
         }
@@ -267,25 +311,43 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
     @Override
     public void onRefreshingDone() {
-        if(refreshLayout.isRefreshing())
+        if (refreshLayout.isRefreshing())
             refreshLayout.setRefreshing(false);
     }
 
 
+    private void showNavBars(){
+        navBar.setVisibility(View.VISIBLE);
+        getSupportActionBar().show();
+    }
+
+    private void hideNavBars(){
+        navBar.setVisibility(View.GONE);
+        getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        this.isOnDialogFragment = false;
+        Log.e("AppMainPage", "dismiss");
+    }
 
 
-    public class SwipeGestureDetectorListener extends GestureDetector.SimpleOnGestureListener{
+    public class SwipeGestureDetectorListener extends GestureDetector.SimpleOnGestureListener {
         private static final int SWIPE_DISTANCE_THRESHOLD = 70;
         private static final int SWIPE_VELOCITY_THRESHOLD = 70;
+
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-            if(  Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD )
-                if( velocityX > 0)
-                    showNavView();
+            Log.e("AppMainPage", "onFling");
+            if (Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD)
+                if (velocityX > 0)
+                    /*showNavView()*/;
                 else
                     hideNavView();
             return true;
         }
     }
+
+
 }

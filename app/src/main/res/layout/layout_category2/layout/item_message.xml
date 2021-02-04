@@ -16,7 +16,7 @@
         app:cardCornerRadius="20dp"
         android:layout_margin="5dp"
         app:cardElevation="10dp"
-        android:background="@drawable/message_background">
+        android:background="@drawable/message_background_me">
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -65,8 +65,8 @@
                     android:alpha="0.9"
                     android:fontFamily="sans-serif-medium"
                     android:lineSpacingExtra="10sp"
-                    android:maxLines="1"
-                    android:text="aaaaaaw"
+                    android:maxEms="8"
+                    android:text="aaaaaawaa"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="16sp"
                     android:typeface="normal">
@@ -123,7 +123,7 @@
                     android:textColor="@color/white"
                     android:fontFamily="sans-serif-medium"
                     android:lineSpacingExtra="10sp"
-                    android:maxLines="1"
+                    android:maxEms="8"
                     android:text="aaaaaaw"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="16sp"
