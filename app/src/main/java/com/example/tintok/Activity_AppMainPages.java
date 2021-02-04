@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -93,9 +95,9 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     private void initActionBar() {
         setSupportActionBar(findViewById(R.id.actionBar));
 
-        getSupportActionBar()/* or getSupportActionBar() */.setTitle(HtmlCompat.fromHtml("<font color=\"black\"><b>"+getString(R.string.app_name) + "</b></font>",HtmlCompat.FROM_HTML_MODE_LEGACY));
-
+        getSupportActionBar().setTitle(HtmlCompat.fromHtml("<font color=\"black\"><b>"+getString(R.string.app_name) + "</b></font>",HtmlCompat.FROM_HTML_MODE_LEGACY));
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         ShapeableImageView matchingBtn, myprofileBtn;
@@ -141,7 +143,6 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
         myHomepage = new MainPages_MyProfile_Fragment(DataRepositoryController.getInstance().getUser().getValue());
 
 
-        current = mediaSurfing;
         navBar.setOnNavigationItemSelectedListener(item -> {
             NavBarUntil.removeItemsUnderline(navBar);
             NavBarUntil.underlineMenuItem(item);
@@ -160,7 +161,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
                     ShowBadgeForNavBar(ITEM_MESSENGER, unseenChatrooms);
                     break;
                 default:
-                    break;
+                    return false;
             }
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.animation_in, R.anim.animation_out)
                     .addToBackStack(current.getTag()).replace(R.id.mainPageContent, current).commit();
@@ -174,7 +175,6 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
                     break;
                 case R.id.logout:
-                    current = mediaSurfing;
                     App.Logout(Activity_AppMainPages.this);
                     finish();
                     break;
@@ -268,13 +268,11 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
     public void showNavView() {
         drawerLayout.openDrawer(GravityCompat.START);
-        hideNavBars();
+
     }
 
     public void hideNavView() {
-        showNavBars();
         drawerLayout.closeDrawer(GravityCompat.START);
-        drawerLayout.close();
     }
 
     public void OnNotificationClicked(Notification noti) {
@@ -315,16 +313,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
             refreshLayout.setRefreshing(false);
     }
 
-
-    private void showNavBars(){
-        navBar.setVisibility(View.VISIBLE);
-        getSupportActionBar().show();
-    }
-
-    private void hideNavBars(){
-        navBar.setVisibility(View.GONE);
-        getSupportActionBar().hide();
-    }
+    
 
     @Override
     public void onDismiss(DialogInterface dialog) {
