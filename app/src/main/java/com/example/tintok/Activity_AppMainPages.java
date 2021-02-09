@@ -55,7 +55,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     DrawerLayout drawerLayout;
     GestureDetector mGestureDetector;
     Fragment mediaSurfing, notification, messages;
-    DialogFragment peopleBrowsing, myHomepage;
+    DialogFragment peopleBrowsing, myHomepage, password_change_fragment;
     boolean isOnDialogFragment;
     Fragment current;
 
@@ -141,6 +141,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
         mediaSurfing = new MainPages_Posts_Fragment(true, true);
         myHomepage = new MainPages_MyProfile_Fragment(DataRepositoryController.getInstance().getUser().getValue());
+        password_change_fragment = new Password_Change_Fragment();
 
 
         navBar.setOnNavigationItemSelectedListener(item -> {
@@ -178,6 +179,9 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
                     App.Logout(Activity_AppMainPages.this);
                     finish();
                     break;
+                case R.id.change_password:
+                    drawerLayout.closeDrawer(GravityCompat.START, false);
+                    password_change_fragment.show(getSupportFragmentManager(), "PASSWORD_CHANGE_FRAGMENT");
             }
             return true;
         });

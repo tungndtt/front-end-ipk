@@ -80,7 +80,8 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
         forget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getParentFragmentManager().beginTransaction().replace(R.id.fragment, ForgetPasswordFragment.newInstance(viewModel)).addToBackStack("Login").commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.fragment, Password_Reset_Fragment.newInstance(viewModel)).addToBackStack("Login").commit();
+                //getParentFragmentManager().beginTransaction().replace(R.id.fragment, ForgetPasswordFragment.newInstance(viewModel)).addToBackStack("Login").commit();
             }
         });
     }

@@ -31,6 +31,11 @@ public class DataRepository_UserSimple {
         }
         return  m ;
     }
+    public void updateUserSimpleInCache(UserSimple user){
+        this.cacheQueriedUserSimple.put(user.getUserID(), user);
+        for(OnUserProfileChangeListener l:mListeners)
+            l.onProfileChange(user);
+    }
 
     private ArrayList<String> onQueries = new ArrayList<>();
     public void UpdateProfile(String id){

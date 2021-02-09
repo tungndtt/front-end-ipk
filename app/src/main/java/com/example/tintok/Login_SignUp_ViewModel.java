@@ -10,6 +10,8 @@ import android.view.View;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI;
@@ -17,6 +19,7 @@ import com.example.tintok.Communication.RestAPI_Entity;
 import com.example.tintok.Communication.RestAPI_model.LoginResponseForm;
 import com.example.tintok.Communication.RestAPI_model.UnknownUserForm;
 import com.example.tintok.Communication.RestAPI_model.UserForm;
+import com.example.tintok.Model.Interest;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonObject;
 
@@ -24,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -32,10 +36,18 @@ import retrofit2.Response;
 
 public class Login_SignUp_ViewModel extends AndroidViewModel {
     private RestAPI api;
+    private MutableLiveData<HashMap<Integer, Interest>> selectedInterests;
 
     public Login_SignUp_ViewModel(Application app){
         super(app);
         this.api = Communication.getInstance().getApi();
+        selectedInterests = new MutableLiveData<>();
+    }
+    public LiveData<HashMap<Integer, Interest>> getSelectedInterests() {
+        return selectedInterests;
+    }
+    public void setSelectedInterests(HashMap<Integer, Interest> selectedInterests) {
+        this.selectedInterests.setValue(selectedInterests);
     }
 
     public void loginRequest(String email, String password, requestListener listener){
@@ -70,7 +82,7 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
         });
     }
 
-    public void signUpRequest(String username, String email, String birthday, String password, requestListener listener){
+    public void signUpRequest(String username, String email, String birthday, String password, int gender, Integer[] interests, requestListener listener){
         UnknownUserForm form = new UnknownUserForm(username, email, password);
         form.setBirthday(birthday);
         this.api.postRegisterData(form).enqueue(new Callback<ResponseBody>() {
@@ -93,14 +105,15 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void resetPassword(String email, String password){
+    public void resetPassword(String email, String password,  requestListener listener){
         this.api.resetPassword(new UserForm("",email,password)).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    snackBarShow("Sending to email");
+                   // snackBarShow("Sending to email");
+                    listener.requestSuccess();
                 } else {
-                    snackBarShow("No email available!");
+                    listener.requestFail("No user with given email available");//snackBarShow("No email available!");
                 }
             }
 
@@ -111,7 +124,7 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
-                snackBarShow("Some errors occur in reset password!");
+                listener.connectionFail();//snackBarShow("Some errors occur in reset password!");
             }
         });
     }

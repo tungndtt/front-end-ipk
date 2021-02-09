@@ -56,7 +56,7 @@ public class ForgetPasswordFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                viewModel.resetPassword(email.getText().toString(), password.getText().toString());
+              //  viewModel.resetPassword(email.getText().toString(), password.getText().toString());
                 getParentFragmentManager().popBackStack();
             }
         });

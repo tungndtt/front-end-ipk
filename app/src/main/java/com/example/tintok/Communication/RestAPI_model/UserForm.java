@@ -22,8 +22,14 @@ public class UserForm extends UnknownUserForm{
     @SerializedName("followees")
     private ArrayList<String> following;
 
+
     @SerializedName("lastLogout")
     private long time;
+
+    @SerializedName("location")
+    private String location;
+    @SerializedName("description")
+    private String description;
 
     public UserForm(String username, String email, String password) {
         super(username, email, password);
@@ -33,6 +39,9 @@ public class UserForm extends UnknownUserForm{
     }
     public String getId(){
         return this.id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
     public String getImageUrl(){ return url; }
     public ArrayList<String> getFollowing_posts() {
@@ -51,6 +60,18 @@ public class UserForm extends UnknownUserForm{
     }
     public long getTime() {
         return time;
+    }
+    public String getLocation() {
+        return location;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

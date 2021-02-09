@@ -1,15 +1,11 @@
 package com.example.tintok;
 
-import androidx.annotation.RequiresApi;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,23 +13,37 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.example.tintok.Communication.Communication;
-import com.example.tintok.Communication.RestAPI_Entity;
-import com.google.gson.JsonObject;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.tintok.Adapters_ViewHolder.InterestAdapter;
+import com.example.tintok.DataLayer.DataRepository_Interest;
+import com.example.tintok.Model.Interest;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.HashMap;
 
 public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel.requestListener {
 
-    private SignUpViewModel mViewModel;
+
     private Button registerButton, backBtn;
     private ProgressBar loadingBar;
     private TextView status;
     private EditText name, email,password, retypepassword, day,month,year;
     private Login_SignUp_ViewModel viewModel;
+    private RadioGroup mGenderGroup;
+    private TextView mInterestTV;
+    private InterestAdapter interestAdapter;
+    private String selectedInterest;
 
     public static Sign_up_Fragment newInstance(Login_SignUp_ViewModel viewModel) {
         return new Sign_up_Fragment(viewModel);
@@ -52,7 +62,15 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+        if(viewModel == null){
+            viewModel = new ViewModelProvider(this).get(Login_SignUp_ViewModel.class);
+        }
+        if(viewModel.getSelectedInterests().getValue() == null){
+            HashMap<Integer, Interest> selectedItems = new HashMap<>();
+            viewModel.setSelectedInterests(selectedItems);
+            selectedInterest = "click here to choose your interests";
+        }
+
         // TODO: Use the ViewModel
     }
 
@@ -65,7 +83,7 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     @RequiresApi(api = Build.VERSION_CODES.O)
     void init(){
         registerButton = getView().findViewById(R.id.sign_upButton);
-        backBtn = getView().findViewById(R.id.back_to_login_button);
+        backBtn = getView().findViewById(R.id.register_backBtn);
         status = getView().findViewById(R.id.status);
         loadingBar = getView().findViewById(R.id.progressBar);
         name = getView().findViewById(R.id.nameInput);
@@ -75,6 +93,16 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         day = getView().findViewById(R.id.dayofbirth_date);
         month = getView().findViewById(R.id.dayofbirth_month);
         year = getView().findViewById(R.id.dayofbirth_year);
+        mGenderGroup = getView().findViewById(R.id.register_gender_group);
+        mInterestTV = getView().findViewById(R.id.register_interests_inputTV);
+
+        mInterestTV.setText(selectedInterest);
+        interestAdapter = new InterestAdapter(getActivity(), DataRepository_Interest.getInterestArrayList());
+        interestAdapter.setOnCheckboxListner(position -> {
+            Log.e("sign_up", String.valueOf(interestAdapter.getItems().get(position).isSelected()));
+            interestAdapter.getItems().get(position).setSelected(!(interestAdapter.getItems().get(position).isSelected()));
+            Log.e("sign_up", String.valueOf(interestAdapter.getItems().get(position).isSelected()));
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -89,25 +117,77 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
                 getParentFragmentManager().popBackStack();
             }
         });
+
+        mInterestTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                View view = LayoutInflater.from(getContext()).inflate(R.layout.interest_recyclerview, null);
+
+                RecyclerView interestList = view.findViewById(R.id.interest_list);
+
+                interestList.setAdapter(interestAdapter);
+                interestList.setLayoutManager(new LinearLayoutManager(getActivity()));
+                MaterialAlertDialogBuilder alertDialogBuilder =  new MaterialAlertDialogBuilder(getActivity());
+                alertDialogBuilder.setTitle("Interests")
+                        .setMessage("Choose your interests")
+                        .setView(view)
+                        .setCancelable(false)
+                        .setNeutralButton("Cancel", new DialogInterface.OnClickListener() { //delete
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                for(Interest interest: interestAdapter.getItems()){
+                                    interest.setSelected(false);
+                                }
+                                interestAdapter.clearSelectedItems();
+                                viewModel.setSelectedInterests(interestAdapter.getSelectedItems());
+                                selectedInterest = "click here to choose your interests";
+                                mInterestTV.setText(selectedInterest);
+                            }
+                        })
+                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e("save", "...");
+                                selectedInterest = "";
+                                for(Interest interest :  interestAdapter.getSelectedItems().values())
+                                    selectedInterest += interest.getInterest().toLowerCase() + " ";
+                                viewModel.setSelectedInterests(interestAdapter.getSelectedItems());
+                                mInterestTV.setText(selectedInterest);
+                            }})
+                        .create()
+                        .show();
+            }
+        });
+
+
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void HandleSignUp(){
+        Log.e("handle", "again");
         email.onEditorAction(EditorInfo.IME_ACTION_DONE);
         if(name.getText().toString().isEmpty()){
-            status.setVisibility(View.VISIBLE);
-            status.setText("Name cant be blank");
+           // name.setError("Name cant be blank");
+            setErrorStatus(R.string.error_username_empty);
+
             return;
         }
-        if(email.getText().toString().length() <= 5 || password.getText().toString().length()<=5){
-            status.setVisibility(View.VISIBLE);
-            status.setText("Invalid Email or Password");
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches()){
+            setErrorStatus(R.string.error_email_invalid);
             return;
         }
+        if(password.getText().toString().length() < 6){
+            setErrorStatus(R.string.error_password_length);
+
+            return;
+        }
+
         int dayInt, monthInt, yearInt;
         if(day.getText().toString().isEmpty() || month.getText().toString().isEmpty()||year.getText().toString().isEmpty()){
-            status.setVisibility(View.VISIBLE);
-            status.setText("Invalid Date of Birth");
+            setErrorStatus(R.string.error_birthday_invalid);
             return;
         }
         try {
@@ -115,26 +195,35 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
             monthInt = Integer.parseInt(month.getText().toString());
             yearInt = Integer.parseInt(year.getText().toString());
         }catch (Exception e){
-            status.setVisibility(View.VISIBLE);
-            status.setText("Invalid Date of Birth");
+            setErrorStatus(R.string.error_birthday_invalid);
             return;
         }
-        if(year.getText().toString().length()!=4 || (dayInt <0 || dayInt >31)
-            || (monthInt<=0 || monthInt >=12)){
-            status.setVisibility(View.VISIBLE);
-            status.setText("Invalid Date of Birth");
+        if(year.getText().toString().length()!=4 || (dayInt <=0 || dayInt >31)
+            || (monthInt<=0 || monthInt > 12)){
+            setErrorStatus(R.string.error_birthday_invalid);
             return;
         }
 
         if(retypepassword.getText().toString().compareTo(password.getText().toString()) != 0){
+           setErrorStatus(R.string.error_password_notMatching);
+            return;
+        }
+
+        if(mGenderGroup.getCheckedRadioButtonId() == -1){
+            setErrorStatus(R.string.error_gender_empty);
+            return;
+        }
+        if(viewModel.getSelectedInterests().getValue().size() == 0){
             status.setVisibility(View.VISIBLE);
-            status.setText("Passwords dont match");
+            status.setText("No interests selected");
             return;
         }
 
         status.setVisibility(View.VISIBLE);
-        status.setText("Signing un...");
+        status.setText(R.string.registration_signUp);
+        status.setTextColor(Color.BLACK);
         loadingBar.setVisibility(View.VISIBLE);
+        /*
         JsonObject data = new JsonObject();
         data.addProperty("email", email.getText().toString());
         data.addProperty("password", password.getText().toString());
@@ -142,8 +231,22 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         data.addProperty("month_ofBirth", monthInt);
         data.addProperty("year_ofBirth", yearInt);
         data.addProperty("name", name.getText().toString());
+
+         */
         String birthday = dayInt+"/"+monthInt+"/"+yearInt;
-        this.viewModel.signUpRequest(name.getText().toString(), email.getText().toString(), birthday, password.getText().toString(), this);
+        int gender = mGenderGroup.indexOfChild(getView().findViewById(mGenderGroup.getCheckedRadioButtonId())) + 1;
+        Log.e("inter", String.valueOf(viewModel.getSelectedInterests().getValue().size()));
+        Integer[] interests = new Integer[viewModel.getSelectedInterests().getValue().size()];
+        Log.e("inter", String.valueOf(interests.length));
+        HashMap<Integer, Interest> result = viewModel.getSelectedInterests().getValue();
+        int i = 0;
+        for(Interest interest :  result.values()){
+            Log.e("selected", String.valueOf(interest.getId()));
+            interests[i] = interest.getId();
+            i++;
+        }
+
+        this.viewModel.signUpRequest(name.getText().toString(), email.getText().toString(), birthday, password.getText().toString(), gender, interests, this);
         /*
         communication.LoginRequest(data, new RestAPI_Entity.RestApiListener(){
 
@@ -167,23 +270,34 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
          */
     }
 
+    private void setErrorStatus(int error){
+        status.setVisibility(View.VISIBLE);
+        status.setText(error);
+        status.setTextColor(Color.RED);
+    }
+
 
     @Override
     public void requestSuccess() {
-        status.setVisibility(View.VISIBLE);
-        status.setText("Signing up sucessfull. Please press return to Login");
+        loadingBar.setVisibility(View.INVISIBLE);
+        Snackbar.make(getView(), R.string.registration_email_sent, Snackbar.LENGTH_LONG);
+        //TODO:
+        getActivity().getSupportFragmentManager().popBackStack();//.beginTransaction().replace(R.id.fragment, )
+
     }
 
     @Override
     public void requestFail(String reason) {
-        status.setVisibility(View.VISIBLE);
-        status.setText("Signing up failed: "+ reason);
+       // setErrorStatus(R.string.error_registration_failed);
+        status.setText(reason);
         loadingBar.setVisibility(View.INVISIBLE);
+        //TODO: reset email textfield?
     }
 
     @Override
     public void connectionFail() {
         status.setVisibility(View.VISIBLE);
-        status.setText("Signing up failed");
+        status.setText(R.string.error_connection_failed);
+        loadingBar.setVisibility(View.INVISIBLE);
     }
 }

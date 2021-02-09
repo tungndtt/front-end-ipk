@@ -17,6 +17,7 @@ import com.example.tintok.Model.UserSimple;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataRepositoryController {
     public static Context applicationContext;
@@ -128,6 +129,18 @@ public class DataRepositoryController {
 //region CurrentUser
     public MutableLiveData<UserProfile> getUser() {
         return  dataRepository_currentUser.currentUser;
+    }
+    public MutableLiveData<Boolean> getIsUserUpdating(){
+        return dataRepository_currentUser.isUserUpdating;
+    }
+    public void updateUserInfo(UserProfile userProfile){
+        this.dataRepository_currentUser.updateUserInfo(userProfile);
+    }
+    public MutableLiveData<ResponseEvent> getNetworkResponse(){
+        return this.dataRepository_currentUser.networkStatus;
+    }
+    public void changePassword(List<String> passwords) {
+        this.dataRepository_currentUser.updateUserPassword(passwords);
     }
     public long getLastSeen(){
         return dataRepository_currentUser.lastSeen;

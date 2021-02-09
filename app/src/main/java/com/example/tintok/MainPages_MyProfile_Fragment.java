@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,7 +53,9 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
     private UserProfile user;
     private ImageView profilePic;
     private View newPostBtn;
-    private TextView followingNumber, followerNumber, username;
+    private TextView followingNumber, followerNumber;
+    private EditText username, location;
+    private View view;
     ShapeableImageView backBtn;
     BottomNavigationView profile_navigation_bar;
 
@@ -87,7 +92,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.i("INFO", "Creating view for profile fragment ...");
-        View view = inflater.inflate(R.layout.mainpages_myprofile_fragment, container, false);
+        view = inflater.inflate(R.layout.mainpages_myprofile_fragment, container, false);
         //this.viewModel.setFragment(this);
         // info of displayed user. Currently just user name for testing
         username = view.findViewById(R.id.profile_name);
@@ -96,6 +101,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         followingNumber = view.findViewById(R.id.followingsNumber);
         followerNumber = view.findViewById(R.id.follwersNumber);
         backBtn = view.findViewById(R.id.backBtn);
+        location = view.findViewById(R.id.profile_location);
 
         profile_navigation_bar = view.findViewById(R.id.profile_navigation_bar);
         profile_navigation_bar.setSelectedItemId(this.selected);
@@ -135,10 +141,49 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
 
             }
         });
+        location.addTextChangedListener(new TextWatcher() {
 
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String input = s.toString();
+                mViewModel.setLocation(input);
+                mViewModel.setInfoIsEdited(true);
+                //   Log.e("afterTC", s.toString());
+            }
+        });
+        username.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mViewModel.setUsername(s.toString());
+                mViewModel.setInfoIsEdited(true);
+            }
+        });
+        /*
         username.setText(user.getUserName());
         Glide.with(this.getContext()).load(user.getProfilePic().url)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
+
+        */
     }
 
     void initPosts(){
@@ -155,6 +200,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             if (userProfile == null)
                 return;
             username.setText(mViewModel.getUserProfile().getValue().getUserName());
+            location.setText(mViewModel.getUserProfile().getValue().getLocation());
             Glide.with(this.getContext()).load(mViewModel.getUserProfile().getValue().getProfilePic().url)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
             followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));

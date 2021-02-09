@@ -44,17 +44,25 @@
                         android:scaleType="fitXY"/>
                 </androidx.cardview.widget.CardView>
             </androidx.cardview.widget.CardView>
-            <TextView
+            <EditText
                 android:id="@+id/profile_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ganmo"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@id/post_profile_wrap"
-                android:textSize="25sp"
-                android:textAllCaps="true"
+
+                android:gravity="center"
+
+                android:layout_marginTop="5dp"
+                tools:text="12345678901234567890"
+                android:background="@color/transparent"
+                android:layout_centerHorizontal="true"
+
+                android:hint="Your username"
+                android:inputType="textPersonName"
+                android:maxLength="20"
                 android:textColor="@color/black"
-                android:layout_marginTop="5dp"/>
+                android:textSize="25sp"
+                />
             <View
                 android:id="@+id/divider_0"
                 android:layout_width="100dp"
@@ -63,17 +71,22 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/profile_name"
                 android:layout_marginTop="5dp"/>
-            <TextView
-                android:id="@+id/profile_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Darmstadt, Germany"
-                android:textSize="16sp"
-                android:textAllCaps="true"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/divider_0"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="20dp"/>
+            <EditText
+            android:id="@+id/profile_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="london"
+            android:gravity="center"
+            android:hint="Your location"
+            android:background="@color/transparent"
+            android:textSize="16sp"
+            android:inputType="text"
+            android:maxLength="40"
+
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/divider_0"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"/>
         </RelativeLayout>
 
 

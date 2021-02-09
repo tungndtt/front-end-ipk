@@ -23,6 +23,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
@@ -96,4 +97,10 @@ public interface RestAPI {
 
     @GET("get_all_notifications")
     Call<ArrayList<NotificationForm>> getAllNotifications();
+
+    @PATCH("update_user_info")
+    Call<UserForm> updateUserInfo(@Body UserForm data);
+
+    @POST("update_new_password")
+    Call<ResponseBody> updateUserPassword(@Body UserForm data);
 }

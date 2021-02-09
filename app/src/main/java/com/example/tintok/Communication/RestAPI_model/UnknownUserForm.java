@@ -11,10 +11,12 @@ public class UnknownUserForm {
     private String password;
     @SerializedName("birthday")
     private String birthday;
-    /*
-    @SerializedName("location")
-    private String location;
-     */
+    @SerializedName("sex")
+    private int gender;
+    @SerializedName("new_password")
+    private String new_password;
+    @SerializedName("interests")
+    private Integer[] interests;
 
 
     public UnknownUserForm(String username, String email, String password) {
@@ -31,5 +33,23 @@ public class UnknownUserForm {
     }
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+    public String getBirthday() {
+        return birthday;
+    }
+    public int getGender() {
+        return gender;
+    }
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+    public void setNew_password(String new_password) {
+        this.new_password = new_password;
+    }
+    public Integer[] getInterests() {
+        return interests;
+    }
+    public void setInterests(Integer[] interests) {
+        this.interests = interests;
     }
 }
