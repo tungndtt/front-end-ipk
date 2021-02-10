@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,13 +14,80 @@ import androidx.annotation.NonNull;
 import com.example.tintok.Model.Interest;
 import com.example.tintok.R;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class InterestAdapter extends BaseAdapter<Interest, InterestAdapter.ViewHolder> {
 
+
+    OnInterestClickListener mListener;
+
+    public InterestAdapter(Context context, ArrayList<Interest> models) {
+        super(context, models);
+    }
+
+    @NonNull
+    @Override
+    public InterestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_interest, parent, false);
+        return new ViewHolder(view, this);
+    }
+
+
+    @Override
+    public void setItems(ArrayList<Interest> items) {
+        super.setItems(items);
+    }
+
+    public class ViewHolder extends BaseViewHolder<Interest> {
+
+         ImageView interestIcon;
+         TextView interestTV;
+         MaterialCardView cardView;
+
+
+        public ViewHolder(@NonNull View itemView, BaseAdapter mAdapter) {
+            super(itemView, mAdapter);
+            this.interestIcon = itemView.findViewById(R.id.item_interest_image);
+            this.interestTV = itemView.findViewById(R.id.item_interest_tv);
+            this.cardView = itemView.findViewById(R.id.item_interest_cardview);
+        }
+        public void updateColor(Interest interest){
+            if(interest.isSelected()){
+                cardView.setBackgroundResource(R.drawable.interest_background);
+            }
+            else {
+                cardView.setBackgroundResource(R.color.transparent);
+            }
+        }
+        @Override
+        public void bindData(Interest itemData) {
+            this.interestTV.setText(itemData.getInterest().toLowerCase());
+            this.interestIcon.setImageResource(itemData.getImageResource());
+            this.cardView.setOnClickListener(v -> {
+                if(mListener != null){
+                    mListener.onItemClick(getAdapterPosition());
+                    updateColor(itemData);
+                }
+            });
+            updateColor(itemData);
+
+        }
+
+    }
+
+    public interface OnInterestClickListener {
+        void onItemClick(int pos);
+    }
+    public void setOnInterestClickListener(OnInterestClickListener mListener){
+        this.mListener = mListener;
+    }
+
+
+
+}
+
+    /*
     HashMap<Integer, Interest> selectedItems;
 
     public InterestAdapter(Context context, ArrayList<Interest> models) {
@@ -75,7 +143,7 @@ public class InterestAdapter extends BaseAdapter<Interest, InterestAdapter.ViewH
             this.interestTV = itemView.findViewById(R.id.item_interest_tv);
             this.checkBox = itemView.findViewById(R.id.item_interest_checkbox);
             this.cardView = itemView.findViewById(R.id.item_interest_cardview);
-          //  this.cardView.setBackgroundResource(R.drawable.post_background);
+           // this.cardView.setBackgroundResource(R.drawable.post_background);
 
 
 
@@ -92,6 +160,7 @@ public class InterestAdapter extends BaseAdapter<Interest, InterestAdapter.ViewH
                     mListener.onCheckboxClicked(getAdapterPosition());
                     updateSelectedItems(itemData);
                 }
+                updateSelectedItems(itemData);
 
 
             });
@@ -100,19 +169,25 @@ public class InterestAdapter extends BaseAdapter<Interest, InterestAdapter.ViewH
         public void updateSelectedItems(Interest interest){
             if(interest.isSelected()) {
                 selectedItems.putIfAbsent(getItems().get(getAdapterPosition()).getId(), interest); //interest.getId()
+                cardView.setBackgroundResource(R.drawable.interest_background);
 
-                /*
-                Log.e("updatedSelect", getItems().get(getAdapterPosition()).getInterest());
-                if (!selectedItems.containsKey(getItems().get(getAdapterPosition()).getId())) {
-                    selectedItems.put(getItems().get(getAdapterPosition()).getId(), getItems().get(getAdapterPosition()));
-                    Log.e("updatedSelect", "not already in");
-                } else Log.e("updatedSelect", "already in");
 
-                 */
+               // Log.e("updatedSelect", getItems().get(getAdapterPosition()).getInterest());
+               // if (!selectedItems.containsKey(getItems().get(getAdapterPosition()).getId())) {
+               //     selectedItems.put(getItems().get(getAdapterPosition()).getId(), getItems().get(getAdapterPosition()));
+               //     Log.e("updatedSelect", "not already in");
+               // } else Log.e("updatedSelect", "already in");
+
+
             }
-            else selectedItems.remove(getItems().get(getAdapterPosition()).getId());  //interest.getId()
+            else {
+                selectedItems.remove(getItems().get(getAdapterPosition()).getId());  //interest.getId()
+                cardView.setBackgroundResource(R.color.transparent);
+
+            }
         }
     }
 
 
 }
+*/

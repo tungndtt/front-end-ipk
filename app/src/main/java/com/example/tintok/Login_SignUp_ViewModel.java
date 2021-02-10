@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -36,19 +37,30 @@ import retrofit2.Response;
 
 public class Login_SignUp_ViewModel extends AndroidViewModel {
     private RestAPI api;
-    private MutableLiveData<HashMap<Integer, Interest>> selectedInterests;
+    private MutableLiveData<boolean[]> selectedInterests;
+   // private MutableLiveData<HashMap<Integer, Interest>> selectedInterests;
 
     public Login_SignUp_ViewModel(Application app){
         super(app);
         this.api = Communication.getInstance().getApi();
         selectedInterests = new MutableLiveData<>();
     }
+    public LiveData<boolean[]> getSelectedInterests(){
+        return selectedInterests;
+    }
+    public void setSelectedInterests(boolean[] interests){
+        Log.e("setSelecetd", "changed");
+        selectedInterests.setValue(interests);
+    }
+    /*
     public LiveData<HashMap<Integer, Interest>> getSelectedInterests() {
         return selectedInterests;
     }
     public void setSelectedInterests(HashMap<Integer, Interest> selectedInterests) {
         this.selectedInterests.setValue(selectedInterests);
     }
+
+     */
 
     public void loginRequest(String email, String password, requestListener listener){
         this.api.postLoginData(new UnknownUserForm("",email,password)).enqueue(new Callback<LoginResponseForm>() {
@@ -82,9 +94,11 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
         });
     }
 
-    public void signUpRequest(String username, String email, String birthday, String password, int gender, Integer[] interests, requestListener listener){
+    public void signUpRequest(String username, String email, String birthday, String password, int gender, ArrayList<Integer> interests, requestListener listener){
         UnknownUserForm form = new UnknownUserForm(username, email, password);
         form.setBirthday(birthday);
+        form.setGender(gender);
+        form.setInterests(interests);
         this.api.postRegisterData(form).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

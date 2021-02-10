@@ -2,6 +2,8 @@ package com.example.tintok.Communication.RestAPI_model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class UnknownUserForm {
     @SerializedName("username")
     private String username;
@@ -16,7 +18,7 @@ public class UnknownUserForm {
     @SerializedName("new_password")
     private String new_password;
     @SerializedName("interests")
-    private Integer[] interests;
+    private ArrayList<Integer> interests;
 
 
     public UnknownUserForm(String username, String email, String password) {
@@ -46,10 +48,10 @@ public class UnknownUserForm {
     public void setNew_password(String new_password) {
         this.new_password = new_password;
     }
-    public Integer[] getInterests() {
+    public ArrayList<Integer> getInterests() {
         return interests;
     }
-    public void setInterests(Integer[] interests) {
+    public void setInterests(ArrayList<Integer> interests) {
         this.interests = interests;
     }
 }

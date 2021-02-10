@@ -66,11 +66,18 @@ public class FilterDialogFragment extends DialogFragment {
         applyBtn = view.findViewById(R.id.applyFilterBtn);
         cancelBtn = view.findViewById(R.id.cancelBtn);
         resetBtn = view.findViewById(R.id.resetBtn);
+        Log.e("filter","onCreateView");
         initComponents();
 
         resetBtn.setOnClickListener(v -> {
             resetFilter();
         });
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.e("filter","onActivView");
     }
 
     @Override

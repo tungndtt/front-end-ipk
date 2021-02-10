@@ -19,8 +19,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tintok.DataLayer.DataRepository_Interest;
 import com.example.tintok.DataLayer.ResponseEvent;
 import com.example.tintok.Model.UserProfile;
 import com.google.android.material.button.MaterialButton;
@@ -29,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -36,7 +39,7 @@ public class Info_Profile_Fragment extends Fragment {
 
 
     private MainPages_MyProfile_ViewModel mViewModel;
-    private TextView mEmailTextView, mAgeTextView, mBirthdayTextView;
+    private TextView mEmailTextView, mAgeTextView, mBirthdayTextView, mInterestsTextView;
     private Spinner mGenderSpinner;
     private EditText mDescriptionEditText;
     View view;
@@ -46,6 +49,7 @@ public class Info_Profile_Fragment extends Fragment {
     private DatePickerDialog.OnDateSetListener  mOnDataSetListener;
     private DateTimeFormatter formatter;
     private int day, year, month;
+    private String interests;
 
 
 
@@ -83,6 +87,7 @@ public class Info_Profile_Fragment extends Fragment {
         saveBtn = view.findViewById(R.id.profile_edit_profile_button);
         cancelBtn = view.findViewById(R.id.profile_cancel_profile_button);
         mBirthdayTextView = view.findViewById(R.id.profile_birthday);
+        mInterestsTextView = view.findViewById(R.id.profile_interest);
     }
 
 
@@ -90,12 +95,15 @@ public class Info_Profile_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(mViewModel == null){
-         //   mViewModel = new ViewModelProvider(getParentFragment()).get(MainPages_MyProfile_ViewModel.class);
-            mViewModel = new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class);
+            //TODO just for view profile
+            if(getParentFragment() == null)
+                 mViewModel = new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class); //requireParentFragment()
+            else mViewModel = new ViewModelProvider(getParentFragment()).get(MainPages_MyProfile_ViewModel.class);
         }
 
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         Log.e("viewmodel info", mViewModel.toString() );
+
         mViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
             //TODO age, birthday, gender, description,
             Log.e("OnChange", "Info");
@@ -131,10 +139,14 @@ public class Info_Profile_Fragment extends Fragment {
                     Snackbar.make(view, "Updated", Snackbar.LENGTH_LONG).show();
                 if(response != null && response.equals("Forbidden"))
                     Snackbar.make(view, "Your changes could not be saved ", Snackbar.LENGTH_LONG).show(); // error textview
-
             }
+        });
 
-
+        mViewModel.getUserProfile().getValue().getUserInterests().observe(getViewLifecycleOwner(), integers -> {
+            interests="";
+            for(int i=0; i<integers.size();i++)
+                interests += DataRepository_Interest.interests[integers.get(i)] + " ";
+            mInterestsTextView.setText(interests);
         });
     }
 
@@ -145,6 +157,8 @@ public class Info_Profile_Fragment extends Fragment {
         mEmailTextView.setText(user.getEmail());
         mAgeTextView.setText(Integer.toString(user.getAge()));
         mBirthdayTextView.setText(formatter.format(user.getBirthday()));
+
+
 
         mBirthdayTextView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -7,7 +7,7 @@ public class Interest {
     private int id;
     private int imageResource;
     private String interest;
-    private CheckBox checkbox;
+   // private CheckBox checkbox;
     private boolean isSelected;
 
     public Interest(int id, int imageResource, String interest) {
@@ -40,16 +40,21 @@ public class Interest {
     public void setInterest(String interest) {
         this.interest = interest;
     }
-
+/*
     public CheckBox getCheckbox() {
         return checkbox;
     }
+
+ */
 
     public int getId(){
         return id;
     }
 
+    /*
     public void setCheckbox(CheckBox checkbox) {
         this.checkbox = checkbox;
     }
+
+     */
 }

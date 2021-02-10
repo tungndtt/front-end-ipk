@@ -27,6 +27,6 @@ public class ResponseEvent {
         return response;
     }
 
-    public enum Type {PASSWORD, USER_UPDATE, PROFILE_PIC_UPDATE};
+    public enum Type {PASSWORD, USER_UPDATE, PROFILE_PIC_UPDATE, INTEREST_UPDATE};
 
 }

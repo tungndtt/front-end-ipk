@@ -103,4 +103,7 @@ public interface RestAPI {
 
     @POST("update_new_password")
     Call<ResponseBody> updateUserPassword(@Body UserForm data);
+
+    @POST("update_user_interests")
+    Call<ResponseBody> updateUserInterests(@Body UserForm data);
 }

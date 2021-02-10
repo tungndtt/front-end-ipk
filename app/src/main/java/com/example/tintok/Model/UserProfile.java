@@ -12,6 +12,7 @@ public class UserProfile extends UserSimple {
     public MutableLiveData<ArrayList<Post>> myPosts;
 
     public MutableLiveData<ArrayList<MediaEntity>> mPhotos;
+    public MutableLiveData<ArrayList<Integer>> userInterests;
 
     public MutableLiveData<ArrayList<MediaEntity>> getPhotos() {
         return mPhotos;
@@ -24,7 +25,12 @@ public class UserProfile extends UserSimple {
     public void setFollowingPost(MutableLiveData<ArrayList<String>> followingPost) {
         this.followingPost = followingPost;
     }
-
+    public MutableLiveData<ArrayList<Integer>> getUserInterests(){
+        return userInterests;
+    }
+    public void setUserInterests(ArrayList<Integer> interests){
+        this.userInterests.postValue(interests);
+    }
     public MutableLiveData<ArrayList<String>> followingPost;
 
     public void postPhotos(ArrayList<MediaEntity> photos) {
@@ -37,6 +43,7 @@ public class UserProfile extends UserSimple {
         this.followers = new MutableLiveData<>(new ArrayList<>());
         this.following = new MutableLiveData<>(new ArrayList<>());
         this.followingPost = new MutableLiveData<>(new ArrayList<>());
+        this.userInterests = new MutableLiveData<>(new ArrayList<>());
     }
 
 

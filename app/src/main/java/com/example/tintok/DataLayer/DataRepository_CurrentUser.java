@@ -36,6 +36,7 @@ public class DataRepository_CurrentUser {
     public long lastSeen;
     MutableLiveData<Boolean> isUserUpdating;
     MutableLiveData<ResponseEvent>  networkStatus;
+
     public DataRepository_CurrentUser(DataRepositoryController controller){
         this.controller = controller;
         currentUser = new MutableLiveData<>();
@@ -60,6 +61,7 @@ public class DataRepository_CurrentUser {
                     currUser.setDescription(form.getDescription());
                     currUser.setGender(form.getGender());
                     currUser.setProfilePic(new MediaEntity(form.getImageUrl()));
+                    currUser.userInterests.postValue(form.getInterests());//setUserInterests(form.getInterests()); //LIVEDATA
                     ArrayList<Post> photos = currUser.getMyPosts().getValue();
                     for(PostForm post : form.getPosts()){
                         Post tmp = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), new MediaEntity(post.getImageUrl()));
@@ -78,6 +80,7 @@ public class DataRepository_CurrentUser {
                     dummy = currUser.getFollowingPost().getValue();
                     dummy.addAll(form.getFollowing_posts());
                     currUser.getFollowingPost().postValue(dummy);
+
 
                     currentUser.postValue( currUser);
                     lastSeen = form.getTime();
@@ -231,7 +234,31 @@ public class DataRepository_CurrentUser {
     //TODO:
     public void updateUserProfilePic(UserProfile userProfile){}
     //TODO:
-    public void updateUserInterests(UserProfile userProfile){
+    public void updateUserInterests(ArrayList<Integer> newInterests){
+        isUserUpdating.setValue(true);
+        RestAPI api = Communication.getInstance().getApi();
+        UserForm userForm = new UserForm("", "", "");
+        userForm.setInterests(newInterests);
+        if(api != null){
+            api.updateUserInterests(userForm).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    if(response.isSuccessful())
+                       currentUser.getValue().setUserInterests(newInterests); //DataRepositoryController.getInstance().dataRepository_currentUser.currentUser.getValue().setUserInterests(newInterests);
+
+                    networkStatus.postValue(new ResponseEvent(ResponseEvent.Type.INTEREST_UPDATE, response.message()));
+                    isUserUpdating.postValue(false);
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+        }
+
+
 
     }
 

@@ -1,5 +1,7 @@
 package com.example.tintok.DataLayer;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.tintok.Model.Interest;
 import com.example.tintok.R;
 
@@ -28,7 +30,7 @@ public class DataRepository_Interest {
         }
     }
     public static ArrayList<Interest> interestArrayList = new ArrayList<Interest>();
-    public static ArrayList<Interest> getInterestArrayList() {
+    public static void initInterestArrayList(){
         if(interestArrayList.size() == 0) {
             interestArrayList.add(new Interest(0, R.drawable.ic_edit, interests[0]));          //GAMING
             interestArrayList.add(new Interest(1,R.drawable.ic_arrow_send, interests[1]));    //READING
@@ -38,6 +40,22 @@ public class DataRepository_Interest {
             interestArrayList.add(new Interest(5,R.drawable.ic_backspace, interests[5]));     //LEARNING
             interestArrayList.add(new Interest(6,R.drawable.ic_backspace, interests[6]));     //GOSSIP
         }
+    }
+    public static ArrayList<Interest> getInterestArrayList() {
         return interestArrayList;
     }
+    public static ArrayList<Interest> getDefaultArrayList(){
+        for(Interest interest: interestArrayList)
+            interest.setSelected(false);
+        return interestArrayList;
+    }
+
+    public void setUserInterest(ArrayList<Integer> interests){
+        for(int interest: interests){
+                getInterestArrayList().get(interest).setSelected(true);
+
+        }
+    }
+
+
 }

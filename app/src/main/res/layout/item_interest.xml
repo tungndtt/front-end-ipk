@@ -12,8 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        android:background="@drawable/interest_background"
+        android:id="@+id/item_interest_RL"
         >
         <ImageView
             android:id="@+id/item_interest_image"
@@ -29,18 +28,11 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="@color/black"
+            android:layout_marginStart="8dp"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/item_interest_image"
             android:text="interest"
             android:gravity="center"
-            />
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/item_interest_checkbox"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-
             />
 
     </RelativeLayout>

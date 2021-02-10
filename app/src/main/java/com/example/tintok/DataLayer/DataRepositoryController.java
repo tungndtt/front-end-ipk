@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.Model.ChatRoom;
+import com.example.tintok.Model.Interest;
 import com.example.tintok.Model.MessageEntity;
 import com.example.tintok.Model.Notification;
 import com.example.tintok.Model.Post;
@@ -141,6 +142,9 @@ public class DataRepositoryController {
     }
     public void changePassword(List<String> passwords) {
         this.dataRepository_currentUser.updateUserPassword(passwords);
+    }
+    public void updateUserInterests(ArrayList<Integer> interests){
+        this.dataRepository_currentUser.updateUserInterests(interests);
     }
     public long getLastSeen(){
         return dataRepository_currentUser.lastSeen;

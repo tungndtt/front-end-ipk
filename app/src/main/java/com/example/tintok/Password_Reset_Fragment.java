@@ -2,6 +2,7 @@ package com.example.tintok;
 
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,6 @@ public class Password_Reset_Fragment extends Fragment implements Login_SignUp_Vi
         super.onActivityCreated(savedInstanceState);
         if(viewModel == null)
             viewModel = new ViewModelProvider(this).get(Login_SignUp_ViewModel.class);
-
         mCurrentPwEditText.setHint("Email address");
         mCurrentPwEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         //TODO: change ICON

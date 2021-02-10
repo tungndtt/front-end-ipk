@@ -19,7 +19,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,8 @@ import com.example.tintok.Model.Interest;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel.requestListener {
@@ -44,6 +48,7 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     private TextView mInterestTV;
     private InterestAdapter interestAdapter;
     private String selectedInterest;
+    private DialogFragment interestFragment;
 
     public static Sign_up_Fragment newInstance(Login_SignUp_ViewModel viewModel) {
         return new Sign_up_Fragment(viewModel);
@@ -65,8 +70,12 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         if(viewModel == null){
             viewModel = new ViewModelProvider(this).get(Login_SignUp_ViewModel.class);
         }
+        if(DataRepository_Interest.getInterestArrayList().size() == 0)
+            DataRepository_Interest.initInterestArrayList();
         if(viewModel.getSelectedInterests().getValue() == null){
-            HashMap<Integer, Interest> selectedItems = new HashMap<>();
+
+            //HashMap<Integer, Interest> selectedItems = new HashMap<>();
+            boolean[] selectedItems = new boolean[(DataRepository_Interest.getInterestArrayList().size())];
             viewModel.setSelectedInterests(selectedItems);
             selectedInterest = "click here to choose your interests";
         }
@@ -97,13 +106,39 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         mInterestTV = getView().findViewById(R.id.register_interests_inputTV);
 
         mInterestTV.setText(selectedInterest);
+
+        viewModel.getSelectedInterests().observe(getViewLifecycleOwner(), booleans -> {
+            Log.e("getSelec", "isSelected");
+            selectedInterest= "";
+            Log.e("length", String.valueOf(booleans.length));
+            for(int i=0; i < booleans.length; i++){
+                if(booleans[i]){
+                    selectedInterest += DataRepository_Interest.interests[i].toLowerCase() + " ";
+                }
+            }
+            if(selectedInterest.isEmpty())
+                selectedInterest = "click here to choose your interests";
+            mInterestTV.setText(selectedInterest);
+        });
+
+
         interestAdapter = new InterestAdapter(getActivity(), DataRepository_Interest.getInterestArrayList());
+
+        /*
         interestAdapter.setOnCheckboxListner(position -> {
             Log.e("sign_up", String.valueOf(interestAdapter.getItems().get(position).isSelected()));
-            interestAdapter.getItems().get(position).setSelected(!(interestAdapter.getItems().get(position).isSelected()));
+            Interest tmp = interestAdapter.getItems().get(position);
+            tmp.setSelected(!(tmp.isSelected()));
+            HashMap<Integer, Interest> tmpItems = viewModel.getSelectedInterests().getValue();
+            if(viewModel.getSelectedInterests().getValue().containsKey(tmp.getId())){
+               tmpItems.remove(tmp.getId());
+            }else tmpItems.put(tmp.getId(), tmp);
+            viewModel.setSelectedInterests(tmpItems);
             Log.e("sign_up", String.valueOf(interestAdapter.getItems().get(position).isSelected()));
         });
 
+
+         */
         registerButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -122,6 +157,9 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
             @Override
             public void onClick(View v) {
 
+                interestFragment = Interests_SignUp_Fragment.newInstance(viewModel);
+                interestFragment.show(getChildFragmentManager(), "interests_signUp");
+                /*
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.interest_recyclerview, null);
 
                 RecyclerView interestList = view.findViewById(R.id.interest_list);
@@ -157,6 +195,8 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
                             }})
                         .create()
                         .show();
+
+                 */
             }
         });
 
@@ -213,7 +253,7 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
             setErrorStatus(R.string.error_gender_empty);
             return;
         }
-        if(viewModel.getSelectedInterests().getValue().size() == 0){
+        if(selectedInterest.equals("click here to choose your interests")){
             status.setVisibility(View.VISIBLE);
             status.setText("No interests selected");
             return;
@@ -235,9 +275,15 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
          */
         String birthday = dayInt+"/"+monthInt+"/"+yearInt;
         int gender = mGenderGroup.indexOfChild(getView().findViewById(mGenderGroup.getCheckedRadioButtonId())) + 1;
-        Log.e("inter", String.valueOf(viewModel.getSelectedInterests().getValue().size()));
-        Integer[] interests = new Integer[viewModel.getSelectedInterests().getValue().size()];
-        Log.e("inter", String.valueOf(interests.length));
+
+        boolean[] interests = viewModel.getSelectedInterests().getValue();
+        ArrayList<Integer> chosenInterests = new ArrayList<>();
+
+        for(int i=0; i < interests.length; i++){
+            if(interests[i])
+                chosenInterests.add(i);
+        }
+        /*
         HashMap<Integer, Interest> result = viewModel.getSelectedInterests().getValue();
         int i = 0;
         for(Interest interest :  result.values()){
@@ -246,7 +292,10 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
             i++;
         }
 
-        this.viewModel.signUpRequest(name.getText().toString(), email.getText().toString(), birthday, password.getText().toString(), gender, interests, this);
+         */
+
+
+        this.viewModel.signUpRequest(name.getText().toString(), email.getText().toString(), birthday, password.getText().toString(), gender, chosenInterests, this);
         /*
         communication.LoginRequest(data, new RestAPI_Entity.RestApiListener(){
 

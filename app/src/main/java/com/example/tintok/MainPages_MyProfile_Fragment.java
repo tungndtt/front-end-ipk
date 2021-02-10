@@ -130,6 +130,8 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class);
         initPosts();
+        mViewModel.setUsername(mViewModel.getUserProfile().getValue().getUserName());
+        mViewModel.setLocation(mViewModel.getUserProfile().getValue().getLocation());
         newPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
