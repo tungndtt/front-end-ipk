@@ -109,7 +109,7 @@ public class DataRepository_CurrentUser {
             RequestBody status = RequestBody.create(MultipartBody.FORM, newPost.getStatus());
             String[] split = currentUser.getValue().getProfilePic().url.split("/");
             RequestBody profile_path = RequestBody.create(MultipartBody.FORM, split[split.length-1]);
-            api.uploadFile(part, user_id, profile_path, status).enqueue(new Callback<PostForm>() {
+            api.uploadFile(part, user_id, status, profile_path).enqueue(new Callback<PostForm>() {
                 @Override
                 public void onResponse(Call<PostForm> call, Response<PostForm> response) {
                     if(response.isSuccessful()){

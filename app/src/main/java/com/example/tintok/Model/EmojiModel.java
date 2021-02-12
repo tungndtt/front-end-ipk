@@ -1,40 +1,47 @@
 package com.example.tintok.Model;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class EmojiModel {
 
     private final String resourceImgName;
-    private final int resourceID;
+    private final Drawable resource;
 
-    public EmojiModel(String resourceImgName, int resourceID) {
+    public EmojiModel(String resourceImgName, Drawable resource) {
         this.resourceImgName = resourceImgName;
-        this.resourceID = resourceID;
+        this.resource = resource;
     }
 
     public String getResourceImgName() {
         return resourceImgName;
     }
 
-    public int getResourceID() {
-        return resourceID;
+    public Drawable getResource() {
+        return resource;
     }
 
     public static ArrayList<EmojiModel> getEmojis(Context context){
         ArrayList<EmojiModel> emojis = new ArrayList<>();
-        String dataname = "sample";
-        int emojiID;
+        String dataname = "emoticon (";
+        Drawable emoji = null;
+        final int numEmoji = 3248;
         int i = 1;
         do {
-            String imgName = dataname + i;
-            emojiID = context.getResources().getIdentifier(imgName, "drawable", context.getPackageName());
-            if (emojiID == 0)
-                break;
-            emojis.add(new EmojiModel(imgName, emojiID));
+            String imgName = dataname + i+").png";
+            try {
+                emoji = Drawable.createFromStream(context.getAssets().open("Emojis/"+imgName), null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (emoji == null)
+                continue;
+            emojis.add(new EmojiModel(imgName, emoji));
             i++;
-        } while (true);
+        } while (i <= numEmoji);
         return emojis;
     }
 }

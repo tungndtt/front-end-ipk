@@ -116,7 +116,7 @@ public class DataRepositoryController {
         int i = 0;
         for(ChatRoom r: getChatRooms().getValue()){
             ArrayList<MessageEntity> messages = r.getMessageEntities().getValue();
-            if(messages.get(messages.size()-1).datePosted.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() > getLastSeen()){
+            if(messages!= null && !messages.isEmpty() && messages.get(messages.size()-1).datePosted.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() > getLastSeen()){
                 Log.e("DataRepo_Control_mess", "lastseen: "+getLastSeen() + " time: "+messages.get(messages.size()-1).datePosted.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
                 i++;
             }

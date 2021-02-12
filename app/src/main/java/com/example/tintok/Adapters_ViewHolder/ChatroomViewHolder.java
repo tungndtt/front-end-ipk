@@ -50,7 +50,8 @@ public class ChatroomViewHolder extends BaseViewHolder<ChatRoom> implements View
         if(another!=null){
            this.onProfileChange(another);
         }
-
+        if(itemData.getMessageEntities().getValue() == null || itemData.getMessageEntities().getValue().isEmpty())
+            return;
         MessageEntity mess = itemData.getMessageEntities().getValue().get(itemData.getMessageEntities().getValue().size()-1);
         this.date.setText(mess.getDatePosted().toString());
         if(mess.getBuilder() == null)

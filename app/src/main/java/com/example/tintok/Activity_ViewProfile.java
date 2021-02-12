@@ -76,13 +76,19 @@ public class Activity_ViewProfile extends AppCompatActivity{
                 return true;
             }
         });
-        infoFragment = Info_Profile_Fragment.getInstance();
+       // infoFragment = ViewProfile_UserInfo_Fragment.getInstance();//Info_Profile_Fragment.getInstance();
+
+        this.viewModel = new ViewModelProvider(this).get(Activity_ViewProfile_ViewModel.class);
+        String author_id = getIntent().getStringExtra("author_id");
+        this.viewModel.getUserProfile(author_id);
+        Log.e("Act", viewModel.toString());
+        infoFragment = ViewProfile_UserInfo_Fragment.getInstance(viewModel);//Info_Profile_Fragment.getInstance();
+
         this.selected = R.id.profile_info_item;
         profile_navigation_bar.setSelectedItemId( this.selected);
 
-        this.viewModel = new ViewModelProvider(this).get(Activity_ViewProfile_ViewModel.class);
 
-        String author_id = getIntent().getStringExtra("author_id");
+       // String author_id = getIntent().getStringExtra("author_id");
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.view_profile_activity_toolbar);
         if (toolbar != null){
             setSupportActionBar(toolbar);
@@ -90,7 +96,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
             toolbar.setTitle("Profile");
         }*/
-        this.viewModel.getUserProfile(author_id);
+       // this.viewModel.getUserProfile(author_id);
 
         profile_pic = findViewById(R.id.profile_picture);
 

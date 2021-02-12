@@ -88,8 +88,8 @@ public class FileUtil {
         String myDirectory = Environment.getExternalStorageDirectory().getAbsolutePath();
 
         Log.e("GetFileName: " , " at package: "+DataRepositoryController.applicationContext.getPackageName());
-        Log.e("GetFileName: " , " at directory: "+Uri.parse("android.resource://"+DataRepositoryController.applicationContext.getPackageName()+"/"+ R.drawable.sample1).getPath());
-        File f = new File(Uri.parse("android.resource://"+DataRepositoryController.applicationContext.getPackageName()+"/"+ R.drawable.sample1).toString());
+        Log.e("GetFileName: " , " at directory: "+Uri.parse("android.resource://"+DataRepositoryController.applicationContext.getPackageName()+"/").getPath());
+        File f = new File(Uri.parse("android.resource://"+DataRepositoryController.applicationContext.getPackageName()+"/").toString());
         Log.e("GetFileName: " , " fodler f: "+f.exists());
         if (true ) {
             final Pattern p = Pattern.compile(regex);

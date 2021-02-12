@@ -58,7 +58,6 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="40dp"
             android:layout_marginBottom="5dp"
-
             android:layout_weight="2"></ImageButton>
 
 

@@ -39,14 +39,15 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:id="@+id/messageView"
+        android:clipChildren="false"
         android:clipToPadding="false"
         android:paddingVertical="10dp"
-        android:clipChildren="false"
         app:layout_constraintBottom_toTopOf="@+id/sendMsgLayout"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileLayout">
@@ -58,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxHeight="160dp"
-        android:layout_marginHorizontal="50dp"
+        android:layout_marginHorizontal="45dp"
         android:layout_marginBottom="10dp"
         android:padding="1dp"
         android:scrollbars="vertical"
@@ -69,7 +70,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"></androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintVertical_bias="1.0"
+        android:background="@color/white"></androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/sendMsgLayout"
@@ -129,7 +131,9 @@
                         android:id="@+id/cameraBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"></ImageButton>
+                        android:scaleType="center"
+                        android:src="@drawable/ic_camera"
+                        android:background="@color/transparent"></ImageButton>
                 </androidx.cardview.widget.CardView>
 
                 <com.example.tintok.CustomView.EditTextSupportIME

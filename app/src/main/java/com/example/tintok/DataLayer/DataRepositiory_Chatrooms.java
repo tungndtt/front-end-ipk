@@ -139,7 +139,6 @@ public class DataRepositiory_Chatrooms {
                             r.setChatRoomID(c.getRoom_id());
                             r.setMemberIDs(new ArrayList<>(Arrays.asList(new String[]{c.getUser_1(),c.getUser_2()})));
                             ArrayList<MessageForm> msgs = c.getMessages();
-                            Log.e("DataRepo_Chatroom", msgs.get(0).getMessage());
                             ArrayList<MessageEntity> myMSG = new ArrayList<>();
                             for(MessageForm m : msgs){
                                if(m.getMessage() != null){

@@ -22,6 +22,8 @@ import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,10 @@ public class Activity_ViewProfile_ViewModel extends MainPages_Posts_ViewModel {
                     result.setUserID(id);
                     result.setUserName(name);
                     result.setProfilePic(new MediaEntity(userForm.getImageUrl()));
+                    result.setGender(userForm.getGender());
+                    result.setBirthday(LocalDate.parse(userForm.getBirthday(),  DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                    result.setDescription(userForm.getDescription());
+                    result.userInterests.postValue(userForm.getInterests());
                     Log.e("Activity_VIewProfile_ViewModel", "img: "+userForm.getImageUrl());
                     ArrayList<String> dummy = result.getFollowers().getValue();
                     dummy.addAll(userForm.getFollowers());

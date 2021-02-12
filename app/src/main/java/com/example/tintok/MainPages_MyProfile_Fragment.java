@@ -201,8 +201,8 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         mViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
             if (userProfile == null)
                 return;
-            username.setText(mViewModel.getUserProfile().getValue().getUserName());
-            location.setText(mViewModel.getUserProfile().getValue().getLocation());
+            username.setText(mViewModel.getUserProfile().getValue().getUserName().toUpperCase());
+            location.setText(mViewModel.getUserProfile().getValue().getLocation().toUpperCase());
             Glide.with(this.getContext()).load(mViewModel.getUserProfile().getValue().getProfilePic().url)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
             followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));

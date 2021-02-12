@@ -54,6 +54,7 @@ public class MainPages_Notification_Fragment extends Fragment implements Notific
         notifications.setAdapter(adapter);
         adapter.setNotificationClickListener(this);
         LinearLayoutManager manager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, true);
+        manager.setStackFromEnd(true);
         RecyclerView.ItemDecoration decoration= new NoSpaceRecyclerViewDecoration();
         notifications.setLayoutManager(manager);
         notifications.addItemDecoration(decoration);
