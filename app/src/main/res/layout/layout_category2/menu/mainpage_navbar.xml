@@ -11,6 +11,6 @@
         android:title="@string/text_spaces"/>
     <item
         android:id="@+id/messagers"
-        android:icon="@android:drawable/ic_dialog_map"
+        android:icon="@drawable/ic_bubble"
         android:title="@string/text_spaces"/>
 </menu>

@@ -22,7 +22,7 @@ public class EmojiViewHolder extends BaseViewHolder<EmojiModel> implements View.
 
     @Override
     public void bindData(EmojiModel itemData) {
-        img.setImageResource(itemData.getResourceID());
+        img.setImageDrawable(itemData.getResource());
     }
 
     @Override

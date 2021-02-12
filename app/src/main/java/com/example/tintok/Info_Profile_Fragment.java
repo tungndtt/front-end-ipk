@@ -118,7 +118,7 @@ public class Info_Profile_Fragment extends Fragment {
             }
 
 
-            if(userProfile.getDescription().isEmpty())
+            if(userProfile.getDescription() == null || userProfile.getDescription().isEmpty())
                 mDescriptionEditText.setHint(R.string.inspirational_quote);
             else mDescriptionEditText.setText(userProfile.getDescription());
 
@@ -206,7 +206,7 @@ public class Info_Profile_Fragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int pos = position+1;
-                if(mViewModel.getUserProfile().getValue().getGender().getI() != pos)
+                if(mViewModel.getUserProfile().getValue().getGender() != null && mViewModel.getUserProfile().getValue().getGender().getI() != pos)
                     mViewModel.setInfoIsEdited(true);
             }
 
@@ -216,7 +216,7 @@ public class Info_Profile_Fragment extends Fragment {
             }
         });
 
-        if(user.getDescription().isEmpty())
+        if(user.getDescription() == null ||user.getDescription().isEmpty())
             mDescriptionEditText.setHint(R.string.inspirational_quote);
 
         saveBtn.setOnClickListener(new View.OnClickListener() {

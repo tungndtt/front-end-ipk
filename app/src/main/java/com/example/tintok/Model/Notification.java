@@ -71,16 +71,16 @@ public class Notification {
         StyleSpan italicText = new StyleSpan(Typeface.ITALIC);
         str.setSpan(bold_italicText, 0, str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         if(type == NotificationType.NEW_FOLLOWER){
-            str.append(" has just followed you");
+            str.append(" has followed you");
         }
         else if(type == NotificationType.NEW_POSTS_FROM_FOLLOWINGS){
-            str.append(" has just added a new post");
+            str.append(" has added a new post");
         }
         else if(type == NotificationType.LIKE_POST){
-            str.append(" has just put a like on your post");
+            str.append(" has put a like on your post");
         }
         else if(type == NotificationType.COMMENT_POST){
-            str.append(" has just put a new comment on your post");
+            str.append(" has put a new comment on your post");
         }
         str.setSpan(bold_italicText, author_username.length(), str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         for (UnderlineSpan span : str.getSpans(0, str.length(), UnderlineSpan.class))

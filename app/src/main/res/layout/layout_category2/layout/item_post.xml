@@ -42,7 +42,7 @@
                     android:id="@+id/post_profile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:srcCompat="@drawable/sample1"
+                    app:srcCompat="@drawable/ic_close"
                     android:scaleType="fitXY"/>
             </androidx.cardview.widget.CardView>
 

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.EditText;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class EmoticonHandler implements TextWatcher {
@@ -37,14 +38,18 @@ public class EmoticonHandler implements TextWatcher {
                 end = i;
                 String emoji = message.substring(start + 2, end);
                 String beforespan = message.substring(previousSpanPos, start);
-                int emojiID = mContext.getResources().getIdentifier(emoji, "drawable", mContext.getPackageName());
-                Drawable drawable = mContext.getResources().getDrawable(emojiID);
-                drawable.setBounds(0, 0, 60, 60);
-                ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
-                builder.append(beforespan).append(" ");
-                builder.setSpan(span, builder.length() - 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                builder.append(" ");
-                previousSpanPos = end + 1;
+                Drawable drawable = null;
+                try {
+                    drawable = Drawable.createFromStream(mContext.getAssets().open("Emojis/"+emoji), null);
+                    drawable.setBounds(0, 0, 60, 60);
+                    ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
+                    builder.append(beforespan).append(" ");
+                    builder.setSpan(span, builder.length() - 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    builder.append(" ");
+                    previousSpanPos = end + 1;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             if (i == message.length() - 1)
                 builder.append(message.substring(previousSpanPos, i + 1));
@@ -73,16 +78,20 @@ public class EmoticonHandler implements TextWatcher {
 
     //replace the text within start and and with img speicify by resource, speci
     public void insertEmoji(int start, int end, String resource) {
-        int emojiID = mContext.getResources().getIdentifier(resource, "drawable", mContext.getPackageName());
-        Drawable drawable = mContext.getResources().getDrawable(emojiID);
-        drawable.setBounds(0, 0, 60, 60);
-        ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
-        String placeholder = "  [img]  ";
-        Editable msg = mEditText.getEditableText();
-        msg.replace(start, end, placeholder);
-        msg.setSpan(span, start + 1, start + placeholder.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spanInsMSg.add(new Pair(span, resource));
-
+        Log.e("EmoHandler","at "+resource);
+        Drawable drawable = null;
+        try {
+            drawable = Drawable.createFromStream(mContext.getAssets().open("Emojis/"+resource), null);
+            drawable.setBounds(0, 0, 60, 60);
+            ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
+            String placeholder = "  [img]  ";
+            Editable msg = mEditText.getEditableText();
+            msg.replace(start, end, placeholder);
+            msg.setSpan(span, start + 1, start + placeholder.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spanInsMSg.add(new Pair(span, resource));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void insertEmoji(String resource) {

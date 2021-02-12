@@ -130,7 +130,9 @@ public class Activity_Comment_ViewModel extends MainPages_Posts_ViewModel{
                     Post post = new Post(post_id, p.getStatus(), p.getAuthor_id(), new MediaEntity(p.getImageUrl()));
                     post.likers = p.getLikes() == null?new ArrayList<>():p.getLikes();
                     ArrayList<Post> posts = new ArrayList<>();
+                    post.comments = listComments;
                     posts.add(post);
+
                     currentPost.postValue(posts);
                 } else {
                     Toast.makeText(Activity_Comment_ViewModel.this.getApplication(),"Request fails", Toast.LENGTH_LONG).show();

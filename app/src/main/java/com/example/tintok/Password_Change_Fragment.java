@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.DataLayer.ResponseEvent;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,7 +27,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Arrays;
 import java.util.List;
 
-public class Password_Change_Fragment extends DialogFragment {
+public class Password_Change_Fragment extends MyDialogFragment {
 
     private View view;
     private EditText mCurrentPwEditText, mNewPwEditText, mRetypePWEditText;
@@ -113,12 +114,7 @@ public class Password_Change_Fragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Window window = getDialog().getWindow();
-        window.setGravity(Gravity.FILL);
-        window.setWindowAnimations(R.style.MyAnimation_Window);
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
     }
 
 

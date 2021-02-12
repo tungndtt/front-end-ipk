@@ -191,7 +191,7 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
         BaseAdapter<EmojiModel, EmojiViewHolder> emojidapter = new EmojiAdapter(this, emojis, position -> mEmoHandler.insertEmoji(emojis.get(position).getResourceImgName()));
         emoji.setAdapter(emojidapter);
 
-        GridLayoutManager gridView = new GridLayoutManager(this, 5);
+        GridLayoutManager gridView = new GridLayoutManager(this, 5, RecyclerView.HORIZONTAL, false);
         emoji.setLayoutManager(gridView);
 
     }
