@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,7 +9,9 @@
         android:id="@+id/profile_email_text"
         style="@style/info_textview_style"
         android:text="Email"
+        app:layout_constraintBottom_toTopOf="@+id/profile_email"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,14 +20,18 @@
         style="@style/info_sub_textview_style"
         android:text="a@test.com"
 
+        app:layout_constraintBottom_toTopOf="@+id/divider_0"
         app:layout_constraintEnd_toEndOf="@+id/profile_email_text"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/profile_email_text"
         app:layout_constraintTop_toBottomOf="@+id/profile_email_text" />
 
     <View
         android:id="@+id/divider_0"
         style="@style/info_view_style"
+        app:layout_constraintBottom_toTopOf="@+id/profile_age_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_email" />
 
@@ -34,7 +39,9 @@
         android:id="@+id/profile_age_text"
         style="@style/info_textview_style"
         android:text="Age"
+        app:layout_constraintBottom_toTopOf="@+id/profile_age"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider_0" />
 
@@ -43,7 +50,9 @@
         style="@style/info_sub_textview_style"
         android:text="age"
 
+        app:layout_constraintBottom_toTopOf="@+id/profile_birthday"
         app:layout_constraintEnd_toEndOf="@+id/profile_age_text"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/profile_age_text"
         app:layout_constraintTop_toBottomOf="@+id/profile_age_text" />
 
@@ -53,7 +62,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select your birthday"
+        app:layout_constraintBottom_toTopOf="@+id/divider_1"
         app:layout_constraintEnd_toEndOf="@+id/profile_age"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/profile_age"
         app:layout_constraintTop_toBottomOf="@+id/profile_age" />
 
@@ -61,7 +72,9 @@
     <View
         android:id="@+id/divider_1"
         style="@style/info_view_style"
+        app:layout_constraintBottom_toTopOf="@+id/profile_gender_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_birthday" />
 
@@ -69,23 +82,43 @@
         android:id="@+id/profile_gender_text"
         style="@style/info_textview_style"
         android:text="Gender"
+        app:layout_constraintBottom_toTopOf="@+id/profile_gender"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider_1" />
 
+    <TextView
+        android:id="@+id/profile_gender_showTV"
+        style="@style/info_sub_textview_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="my gender"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_gender_text"
+        app:layout_constraintBottom_toTopOf="@id/profile_gender"
+        app:layout_constraintHorizontal_bias="0.5"
+        />
 
     <Spinner
         android:id="@+id/profile_gender"
         style="@style/info_sub_textview_style"
         android:gravity="center"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/divider_2"
         app:layout_constraintEnd_toEndOf="@+id/profile_gender_text"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/profile_gender_text"
-        app:layout_constraintTop_toBottomOf="@+id/profile_gender_text" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_gender_showTV" />
 
     <View
         android:id="@+id/divider_2"
         style="@style/info_view_style"
+        app:layout_constraintBottom_toTopOf="@+id/profile_description_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_gender" />
 
@@ -93,7 +126,9 @@
         android:id="@+id/profile_description_text"
         style="@style/info_textview_style"
         android:text="Description"
+        app:layout_constraintBottom_toTopOf="@+id/profile_description"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider_2" />
 
@@ -101,16 +136,25 @@
         android:id="@+id/profile_description"
         style="@style/info_sub_textview_style"
         android:background="@color/transparent"
-
+        tools:text="0123456789012345678901234567890123456789"
+        android:maxLength="40"
+        android:layout_width="0dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:gravity="center"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="@+id/profile_description_text"
-        app:layout_constraintStart_toStartOf="@+id/profile_description_text"
+        app:layout_constraintBottom_toTopOf="@+id/divider_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_description_text" />
 
     <View
         android:id="@+id/divider_3"
         style="@style/info_view_style"
+        app:layout_constraintBottom_toTopOf="@+id/profile_interest_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_description" />
 
@@ -118,7 +162,9 @@
         android:id="@+id/profile_interest_text"
         style="@style/info_textview_style"
         android:text="Interest"
+        app:layout_constraintBottom_toTopOf="@+id/profile_interest"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider_3" />
 
@@ -126,12 +172,28 @@
     <TextView
         android:id="@+id/profile_interest"
         style="@style/info_sub_textview_style"
-        android:hint="interests"
+        android:layout_width="0dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
         android:gravity="center"
-        app:layout_constraintEnd_toEndOf="@+id/profile_interest_text"
-        app:layout_constraintStart_toStartOf="@+id/profile_interest_text"
+        tools:text="interests"
+        app:layout_constraintBottom_toTopOf="@+id/profile_edit_profile_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_interest_text" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/profile_interests_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/profile_interest"
+        app:layout_constraintTop_toBottomOf="@id/profile_interest_text"
+
+
+        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/profile_edit_profile_button"
@@ -144,7 +206,9 @@
         android:drawableLeft="@drawable/ic_edit"
         android:text="Edit Profile"
 
+        app:layout_constraintBottom_toTopOf="@+id/profile_cancel_profile_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_interest" />
 
@@ -159,7 +223,9 @@
         android:layout_marginEnd="24dp"
         android:text="cancel"
 
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_edit_profile_button" />
 

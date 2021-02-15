@@ -19,6 +19,7 @@ public class CommunicationEvent {
 
     public static final String COMMENT_NOTIFICATION = "COMMENT_NOTIFICATION";
     public static final String LIKE_NOTIFICATION = "LIKE_NOTIFICATION";
+    public static final String MATCHING_NOTIFICATION = "FRIEND";
 
     public static final String JOIN_CHAT_ROOM = "JOIN_CHAT_ROOM";
     public static final String LEAVE_CHAT_ROOM = "LEAVE_CHAT_ROOM";
@@ -32,7 +33,7 @@ public class CommunicationEvent {
     public static final String FOLLOW_USER = "FOLLOW_USER";
     public static final String  UNFOLLOW_USER = "UNFOLLOW_USER";
 
-    public static final String LIKE_USER ="LIKE_USER";
-    public static final String UNLIKE_USER = "UNLIKE_USER";
+    public static final String LIKE_USER ="FOLLOW_USER";
+    public static final String UNLIKE_USER = "IGNORE";
 
 }

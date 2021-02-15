@@ -12,7 +12,7 @@ public class UserSimple  {
     private String email;
     private String description;
     private LocalDate birthday;     //yyyy-MM-dd
-    private Integer age;
+    private int age;
     private Gender gender;
     private String location;
     private MediaEntity profilePic;
@@ -69,10 +69,10 @@ public class UserSimple  {
     public int getAge(){
         return age;
     }
-    public void setAge(){
+    private void setAge(){
         if(birthday != null){
             LocalDate today = LocalDate.now(ZoneId.systemDefault());
-            this.age = Integer.valueOf(Period.between(birthday, today).getYears());
+            this.age =  Integer.valueOf(Period.between(birthday, today).getYears());;
         }else this.age =  Integer.valueOf(0);
     }
     public Gender getGender() {
@@ -89,11 +89,11 @@ public class UserSimple  {
         switch(gender){
             //case 0: this.gender = Gender.UNKNOWN;
             //    break;
-            case 1: this.gender = Gender.MALE;
+            case 0: this.gender = Gender.MALE;
                 break;
-            case 2: this.gender = Gender.FEMALE;
+            case 1: this.gender = Gender.FEMALE;
                 break;
-            case 3: this.gender = Gender.DIVERS;
+            default: this.gender = Gender.DIVERS;
         }
 
     }
@@ -104,7 +104,7 @@ public class UserSimple  {
         this.location = location;
     }
     public enum Gender{
-        UNKNOWN(0), MALE(1), FEMALE(2), DIVERS(3);
+        MALE(0), FEMALE(1), DIVERS(2);
         private int i;
         Gender(int i) {
             this.i = i;

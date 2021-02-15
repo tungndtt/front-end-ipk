@@ -68,4 +68,9 @@
         <item name="android:layout_marginTop">8dp</item>
     </style>
 
+    <style name="round_button">
+        parent="com.google.android.material.button.MaterialButton"
+
+    </style>
+
 </resources>

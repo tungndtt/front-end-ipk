@@ -77,8 +77,14 @@ public class NotificationsAdapter extends BaseAdapter<Notification, Notification
         @Override
         public void bindData(Notification itemData) {
             current = itemData;
-            this.date.setText(itemData.getDate().toString());
-            Glide.with(mAdapter.getContext()).load(itemData.getUrl()).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(contentPic);
+            this.date.setText(itemData.getDate());
+            if(itemData.getType() == Notification.NotificationType.NEW_FRIEND){
+                contentPic.setVisibility(View.INVISIBLE);
+            }
+            else{
+                contentPic.setVisibility(View.VISIBLE);
+                Glide.with(mAdapter.getContext()).load(itemData.getUrl()).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(contentPic);
+            }
             UserSimple user = DataRepositoryController.getInstance().getUserSimpleProfile(itemData.getAuthor_id());
             if (user != null) {
                 this.onProfileChange(user);
@@ -90,7 +96,8 @@ public class NotificationsAdapter extends BaseAdapter<Notification, Notification
         public void onProfileChange(UserSimple user) {
             if(current.getAuthor_id().compareTo(user.getUserID()) == 0){
                 this.content.setText(current.toTextViewString());
-                Glide.with(mAdapter.getContext()).load(user.getProfilePic().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
+                if(profilePic.getVisibility() == View.VISIBLE)
+                    Glide.with(mAdapter.getContext()).load(user.getProfilePic().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
             }
         }
     }

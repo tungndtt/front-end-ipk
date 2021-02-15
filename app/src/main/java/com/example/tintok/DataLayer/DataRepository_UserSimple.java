@@ -27,7 +27,9 @@ public class DataRepository_UserSimple {
     public UserSimple findUserSimpleinCahe(String id){
         UserSimple m =  this.cacheQueriedUserSimple.get(id);
         if(m == null && !onQueries.contains(id)){
-            this.UpdateProfile(id);
+            ArrayList<String> ids = new ArrayList<>();
+            ids.add(id);
+            this.UpdateProfile(ids);
         }
         return  m ;
     }
@@ -38,26 +40,27 @@ public class DataRepository_UserSimple {
     }
 
     private ArrayList<String> onQueries = new ArrayList<>();
-    public void UpdateProfile(String id){
-        onQueries.add(id);
-        ArrayList<String> ids = new ArrayList<>();
-        ids.add(id);
+    public void UpdateProfile(ArrayList<String> ids){
+        onQueries.addAll(ids);
+
         HashMap<String,ArrayList<String>> hm = new HashMap<>();
         hm.put("users",ids);
-        Communication.getInstance().getApi().getUsers(hm).enqueue(new Callback<ArrayList<UserForm>>() {
+        Communication.getInstance().getApi().getUsersById(hm).enqueue(new Callback<ArrayList<UserForm>>() {
             @Override
             public void onResponse(Call<ArrayList<UserForm>> call, Response<ArrayList<UserForm>> response) {
                 if(response.isSuccessful()){
                     ArrayList<UserForm> users = response.body();
-                    UserForm user = users.get(0);
-                    UserSimple newUser = new UserSimple();
-                    newUser.setUserID(user.getId());
-                    newUser.setUserName(user.getUsername());
-                    newUser.setProfilePic(new MediaEntity(user.getImageUrl()));
-                    Cache(newUser);
-                    onQueries.remove(id);
-                    for(OnUserProfileChangeListener l:mListeners)
-                        l.onProfileChange(newUser);
+                    for(UserForm user: users){
+                        UserSimple newUser = new UserSimple();
+                        newUser.setUserID(user.getId());
+                        newUser.setUserName(user.getUsername());
+                        newUser.setProfilePic(new MediaEntity(user.getImageUrl()));
+                        Cache(newUser);
+
+                        for(OnUserProfileChangeListener l:mListeners)
+                            l.onProfileChange(newUser);
+                    }
+                    onQueries.removeAll(ids);
                 }
                 else {
 

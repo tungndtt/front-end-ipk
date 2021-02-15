@@ -59,7 +59,6 @@ public class EmoticonHandler implements TextWatcher {
 
     public Pair<String, SpannableStringBuilder> parseMessage() {
         Editable message = mEditText.getEditableText();
-        Log.e("EmoHandler", message.toString());
         for (UnderlineSpan span : message.getSpans(0, message.length(), UnderlineSpan.class))
             message.removeSpan(span);
         SpannableStringBuilder builder = new SpannableStringBuilder(message);
@@ -78,7 +77,6 @@ public class EmoticonHandler implements TextWatcher {
 
     //replace the text within start and and with img speicify by resource, speci
     public void insertEmoji(int start, int end, String resource) {
-        Log.e("EmoHandler","at "+resource);
         Drawable drawable = null;
         try {
             drawable = Drawable.createFromStream(mContext.getAssets().open("Emojis/"+resource), null);

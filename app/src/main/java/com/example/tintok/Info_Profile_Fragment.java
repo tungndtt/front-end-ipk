@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,19 +38,20 @@ import java.util.TimeZone;
 
 public class Info_Profile_Fragment extends Fragment {
 
-
+    public static final String INTEREST_FRAGMENT = "interest_fragment";
     private MainPages_MyProfile_ViewModel mViewModel;
-    private TextView mEmailTextView, mAgeTextView, mBirthdayTextView, mInterestsTextView;
+    private TextView mEmailTextView, mAgeTextView, mBirthdayTextView, mInterestsTV;
     private Spinner mGenderSpinner;
     private EditText mDescriptionEditText;
     View view;
     private UserProfile user;
     private ProgressBar mProgressBar;
-    private MaterialButton saveBtn, cancelBtn;
+    private MaterialButton saveBtn, cancelBtn, interestBtn;
     private DatePickerDialog.OnDateSetListener  mOnDataSetListener;
     private DateTimeFormatter formatter;
     private int day, year, month;
     private String interests;
+    private DialogFragment interestFragment;
 
 
 
@@ -87,7 +89,8 @@ public class Info_Profile_Fragment extends Fragment {
         saveBtn = view.findViewById(R.id.profile_edit_profile_button);
         cancelBtn = view.findViewById(R.id.profile_cancel_profile_button);
         mBirthdayTextView = view.findViewById(R.id.profile_birthday);
-        mInterestsTextView = view.findViewById(R.id.profile_interest);
+        mInterestsTV = view.findViewById(R.id.profile_interest);
+        interestBtn = view.findViewById(R.id.profile_interests_btn);
     }
 
 
@@ -95,19 +98,14 @@ public class Info_Profile_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(mViewModel == null){
-            //TODO just for view profile
-            if(getParentFragment() == null)
-                 mViewModel = new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class); //requireParentFragment()
-            else mViewModel = new ViewModelProvider(getParentFragment()).get(MainPages_MyProfile_ViewModel.class);
+            mViewModel = new ViewModelProvider(getParentFragment()).get(MainPages_MyProfile_ViewModel.class);
         }
 
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         Log.e("viewmodel info", mViewModel.toString() );
 
         mViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
-            //TODO age, birthday, gender, description,
             Log.e("OnChange", "Info");
-
             if(userProfile.getBirthday().toString().isEmpty()){
                 mAgeTextView.setText("0");
                 mBirthdayTextView.setHint("pick your birthday");
@@ -117,14 +115,9 @@ public class Info_Profile_Fragment extends Fragment {
                 mBirthdayTextView.setText(formatter.format(userProfile.getBirthday()));
             }
 
-
             if(userProfile.getDescription() == null || userProfile.getDescription().isEmpty())
                 mDescriptionEditText.setHint(R.string.inspirational_quote);
             else mDescriptionEditText.setText(userProfile.getDescription());
-
-            setCurrentGenderSpinner(userProfile);
-
-
         });
         mViewModel.getIsUserUpdating().observe(getViewLifecycleOwner(), aBoolean ->  {
             if(aBoolean)
@@ -146,7 +139,7 @@ public class Info_Profile_Fragment extends Fragment {
             interests="";
             for(int i=0; i<integers.size();i++)
                 interests += DataRepository_Interest.interests[integers.get(i)] + " ";
-            mInterestsTextView.setText(interests);
+            mInterestsTV.setText(interests);
         });
     }
 
@@ -157,7 +150,7 @@ public class Info_Profile_Fragment extends Fragment {
         mEmailTextView.setText(user.getEmail());
         mAgeTextView.setText(Integer.toString(user.getAge()));
         mBirthdayTextView.setText(formatter.format(user.getBirthday()));
-
+        interestFragment = Interest_UpdateUser_Fragment.newInstance(mViewModel);
 
 
         mBirthdayTextView.setOnClickListener(new View.OnClickListener() {
@@ -236,6 +229,10 @@ public class Info_Profile_Fragment extends Fragment {
             }
         }));
 
+        interestBtn.setOnClickListener(v -> {
+            interestFragment.show(getActivity().getSupportFragmentManager(), INTEREST_FRAGMENT);
+        });
+
 
         /* save configuration if user wants to swap
         if(mViewModel.getInfoIsEdited().getValue()) {
@@ -296,9 +293,6 @@ public class Info_Profile_Fragment extends Fragment {
 
         mViewModel.updateUserInfo(updatedUser);
         mViewModel.setInfoIsEdited(false);
-
-
-
     }
 
     private void setCurrentGenderSpinner(UserProfile user){

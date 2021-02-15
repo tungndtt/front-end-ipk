@@ -9,14 +9,10 @@ public class UserProfile extends UserSimple {
     public MutableLiveData<ArrayList<String>> followers;
     public MutableLiveData<ArrayList<String>> following;
 
-    public MutableLiveData<ArrayList<Post>> myPosts;
-
-    public MutableLiveData<ArrayList<MediaEntity>> mPhotos;
     public MutableLiveData<ArrayList<Integer>> userInterests;
+    public MutableLiveData<ArrayList<String>> followingPost;
 
-    public MutableLiveData<ArrayList<MediaEntity>> getPhotos() {
-        return mPhotos;
-    }
+    public MutableLiveData<ArrayList<Post>> myPosts;
 
     public MutableLiveData<ArrayList<String>> getFollowingPost() {
         return followingPost;
@@ -31,19 +27,20 @@ public class UserProfile extends UserSimple {
     public void setUserInterests(ArrayList<Integer> interests){
         this.userInterests.postValue(interests);
     }
-    public MutableLiveData<ArrayList<String>> followingPost;
 
-    public void postPhotos(ArrayList<MediaEntity> photos) {
-        this.mPhotos.postValue(photos);
-    }
+
 
 
     public UserProfile(){
         this.myPosts = new MutableLiveData<>(new ArrayList<>());
+        this.userInterests = new MutableLiveData<>(new ArrayList<>());
         this.followers = new MutableLiveData<>(new ArrayList<>());
         this.following = new MutableLiveData<>(new ArrayList<>());
         this.followingPost = new MutableLiveData<>(new ArrayList<>());
-        this.userInterests = new MutableLiveData<>(new ArrayList<>());
+    }
+
+    public void copyFrom(UserProfile other){
+
     }
 
 

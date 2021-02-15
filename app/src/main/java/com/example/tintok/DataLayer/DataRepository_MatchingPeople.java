@@ -123,9 +123,11 @@ public class DataRepository_MatchingPeople {
         ArrayList<UserSimple> users = this.getMatchingPeople().getValue();
         users.remove(userSimple);
         this.getMatchingPeople().postValue(users);
-        if(isLiked)
-            Communication.getInstance().get_socket().emit(CommunicationEvent.LIKE_USER, controller.getUser().getValue().getUserID(), userSimple.getUserID());
-        else Communication.getInstance().get_socket().emit(CommunicationEvent.UNLIKE_USER, controller.getUser().getValue().getUserID(), userSimple.getUserID());
+        if(isLiked && !controller.isCurrentUserFollowUser(userSimple.getUserID()))
+            controller.UserPressFollow(userSimple.getUserID());
+        else if(!isLiked){
+            Communication.getInstance().get_socket().emit(CommunicationEvent.UNLIKE_USER, controller.getUser().getValue().getUserID(), userSimple.getUserID());
+        }
     }
 
 
