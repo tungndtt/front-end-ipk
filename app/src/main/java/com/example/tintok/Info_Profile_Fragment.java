@@ -149,8 +149,6 @@ public class Info_Profile_Fragment extends Fragment {
         mEmailTextView.setText(user.getEmail());
         mAgeTextView.setText(Integer.toString(user.getAge()));
         mBirthdayTextView.setText(formatter.format(user.getBirthday()));
-        interestFragment = Interest_UpdateUser_Fragment.newInstance(mViewModel);
-
 
         mBirthdayTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,6 +227,7 @@ public class Info_Profile_Fragment extends Fragment {
         }));
 
         interestBtn.setOnClickListener(v -> {
+            interestFragment = new Interest_UpdateUser_Fragment(mViewModel);// Interest_UpdateUser_Fragment.newInstance(mViewModel);
             interestFragment.show(getActivity().getSupportFragmentManager(), INTEREST_FRAGMENT);
         });
 

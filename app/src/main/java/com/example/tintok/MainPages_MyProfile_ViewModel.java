@@ -34,12 +34,21 @@ public class MainPages_MyProfile_ViewModel extends MainPages_Posts_ViewModel {
     MutableLiveData<String> username;
     MutableLiveData<String> location;
     MutableLiveData<Boolean> infoIsEdited;
+    MutableLiveData<boolean[]> newUserInterests;
     public MainPages_MyProfile_ViewModel(@NonNull Application application) {
         super(application);
         username = new MutableLiveData<>();
         location = new MutableLiveData<>();
         infoIsEdited = new MutableLiveData<>();
+        newUserInterests = new MutableLiveData<>();
         infoIsEdited.setValue(false);
+    }
+
+    public LiveData<boolean[]> getNewUserInterests(){
+        return newUserInterests;
+    }
+    public void setNewUserInterests(boolean[] interests){
+        newUserInterests.setValue(interests);
     }
 
     public LiveData<Boolean> getInfoIsEdited() {
@@ -85,5 +94,8 @@ public class MainPages_MyProfile_ViewModel extends MainPages_Posts_ViewModel {
     }
     public void changePassword(List<String> passwords){
         DataRepositoryController.getInstance().changePassword(passwords);
+    }
+    public void updateUserInterests(ArrayList<Integer> interests){
+        DataRepositoryController.getInstance().updateUserInterests(interests);
     }
 }

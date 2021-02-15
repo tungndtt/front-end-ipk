@@ -239,6 +239,7 @@ public class DataRepository_CurrentUser {
         RestAPI api = Communication.getInstance().getApi();
         UserForm userForm = new UserForm("", "", "");
         userForm.setInterests(newInterests);
+
         if(api != null){
             api.updateUserInterests(userForm).enqueue(new Callback<ResponseBody>() {
                 @Override

@@ -38,10 +38,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.tintok.Adapters_ViewHolder.PostAdapter;
 import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.CustomView.PostUploadFragment;
+import com.example.tintok.CustomView.Profile_Picture_BottomSheet;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -94,7 +98,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         Log.i("INFO", "Creating view for profile fragment ...");
         view = inflater.inflate(R.layout.mainpages_myprofile_fragment, container, false);
         //this.viewModel.setFragment(this);
-        // info of displayed user. Currently just user name for testing
+
         username = view.findViewById(R.id.profile_name);
         newPostBtn = view.findViewById(R.id.newPostBtn);
         profilePic = view.findViewById(R.id.post_profile);
@@ -186,6 +190,34 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
 
         */
+        profilePic.setOnClickListener(v -> {
+            Profile_Picture_BottomSheet profilePictureBottomSheet = new Profile_Picture_BottomSheet();
+            profilePictureBottomSheet.show(getActivity().getSupportFragmentManager(), "profile_picture_bottom_sheet");
+            profilePictureBottomSheet.setOnTextViewClickListener(position -> {
+                Log.e("pos", String.valueOf(position));
+                switch (position){
+                    case 0: //TODO: show post
+                            break;// viewPhoto
+                    case 1: Log.e("item", String.valueOf(profile_navigation_bar.getSelectedItemId()));
+                        if(profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item){//selectPhoto
+                           // profilePictureBottomSheet.dismiss();
+                            selected = R.id.profile_photo_item;
+                            getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();
+                        }else{
+                            profilePictureBottomSheet.dismiss();
+                            Snackbar.make(getView(), "Click on your picture", Snackbar.LENGTH_SHORT).show();
+                        }
+                        break;
+
+
+                    case 2:
+
+                        break;
+                }
+            });
+        });
+
+
     }
 
     void initPosts(){

@@ -65,6 +65,7 @@ public class DataRepositoryController {
         dataRepository_matchingPeople.initData();
         dataRepository_notifications.initData();
         dataRepository_posts.initData();
+        DataRepository_Interest.initInterestArrayList();
 
         /*ArrayList<ChatRoom> mChatRooms = new ArrayList<>();
         ArrayList<MessageEntity> msgs = new ArrayList<>();

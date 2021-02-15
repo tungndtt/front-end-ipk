@@ -1,5 +1,7 @@
 package com.example.tintok.DataLayer;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Model.Interest;
@@ -45,14 +47,22 @@ public class DataRepository_Interest {
         return interestArrayList;
     }
     public static ArrayList<Interest> getDefaultArrayList(){
-        for(Interest interest: interestArrayList)
-            interest.setSelected(false);
+
         return interestArrayList;
     }
 
-    public void setUserInterest(ArrayList<Integer> interests){
-        for(int interest: interests){
-                getInterestArrayList().get(interest).setSelected(true);
+
+    public static void setUserInterest(ArrayList<Integer> userInterest){
+        for(Interest interest: interestArrayList){
+            for(int i = 0; i < userInterest.size(); i++ ){
+                if(interest.getId() == userInterest.get(i)){
+                    interest.setSelected(true);
+                    break;
+                }
+                else interest.setSelected(false);
+
+
+            }
 
         }
     }

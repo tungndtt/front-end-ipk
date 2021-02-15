@@ -45,7 +45,7 @@
                 android:gravity="center"
                 android:layout_marginTop="5dp"
                 tools:text="username"
-                android:inputType="textCapCharacters"
+                android:inputType="textCapCharacters|textNoSuggestions"
                 android:background="@color/transparent"
                 android:layout_centerHorizontal="true"
                 android:hint="Your username"
@@ -75,7 +75,7 @@
                 android:layout_below="@id/divider_0"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="20dp"
-                android:inputType="textCapCharacters"/>
+                android:inputType="textCapCharacters|textNoSuggestions"/>
         </RelativeLayout>
 
 
