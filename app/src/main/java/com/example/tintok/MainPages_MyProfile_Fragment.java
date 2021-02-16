@@ -39,6 +39,8 @@ import com.example.tintok.Adapters_ViewHolder.PostAdapter;
 import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.CustomView.PostUploadFragment;
 import com.example.tintok.CustomView.Profile_Picture_BottomSheet;
+import com.example.tintok.CustomView.Profile_Picture_UploadFragment;
+import com.example.tintok.DataLayer.ResponseEvent;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -62,8 +64,13 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
     private View view;
     ShapeableImageView backBtn;
     BottomNavigationView profile_navigation_bar;
+    Profile_Picture_UploadFragment profilePictureUploadFragment;
 
     MainPages_MyProfile_ViewModel mViewModel;
+
+    private final static String NEW_POST = "New Post";
+    private final static String NEW_PROFILE_PICTURE = "New Profile Picture";
+    private final static String BOTTOM_SHEET = "profile picture bottom sheet";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public MainPages_MyProfile_Fragment(UserProfile user) { // and other data of user to display (location, gender, images, ...)
@@ -142,7 +149,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
 
                 if(post == null){
                     post = new PostUploadFragment(MainPages_MyProfile_Fragment.this::onNewPost);
-                    post.show(getChildFragmentManager(), "New Post");
+                    post.show(getChildFragmentManager(), NEW_POST);
                 }
 
             }
@@ -192,9 +199,8 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         */
         profilePic.setOnClickListener(v -> {
             Profile_Picture_BottomSheet profilePictureBottomSheet = new Profile_Picture_BottomSheet();
-            profilePictureBottomSheet.show(getActivity().getSupportFragmentManager(), "profile_picture_bottom_sheet");
+            profilePictureBottomSheet.show(getActivity().getSupportFragmentManager(), BOTTOM_SHEET);
             profilePictureBottomSheet.setOnTextViewClickListener(position -> {
-                Log.e("pos", String.valueOf(position));
                 switch (position){
                     case 0: //TODO: show post
                             break;// viewPhoto
@@ -202,17 +208,22 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                         if(profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item){//selectPhoto
                            // profilePictureBottomSheet.dismiss();
                             selected = R.id.profile_photo_item;
+                            profilePictureBottomSheet.dismiss();
                             getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();
                         }else{
                             profilePictureBottomSheet.dismiss();
                             Snackbar.make(getView(), "Click on your picture", Snackbar.LENGTH_SHORT).show();
                         }
                         break;
-
-
-                    case 2:
-
-                        break;
+                    case 2: profilePictureBottomSheet.dismiss();
+                            if(profilePictureUploadFragment == null){
+                                profilePictureUploadFragment = new Profile_Picture_UploadFragment();
+                                profilePictureUploadFragment.show(getChildFragmentManager(), NEW_PROFILE_PICTURE);
+                                profilePictureUploadFragment.setOnNewProfilePictureListener(newPost -> {
+                                    mViewModel.submitNewProfilePicture(newPost);
+                                });
+                            }
+                            break;
                 }
             });
         });
@@ -239,6 +250,15 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
             followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));
             followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));
+        });
+        mViewModel.getNetworkResponse().observe(getViewLifecycleOwner(), responseEvent -> {
+            if(responseEvent.getType() == ResponseEvent.Type.PROFILE_PICTURE_UPDATE || responseEvent.getType() == ResponseEvent.Type.PROFILE_PICTURE_UPLOAD){
+                String response = responseEvent.getContentIfNotHandled();
+                if(response != null && response.equals("Created"))
+                    Snackbar.make(getView(), "Profile Picture Updated", Snackbar.LENGTH_LONG).show();
+                if(response != null && response.equals("Ok"))
+                    Snackbar.make(getView(), "Profile Picture Saved", Snackbar.LENGTH_LONG).show();
+            }
         });
         if (profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item)
             getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, infoFragment).commit();

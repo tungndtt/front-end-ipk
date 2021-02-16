@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tintok.Adapters_ViewHolder.ImagePage2Adapter;
+import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.Model.Post;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ public class Image_Profile_Fragment extends Fragment {
     private ImagePage2Adapter adapter;
     private ViewPager2 vp2;
     ArrayList<Post> list;
+    private MainPages_MyProfile_ViewModel mViewModel;
 
     public Image_Profile_Fragment(ArrayList<Post> list) {
         this.list = list;
@@ -46,6 +50,8 @@ public class Image_Profile_Fragment extends Fragment {
         // Inflate the layout for this fragment
         Log.i("INFO", "Creating view for displaying photo profile ...");
         View view = inflater.inflate(R.layout.profile_image_fragment, container, false);
+        if(mViewModel == null)
+            mViewModel = new ViewModelProvider(getParentFragment()).get(MainPages_MyProfile_ViewModel.class);
         return view;
     }
 
@@ -56,6 +62,19 @@ public class Image_Profile_Fragment extends Fragment {
         super.onStart();
         setRetainInstance(true);
         this.adapter = new ImagePage2Adapter(this.getContext() ,list);
+        adapter.setOnImageClickListener(url -> {
+            String[] colors = {"Choose this image as Avatar"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
+            builder.setCancelable(true);
+            builder.setTitle("Options");
+            builder.setItems(colors, (dialog, which) -> {
+                    if(which == 0){
+                        mViewModel.updateUserProfilePicture(url);
+                    }
+                });
+            builder.show();
+            Log.e("adapter", url);
+        });
         this.vp2 = getView().findViewById(R.id.profile_image_list_page);
         vp2.setAdapter(adapter);
         final int offScreenPageLimit = 3;

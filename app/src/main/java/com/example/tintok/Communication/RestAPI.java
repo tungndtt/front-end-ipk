@@ -106,4 +106,14 @@ public interface RestAPI {
 
     @POST("update_user_interests")
     Call<ResponseBody> updateUserInterests(@Body UserForm data);
+
+    @POST("update_profile_image")
+    Call<ResponseBody> updateUserImage(@Body UserForm data);
+
+    @Multipart
+    @POST("upload_profile_image")
+    Call<PostForm> uploadImage(@Part MultipartBody.Part file,
+                              @Part("id") RequestBody id,
+                              @Part("status") RequestBody post_status,
+                              @Part("profile_path") RequestBody profile_path);
 }

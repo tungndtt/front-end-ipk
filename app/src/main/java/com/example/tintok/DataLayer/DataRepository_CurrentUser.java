@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Communication.Communication;
@@ -204,16 +205,105 @@ public class DataRepository_CurrentUser {
         }
 
     }
-    //TODO:
-    public void updateUserProfilePic(UserProfile userProfile){}
-    //TODO:
-    public void updateUserInterests(ArrayList<Integer> newInterests){
+
+    public void submitNewProfilePicture(Context mContext, Post newPost){
         isUserUpdating.setValue(true);
         RestAPI api = Communication.getInstance().getApi();
-        UserForm userForm = new UserForm("", "", "");
-        userForm.setInterests(newInterests);
-
         if(api != null){
+            MultipartBody.Part part = FileUtil.prepareImageFileBody(mContext, "upload", newPost.getImage());
+            RequestBody user_id = RequestBody.create(MultipartBody.FORM, newPost.getAuthor_id());
+            RequestBody status = RequestBody.create(MultipartBody.FORM, newPost.getStatus());
+            String[] split = currentUser.getValue().getProfilePic().url.split("/");
+            RequestBody profile_path = RequestBody.create(MultipartBody.FORM, split[split.length-1]);
+            api.uploadImage(part, user_id, status, profile_path).enqueue(new Callback<PostForm>() {
+                @Override
+                public void onResponse(Call<PostForm> call, Response<PostForm> response) {
+                    if(response.isSuccessful()) {
+                        // set id for the post
+                        PostForm form = response.body();
+                        newPost.setId(form.getId());
+                        newPost.getImage().url = form.getImageUrl();
+                        newPost.likers = new ArrayList<>();
+
+                        // do something with newPost ...
+                        ArrayList<Post> mPosts = currentUser.getValue().myPosts.getValue();
+                        mPosts.add(0, newPost);
+                        currentUser.getValue().myPosts.postValue(mPosts);
+                        // update UserProfile and User in Cache
+                        MediaEntity tmpMediaEntity = new MediaEntity(form.getImageUrl());
+                        UserProfile tmpUser = currentUser.getValue();
+                        tmpUser.setProfilePic(tmpMediaEntity);
+                        currentUser.postValue(tmpUser);
+
+                        UserSimple newUser = new UserSimple();
+                        newUser.setUserID(tmpUser.getUserID());
+                        newUser.setUserName(tmpUser.getUserName());
+                        newUser.setProfilePic(tmpMediaEntity);
+                        DataRepositoryController.getInstance().dataRepository_userSimple.updateUserSimpleInCache(newUser);
+                    }
+                    networkStatus.postValue(new ResponseEvent(ResponseEvent.Type.PROFILE_PICTURE_UPDATE, response.message()));
+                    isUserUpdating.postValue(false);
+
+                }
+
+                @Override
+                public void onFailure(Call<PostForm> call, Throwable t) {
+                    try {
+                        throw t;
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                    //Toast.makeText(getApplication(), "Connection fails", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    public void updateUserProfilePicture(String url){
+        RestAPI api = Communication.getInstance().getApi();
+        if(api != null){
+          //  isUserUpdating.setValue(true);
+            UserForm userForm = new UserForm("", "", "");
+            userForm.setId(currentUser.getValue().getUserID());
+            String[] split = url.split("/");
+            userForm.setImageUrl(split[split.length-1]);
+            api.updateUserImage(userForm).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.isSuccessful()){
+                        MediaEntity tmpMediaEntity = new MediaEntity(url);
+                        UserProfile tmpUser = currentUser.getValue();
+                        tmpUser.setProfilePic(tmpMediaEntity);
+                        currentUser.postValue(tmpUser);
+
+                        UserSimple newUser = new UserSimple();
+                        newUser.setUserID(tmpUser.getUserID());
+                        newUser.setUserName(tmpUser.getUserName());
+                        newUser.setProfilePic(tmpMediaEntity);
+                        DataRepositoryController.getInstance().dataRepository_userSimple.updateUserSimpleInCache(newUser);
+                    }
+                    networkStatus.postValue(new ResponseEvent(ResponseEvent.Type.PROFILE_PICTURE_UPDATE, response.message()));
+                   // isUserUpdating.postValue(false);
+
+                }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e("onFailure", "update failed");
+                 //   isUserUpdating.postValue(false);
+
+                }
+            });
+
+        }
+
+    }
+
+    public void updateUserInterests(ArrayList<Integer> newInterests){
+        RestAPI api = Communication.getInstance().getApi();
+        if(api != null){
+            isUserUpdating.setValue(true);
+            UserForm userForm = new UserForm("", "", "");
+            userForm.setInterests(newInterests);
             api.updateUserInterests(userForm).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

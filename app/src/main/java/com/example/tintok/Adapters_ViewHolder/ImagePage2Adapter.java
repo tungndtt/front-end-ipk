@@ -23,6 +23,7 @@ import com.example.tintok.R;
 
 public class ImagePage2Adapter extends BaseAdapter<Post, ImagePage2Adapter.ViewHolder> {
 
+    OnImageClickListener mListener;
     public ImagePage2Adapter(Context context, ArrayList<Post> items) {
         super(context, items);
     }
@@ -45,7 +46,7 @@ public class ImagePage2Adapter extends BaseAdapter<Post, ImagePage2Adapter.ViewH
         return this.items.size();
     }
 
-    public static class ViewHolder extends BaseViewHolder<Post>{
+    public class ViewHolder extends BaseViewHolder<Post>{
         private ImageView img;
         String url;
         public ViewHolder(@NonNull View itemView, BaseAdapter baseAdapter) {
@@ -59,6 +60,11 @@ public class ImagePage2Adapter extends BaseAdapter<Post, ImagePage2Adapter.ViewH
             Glide.with(mAdapter.getContext()).load(itemData.getImage().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(img);
             img.setLongClickable(true);
             img.setOnLongClickListener(v -> {
+                if(mListener != null){
+                    mListener.onImageClick(this.url);
+                }
+
+                /*
                 String[] colors = {"Choose this image as Avatar"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(mAdapter.getContext());
                 builder.setCancelable(true);
@@ -71,8 +77,18 @@ public class ImagePage2Adapter extends BaseAdapter<Post, ImagePage2Adapter.ViewH
                     }
                 });
                 builder.show();
+
+                 */
                 return true;
             });
         }
     }
+
+    public interface OnImageClickListener{
+        void onImageClick(String url);
+    }
+    public void setOnImageClickListener(OnImageClickListener mListener){
+        this.mListener = mListener;
+    }
+
 }

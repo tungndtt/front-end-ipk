@@ -46,6 +46,10 @@ public class UserForm extends UnknownUserForm{
         this.id = id;
     }
     public String getImageUrl(){ return url; }
+    public void setImageUrl(String url) {
+        this.url = url;
+    }
+
     public ArrayList<String> getFollowing_posts() {
         return following_posts;
     }

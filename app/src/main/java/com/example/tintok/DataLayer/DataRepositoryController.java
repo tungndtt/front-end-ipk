@@ -148,6 +148,12 @@ public class DataRepositoryController {
     public void updateUserInterests(ArrayList<Integer> interests){
         this.dataRepository_currentUser.updateUserInterests(interests);
     }
+    public void updateUserProfilePicture(String url){
+        this.dataRepository_currentUser.updateUserProfilePicture(url);
+    }
+    public void submitNewProfilePicture(Context c, Post post){
+        this.dataRepository_currentUser.submitNewProfilePicture(c, post);
+    }
     public long getLastSeen(){
         return dataRepository_currentUser.lastSeen;
     }

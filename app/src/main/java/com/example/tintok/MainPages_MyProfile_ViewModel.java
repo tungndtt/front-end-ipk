@@ -98,4 +98,10 @@ public class MainPages_MyProfile_ViewModel extends MainPages_Posts_ViewModel {
     public void updateUserInterests(ArrayList<Integer> interests){
         DataRepositoryController.getInstance().updateUserInterests(interests);
     }
+    public void updateUserProfilePicture(String url){
+        DataRepositoryController.getInstance().updateUserProfilePicture(url);
+    }
+    public void submitNewProfilePicture(Post newPost){
+        DataRepositoryController.getInstance().submitNewProfilePicture(getApplication(), newPost);
+    }
 }
