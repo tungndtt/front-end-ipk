@@ -71,17 +71,18 @@ public class ViewProfile_UserInfo_Fragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        interests = "";
-        Log.e("viewProf", mViewModel.toString());
+
         mViewModel.getProfile().observe(getViewLifecycleOwner(), userProfile -> {
             if(userProfile == null)
                 return;
+            Log.e("UserInfoFrag", "at "+userProfile.getBirthday());
             mAgeTV.setText(String.valueOf(userProfile.getAge()));
             mBirthdayTV.setText(formatter.format(userProfile.getBirthday()));
             mGenderTV.setText(userProfile.getGender().toString().toLowerCase());
             if(userProfile.getDescription() == null)
                 mDescriptionTV.setVisibility(View.GONE);
             else mDescriptionTV.setText(userProfile.getDescription());
+            interests = "";
             for(int i = 0; i < userProfile.getUserInterests().getValue().size(); i++){
                 interests += DataRepository_Interest.interests[userProfile.getUserInterests().getValue().get(i)] + " ";
             }

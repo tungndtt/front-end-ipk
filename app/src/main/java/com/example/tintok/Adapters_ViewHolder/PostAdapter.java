@@ -158,6 +158,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
             }
             else{
                 itemData.comments.observe((LifecycleOwner) mAdapter.context, comments -> {
+                    Log.e("postadapter", "new cmt");
                     nComment.setVisibility(View.VISIBLE);
                     nCommentText.setVisibility(View.VISIBLE);
                     nComment.setText(String.valueOf(comments.size()));

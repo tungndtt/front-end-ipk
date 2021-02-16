@@ -55,6 +55,11 @@ public class App extends Application implements Application.ActivityLifecycleCal
     }
 
     @Override
+    public void onActivityPostStopped(@NonNull Activity activity) {
+
+    }
+
+    @Override
     public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
 
     }

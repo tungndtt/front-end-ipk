@@ -70,6 +70,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     public static final String ITEM_NOTIFICATIONS = "notifications";
     public static final String ITEM_MESSENGER = "messages";
     public static final String ITEM_MYPROFILE = "profile";
+    private boolean isLogoutPressed ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
         mViewModel = new ViewModelProvider(this).get(Activity_AppMainPages_ViewModel.class);
         initActivity();
         initActionBar();
+        isLogoutPressed = false;
     }
 
 
@@ -177,6 +179,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
                     break;
                 case R.id.logout:
                     App.Logout(Activity_AppMainPages.this);
+                    isLogoutPressed = true;
                     finish();
                     break;
                 case R.id.change_password:
@@ -268,6 +271,13 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
         super.onStop();
         mViewModel.removeNewMessageListener(this);
         mViewModel.removeNewNotificationListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(!isLogoutPressed)
+            App.Logout(this);
     }
 
     public void showNavView() {

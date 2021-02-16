@@ -15,8 +15,13 @@ import java.time.LocalDateTime;
 
 public class Notification {
     public enum NotificationType{
-        NEW_FOLLOWER, NEW_POSTS_FROM_FOLLOWINGS, LIKE_POST, COMMENT_POST
+        NEW_FRIEND, LIKE_POST, COMMENT_POST
     }
+
+    public NotificationType getType() {
+        return type;
+    }
+
     NotificationType type;
 
 
@@ -70,12 +75,10 @@ public class Notification {
         StyleSpan bold_italicText = new StyleSpan(Typeface.BOLD_ITALIC);
         StyleSpan italicText = new StyleSpan(Typeface.ITALIC);
         str.setSpan(bold_italicText, 0, str.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        if(type == NotificationType.NEW_FOLLOWER){
-            str.append(" has followed you");
+        if(type == NotificationType.NEW_FRIEND){
+            str.append(" and you have been following each other. You can now chat with each others");
         }
-        else if(type == NotificationType.NEW_POSTS_FROM_FOLLOWINGS){
-            str.append(" has added a new post");
-        }
+
         else if(type == NotificationType.LIKE_POST){
             str.append(" has put a like on your post");
         }

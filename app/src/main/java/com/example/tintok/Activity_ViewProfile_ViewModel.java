@@ -21,6 +21,7 @@ import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
+import com.example.tintok.Utils.DataConverter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -54,31 +55,8 @@ public class Activity_ViewProfile_ViewModel extends MainPages_Posts_ViewModel {
             public void onResponse(Call<UserForm> call, Response<UserForm> response) {
                 if(response.isSuccessful()){
                     UserForm userForm = response.body();
-                    List<PostForm> posts = userForm.getPosts();
-                    String name = userForm.getUsername();
-                    ArrayList<Post> new_posts = new ArrayList<>();
-                    for(PostForm post : posts){
-                        MediaEntity media = new MediaEntity(post.getImageUrl());
-                        Post p = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), media);
-                        p.likers = post.getLikes() == null ? new ArrayList<>():post.getLikes();
-                        new_posts.add(p);
-                    }
-                    UserProfile result = new UserProfile();
+                    UserProfile result = DataConverter.ConvertToUserProfile(userForm);
                     result.setUserID(id);
-                    result.setUserName(name);
-                    result.setProfilePic(new MediaEntity(userForm.getImageUrl()));
-                    result.setGender(userForm.getGender());
-                    result.setBirthday(LocalDate.parse(userForm.getBirthday(),  DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-                    result.setDescription(userForm.getDescription());
-                    result.userInterests.postValue(userForm.getInterests());
-                    Log.e("Activity_VIewProfile_ViewModel", "img: "+userForm.getImageUrl());
-                    ArrayList<String> dummy = result.getFollowers().getValue();
-                    dummy.addAll(userForm.getFollowers());
-                    result.postFollowers(dummy);
-                    dummy = result.getFollowing().getValue();
-                    dummy.addAll(userForm.getFollowing());
-                    result.postFollowering(dummy);
-                    result.myPosts.postValue(new_posts);
                     profile.postValue(result);
                 }
                 else{
@@ -108,27 +86,22 @@ public class Activity_ViewProfile_ViewModel extends MainPages_Posts_ViewModel {
         ArrayList<String> userIDs = new ArrayList<>(2);
         userIDs.add(this.profile.getValue().getUserID());
         userIDs.add(DataRepositoryController.getInstance().getUser().getValue().getUserID());
-        Log.e("Activity_ViewProf_Model", "at "+ this.profile.getValue().getUserID());
         return DataRepositoryController.getInstance().getChatRoomByUser(userIDs);
     }
 
     public void UserPressFollow() {
-        String currentUser = DataRepositoryController.getInstance().getUser().getValue().getUserID();
+        String currentUser = getCurrentUserID();
         ArrayList<String> currentFollower = this.profile.getValue().getFollowers().getValue();
         if(!currentFollower.contains(currentUser)){
-            Communication.getInstance().get_socket().emit(CommunicationEvent.FOLLOW_USER, this.profile.getValue().getUserID(),  currentUser);
             currentFollower.add(currentUser);
             this.profile.getValue().getFollowers().postValue(currentFollower);
         }
         else{
-            Communication.getInstance().get_socket().emit(CommunicationEvent.UNFOLLOW_USER, this.profile.getValue().getUserID(),  currentUser);
             currentFollower.remove(currentUser);
             this.profile.getValue().getFollowers().postValue(currentFollower);
         }
         this.profile.postValue(this.profile.getValue());
-    }
-    public String GetCurrentUserID(){
-       return DataRepositoryController.getInstance().getUser().getValue().getUserID();
+        DataRepositoryController.getInstance().UserPressFollow(this.profile.getValue().getUserID());
     }
 
     public boolean isFollowing(){

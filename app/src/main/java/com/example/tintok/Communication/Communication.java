@@ -252,7 +252,8 @@ public class Communication {
     }
 
     public void Close(){
-        getInstance().get_socket().disconnect();
+        if(getInstance().get_socket() != null)
+            getInstance().get_socket().disconnect();
         instance = null;
     }
     /*

@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Communication.Communication;
+import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.Interest;
@@ -161,6 +162,13 @@ public class DataRepositoryController {
     }
     public void UpdateFollowingPost(Post p ){
         dataRepository_currentUser.UpdateSubcribedPost(p);
+    }
+
+    public void UserPressFollow(String user){
+        dataRepository_currentUser.UserPressFollow(user);
+    }
+    public boolean isCurrentUserFollowUser(String user){
+        return dataRepository_currentUser.isCurrentUserFollowingUser(user);
     }
 //endregion
 

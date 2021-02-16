@@ -23,6 +23,8 @@ public class UserForm extends UnknownUserForm{
     private ArrayList<String> following;
 
 
+
+
     @SerializedName("lastLogout")
     private long time;
 
@@ -73,5 +75,4 @@ public class UserForm extends UnknownUserForm{
     public void setDescription(String description) {
         this.description = description;
     }
-
 }

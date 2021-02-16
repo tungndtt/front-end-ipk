@@ -70,7 +70,7 @@ public interface RestAPI {
     Call<UserForm> getUser();
 
     @POST("get_users_byId")
-    Call<ArrayList<UserForm>> getUsers(@Body HashMap<String,ArrayList<String>> users);
+    Call<ArrayList<UserForm>> getUsersById(@Body HashMap<String,ArrayList<String>> users);
     /**
      * @param roomId
      * @return

@@ -109,9 +109,11 @@ public class Activity_ViewProfile extends AppCompatActivity{
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profile_pic);
             imageFragment = Image_Profile_Fragment.getInstance(viewModel.getProfile().getValue().myPosts.getValue());
             initPosts();
-            followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));
+
             followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));
-            Log.e("Activity_ViewProfile","profilepic "+userProfile.getProfilePic().url);
+            followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));
+            UpdateFollowBtn();
+
         });
 
         followBtn.setOnClickListener(v -> {

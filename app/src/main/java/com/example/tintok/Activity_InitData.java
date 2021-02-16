@@ -39,6 +39,7 @@ public class Activity_InitData extends AppCompatActivity implements CustomCallab
     @Override
     public void afterWorkDone(String result) {
         Intent intent = new Intent(this, Activity_AppMainPages.class);
+        intent.addCategory(Intent.ACTION_MAIN);
         startActivity(intent);
         overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
         finish();

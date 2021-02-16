@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tintok.Communication.Communication;
+import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.Communication.RestAPI;
 import com.example.tintok.Communication.RestAPI_model.PostForm;
 import com.example.tintok.Communication.RestAPI_model.UserForm;
@@ -14,6 +15,7 @@ import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 import com.example.tintok.Model.UserSimple;
+import com.example.tintok.Utils.DataConverter;
 import com.example.tintok.Utils.FileUtil;
 
 import java.io.File;
@@ -52,36 +54,7 @@ public class DataRepository_CurrentUser {
             public void onResponse(Call<UserForm> call, Response<UserForm> response) {
                 if(response.isSuccessful()){
                     UserForm form = response.body();
-                    UserProfile currUser = new UserProfile();
-                    currUser.setUserName(form.getUsername());
-                    currUser.setUserID(form.getId());
-                    currUser.setEmail(form.getEmail());
-                    currUser.setBirthday(LocalDate.parse(form.getBirthday(),  DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-                    currUser.setLocation(form.getLocation());
-                    currUser.setDescription(form.getDescription());
-                    currUser.setGender(form.getGender());
-                    currUser.setProfilePic(new MediaEntity(form.getImageUrl()));
-                    currUser.userInterests.postValue(form.getInterests());//setUserInterests(form.getInterests()); //LIVEDATA
-                    ArrayList<Post> photos = currUser.getMyPosts().getValue();
-                    for(PostForm post : form.getPosts()){
-                        Post tmp = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), new MediaEntity(post.getImageUrl()));
-                        tmp.likers = post.getLikes() == null?new ArrayList<>():post.getLikes();
-                        photos.add(tmp);
-                    }
-
-                    currUser.myPosts.postValue(photos);
-                    ArrayList<String> dummy = currUser.getFollowers().getValue();
-                    dummy.addAll(form.getFollowers());
-                    Log.e("DataRepo_CurrentU","follower = " + form.getFollowers());
-                    currUser.postFollowers(dummy);
-                    dummy = currUser.getFollowing().getValue();
-                    dummy.addAll(form.getFollowing());
-                    currUser.postFollowering(dummy);
-                    dummy = currUser.getFollowingPost().getValue();
-                    dummy.addAll(form.getFollowing_posts());
-                    currUser.getFollowingPost().postValue(dummy);
-
-
+                    UserProfile currUser = DataConverter.ConvertToUserProfile(form);
                     currentUser.postValue( currUser);
                     lastSeen = form.getTime();
                 } else {
@@ -258,9 +231,24 @@ public class DataRepository_CurrentUser {
                 }
             });
         }
-
-
-
+    }
+    public void UserPressFollow(String user) {
+        UserProfile currentUser = this.currentUser.getValue();
+        ArrayList<String> currentFollowing = currentUser.getFollowing().getValue();
+        Log.e("DataRepo_CurreUser","at " +currentFollowing);
+        if (!currentFollowing.contains(user)) {
+            Communication.getInstance().get_socket().emit(CommunicationEvent.FOLLOW_USER, user, currentUser.getUserID());
+            currentFollowing.add(user);
+        } else {
+            Communication.getInstance().get_socket().emit(CommunicationEvent.UNFOLLOW_USER, user, currentUser.getUserID());
+            currentFollowing.remove(user);
+        }
+        this.currentUser.getValue().getFollowing().postValue(currentFollowing);
     }
 
+    public boolean isCurrentUserFollowingUser(String user){
+        UserProfile currentUser = this.currentUser.getValue();
+        ArrayList<String> currentFollowing = currentUser.getFollowing().getValue();
+        return currentFollowing.contains(user);
+    }
 }

@@ -64,7 +64,6 @@ public class DataRepository_Notifications {
         Socket socket = Communication.getInstance().get_socket();
 
         socket.on(CommunicationEvent.COMMENT_NOTIFICATION, args -> {
-            Log.e("DataRpo_Noti", "new Notis");
             String author_id = (String) args[0];
             String post_id = (String) args[1];
             String post_author_id = (String) args[2];
@@ -100,6 +99,20 @@ public class DataRepository_Notifications {
             AppNotificationChannelManager.getInstance().pushNotificationBasic("Notifications", "New unseen notifications", "Click to view unseen notifications", OpenNotificationIntent());
         });
 
+        socket.on(CommunicationEvent.MATCHING_NOTIFICATION, args -> {
+            String author_id = (String) args[0];
+            Notification newNoti = new Notification(Notification.NotificationType.NEW_FRIEND, LocalDateTime.now(), author_id ,
+                    null, null, null, null);
+            ArrayList<Notification> notis = notifications.getValue();
+            notis.add( newNoti);
+            notifications.postValue(notis);
+            if(newNotificationListeners != null){
+                for(OnNewNotificationListener m :newNotificationListeners)
+                    m.onNewNotification(newNoti);
+            }
+            AppNotificationChannelManager.getInstance().pushNotificationBasic("Notifications", "New unseen notifications", "Click to view unseen notifications", OpenNotificationIntent());
+        });
+
     }
 
     public void initData(){
@@ -107,6 +120,7 @@ public class DataRepository_Notifications {
             @Override
             public void onResponse(Call<ArrayList<NotificationForm>> call, Response<ArrayList<NotificationForm>> response) {
                 ArrayList<NotificationForm> notis = response.body();
+                Log.e("DataRepo_Noti", "len : "+notis.size());
                 ArrayList<Notification> clientNoti  = new ArrayList<>();
                 for(NotificationForm noti : notis){
                     Notification.NotificationType m = Notification.NotificationType.COMMENT_POST;
@@ -114,6 +128,8 @@ public class DataRepository_Notifications {
                         m = Notification.NotificationType.COMMENT_POST;
                     else if(noti.getType().compareTo(NotificationForm.NEW_REACTION) == 0)
                         m = Notification.NotificationType.LIKE_POST;
+                    else if(noti.getType().compareTo(NotificationForm.NEW_FRIEND)==0)
+                        m = Notification.NotificationType.NEW_FRIEND;
                     Notification newNoti = new Notification(m, Instant.ofEpochMilli(noti.getDate()).atZone(ZoneId.systemDefault()).toLocalDateTime(), noti.getAuthor_id(),
                             noti.getUrl(), noti.getPostID(), noti.getPost_author_id(), noti.getStatus());
                     clientNoti.add(newNoti);

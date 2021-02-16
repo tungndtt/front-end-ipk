@@ -63,7 +63,12 @@ public class DataRepository_Posts {
                 if(response.isSuccessful()){
                     ArrayList<PostForm> postForms = response.body();
                    submitNewData(postForms);
-                    timeStamp = postForms.get(0).getDate();
+                   try{
+                       timeStamp = postForms.get(0).getDate();
+                   }catch (Exception e){
+
+                   }
+
                 } else {
                     Log.d("Info", "Response fails");
                 }

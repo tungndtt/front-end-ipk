@@ -114,6 +114,7 @@ public class Info_Profile_Fragment extends Fragment {
                 mAgeTextView.setText(Integer.toString(userProfile.getAge()));
                 mBirthdayTextView.setText(formatter.format(userProfile.getBirthday()));
             }
+
             if(userProfile.getDescription() == null || userProfile.getDescription().isEmpty())
                 mDescriptionEditText.setHint(R.string.inspirational_quote);
             else mDescriptionEditText.setText(userProfile.getDescription());

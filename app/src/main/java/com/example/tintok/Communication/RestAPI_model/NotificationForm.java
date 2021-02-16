@@ -9,6 +9,7 @@ public class NotificationForm {
 
     public static String NEW_COMMENT = "new_comment";
     public static String NEW_REACTION = "new_reaction";
+    public static String NEW_FRIEND = "new_friend";
 
 
     public String getType() {

@@ -15,11 +15,13 @@ public class UnknownUserForm {
     private String birthday;
     @SerializedName("sex")
     private int gender;
+    @SerializedName("age")
+    private int age;
     @SerializedName("new_password")
     private String new_password;
+
     @SerializedName("interests")
     private ArrayList<Integer> interests;
-
 
     public UnknownUserForm(String username, String email, String password) {
         this.username = username;
@@ -48,10 +50,15 @@ public class UnknownUserForm {
     public void setNew_password(String new_password) {
         this.new_password = new_password;
     }
+
     public ArrayList<Integer> getInterests() {
         return interests;
     }
+
     public void setInterests(ArrayList<Integer> interests) {
         this.interests = interests;
+    }
+    public int getAge() {
+        return age;
     }
 }
