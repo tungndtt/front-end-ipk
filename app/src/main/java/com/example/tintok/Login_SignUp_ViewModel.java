@@ -37,30 +37,20 @@ import retrofit2.Response;
 
 public class Login_SignUp_ViewModel extends AndroidViewModel {
     private RestAPI api;
-    private MutableLiveData<boolean[]> selectedInterests;
-   // private MutableLiveData<HashMap<Integer, Interest>> selectedInterests;
+    private MutableLiveData<ArrayList<Integer>> chosenInterests;
 
     public Login_SignUp_ViewModel(Application app){
         super(app);
         this.api = Communication.getInstance().getApi();
-        selectedInterests = new MutableLiveData<>();
+        chosenInterests = new MutableLiveData<>();
+        chosenInterests.setValue(new ArrayList<Integer>());
     }
-    public LiveData<boolean[]> getSelectedInterests(){
-        return selectedInterests;
+    public LiveData<ArrayList<Integer>> getChosenInterests(){
+        return chosenInterests;
     }
-    public void setSelectedInterests(boolean[] interests){
-        Log.e("setSelecetd", "changed");
-        selectedInterests.setValue(interests);
+    public void setChosenInterests(ArrayList<Integer> interests){
+        chosenInterests.setValue(interests);
     }
-    /*
-    public LiveData<HashMap<Integer, Interest>> getSelectedInterests() {
-        return selectedInterests;
-    }
-    public void setSelectedInterests(HashMap<Integer, Interest> selectedInterests) {
-        this.selectedInterests.setValue(selectedInterests);
-    }
-
-     */
 
     public void loginRequest(String email, String password, requestListener listener){
         this.api.postLoginData(new UnknownUserForm("",email,password)).enqueue(new Callback<LoginResponseForm>() {
@@ -113,7 +103,7 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
-                snackBarShow("Some errors occur in sign up!");
+                listener.connectionFail();//("Some errors occur in sign up!");
             }
         });
     }

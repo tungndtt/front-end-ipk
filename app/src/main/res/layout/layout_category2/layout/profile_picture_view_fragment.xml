@@ -7,6 +7,10 @@
     tools:context=".View_Profile_Picture_Fragment"
     android:background="@drawable/message_background_me"
     >
+    <include
+        android:id="@+id/picture_toolbar"
+        layout="@layout/toolbar">
+    </include>
 
     <TextView
         android:id="@+id/picture_view_nameTV"
@@ -15,7 +19,8 @@
         tools:text="My Name"
         android:textStyle="bold"
         android:textSize="@dimen/textSize_16"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@id/picture_view_status"
         app:layout_constraintEnd_toEndOf="@id/picture_view_image"
         app:layout_constraintStart_toStartOf="@id/picture_view_image"
@@ -26,21 +31,25 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="@dimen/textSize_16"
+        android:textColor="@color/white"
+        android:layout_marginBottom="4dp"
         tools:text="my status"
         app:layout_constraintStart_toStartOf="@+id/picture_view_image"
         app:layout_constraintBottom_toTopOf="@+id/picture_view_image"
-
-
+        app:layout_constraintEnd_toEndOf="@id/picture_view_image"
         />
 
     <ImageView
         android:id="@+id/picture_view_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="240dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:scaleType="fitXY"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

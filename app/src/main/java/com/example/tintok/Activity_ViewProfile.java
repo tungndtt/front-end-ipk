@@ -47,6 +47,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
     private TextView followingNumber, followerNumber;
     private MaterialButton followBtn, messageBtn;
     BottomNavigationView profile_navigation_bar;
+    View_Profile_Picture_Fragment viewProfilePictureFragment;
     Fragment postFragment;
 
     @SuppressLint("ResourceAsColor")
@@ -82,7 +83,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
         String author_id = getIntent().getStringExtra("author_id");
         this.viewModel.getUserProfile(author_id);
         Log.e("Act", viewModel.toString());
-        infoFragment = ViewProfile_UserInfo_Fragment.getInstance(viewModel);//Info_Profile_Fragment.getInstance();
+        infoFragment = ViewProfile_UserInfo_Fragment.getInstance();//(viewModel);//Info_Profile_Fragment.getInstance();
 
         this.selected = R.id.profile_info_item;
         profile_navigation_bar.setSelectedItemId( this.selected);
@@ -99,6 +100,22 @@ public class Activity_ViewProfile extends AppCompatActivity{
        // this.viewModel.getUserProfile(author_id);
 
         profile_pic = findViewById(R.id.profile_picture);
+        profile_pic.setOnClickListener(v -> {
+            if(viewProfilePictureFragment == null)
+                viewProfilePictureFragment = new View_Profile_Picture_Fragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("name", viewModel.getProfile().getValue().getUserName());
+            String status = "";
+            String url = viewModel.getProfile().getValue().getProfilePic().url;
+            for(Post p: viewModel.getProfile().getValue().getMyPosts().getValue()){
+                if(p.getImage().url.equals(url))
+                    status = p.getStatus();
+            }
+            bundle.putString("status", status);
+            bundle.putString("url", url);
+            viewProfilePictureFragment.setArguments(bundle);
+            viewProfilePictureFragment.show(getSupportFragmentManager(), "VIEW_PROFILE_PICTURE");
+        });
 
         viewModel.getProfile().observe(this, userProfile -> {
             if (userProfile == null)
@@ -107,7 +124,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
             username.setText(userProfile.getUserName());
             Glide.with(this).load(userProfile.getProfilePic().url)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profile_pic);
-            imageFragment = Image_Profile_Fragment.getInstance(viewModel.getProfile().getValue().myPosts.getValue());
+            imageFragment = Image_Profile_Fragment.getInstance();//viewModel.getProfile().getValue().myPosts.getValue());
             initPosts();
 
             followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));

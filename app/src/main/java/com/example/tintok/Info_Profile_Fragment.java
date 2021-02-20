@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,11 +46,10 @@ public class Info_Profile_Fragment extends Fragment {
     private Spinner mGenderSpinner;
     private EditText mDescriptionEditText;
     View view;
-    private UserProfile user;
     private ProgressBar mProgressBar;
     private MaterialButton saveBtn, cancelBtn, interestBtn;
     private DatePickerDialog.OnDateSetListener  mOnDataSetListener;
-    private DateTimeFormatter formatter;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int day, year, month;
     private String interests;
     private DialogFragment interestFragment;
@@ -76,11 +77,6 @@ public class Info_Profile_Fragment extends Fragment {
         // Inflate the layout for this fragment
         Log.i("INFO", "Creating view for info profile ...");
         view = inflater.inflate(R.layout.profile_info_fragment, container, false);
-        initViews();
-        return view;
-    }
-
-    private void initViews() {
         mEmailTextView = view.findViewById(R.id.profile_email);
         mAgeTextView = view.findViewById(R.id.profile_age);
         mGenderSpinner = view.findViewById(R.id.profile_gender);
@@ -91,30 +87,38 @@ public class Info_Profile_Fragment extends Fragment {
         mBirthdayTextView = view.findViewById(R.id.profile_birthday);
         mInterestsTV = view.findViewById(R.id.profile_interest);
         interestBtn = view.findViewById(R.id.profile_interests_btn);
+        return view;
     }
+
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(mViewModel == null){
-            mViewModel = new ViewModelProvider(getParentFragment()).get(MainPages_MyProfile_ViewModel.class);
+            mViewModel = new ViewModelProvider(requireParentFragment()).get(MainPages_MyProfile_ViewModel.class); //getParentFragment()
         }
+        setRetainInstance(true);
+        Log.e("MyInfo", mViewModel.toString());
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.gender_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGenderSpinner.setAdapter(adapter);
 
-        formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        Log.e("viewmodel info", mViewModel.toString() );
+        UserProfile user = mViewModel.getUserProfile().getValue();
+        mEmailTextView.setText(user.getEmail());
+        mViewModel.setDate(user.getBirthday());
+        mViewModel.setGender(user.getGender().getI());
+        mViewModel.setDescription(user.getDescription());
+
+
 
         mViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
-            Log.e("OnChange", "Info");
-            if(userProfile.getBirthday().toString().isEmpty()){
-                mAgeTextView.setText("0");
-                mBirthdayTextView.setHint("pick your birthday");
-                mBirthdayTextView.setText("");
-            }else{
-                mAgeTextView.setText(Integer.toString(userProfile.getAge()));
-                mBirthdayTextView.setText(formatter.format(userProfile.getBirthday()));
-            }
 
+            if(userProfile == null)
+                return;
+            mAgeTextView.setText(Integer.toString(userProfile.getAge()));
+            mBirthdayTextView.setText(formatter.format(userProfile.getBirthday()));
+            setCurrentGenderSpinner(userProfile);
             if(userProfile.getDescription() == null || userProfile.getDescription().isEmpty())
                 mDescriptionEditText.setHint(R.string.inspirational_quote);
             else mDescriptionEditText.setText(userProfile.getDescription());
@@ -124,56 +128,39 @@ public class Info_Profile_Fragment extends Fragment {
                 mProgressBar.setVisibility(View.VISIBLE);
             else{mProgressBar.setVisibility(View.INVISIBLE);}
         });
-
         mViewModel.getNetworkResponse().observe(getViewLifecycleOwner(), responseEvent -> {
             if(responseEvent.getType() == ResponseEvent.Type.USER_UPDATE){
                 String response = responseEvent.getContentIfNotHandled();
-                if(response != null && response.equals("Created"))
+                if(response != null && response.equals("Created")){
+                    mViewModel.resetLiveData();
                     Snackbar.make(view, "Updated", Snackbar.LENGTH_LONG).show();
+                }
+
                 if(response != null && response.equals("Forbidden"))
                     Snackbar.make(view, "Your changes could not be saved ", Snackbar.LENGTH_LONG).show(); // error textview
             }
         });
-
         mViewModel.getUserProfile().getValue().getUserInterests().observe(getViewLifecycleOwner(), integers -> {
             interests="";
             for(int i=0; i<integers.size();i++)
                 interests += DataRepository_Interest.interests[integers.get(i)] + " ";
-            mInterestsTV.setText(interests);
+            mInterestsTV.setText(interests.toLowerCase());
         });
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        user = mViewModel.getUserProfile().getValue();
-        mEmailTextView.setText(user.getEmail());
-        mAgeTextView.setText(Integer.toString(user.getAge()));
-        mBirthdayTextView.setText(formatter.format(user.getBirthday()));
-
-        mBirthdayTextView.setOnClickListener(new View.OnClickListener() {
+        mGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));//"UTC"
-                if(mBirthdayTextView.getText().toString().isEmpty()){
-                    year = calendar.get(Calendar.YEAR);
-                    month = calendar.get(Calendar.MONTH);
-                    day = calendar.get(Calendar.DAY_OF_MONTH);
-                }else {
-                    year = user.getBirthday().getYear();
-                    month = user.getBirthday().getMonthValue();
-                    day = user.getBirthday().getDayOfMonth();
-                }
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getActivity(),
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mOnDataSetListener, year, month, day);
-                datePickerDialog.getDatePicker().setMinDate(1904);
-                datePickerDialog.getDatePicker().setMaxDate(calendar.getTime().getTime());
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                datePickerDialog.show();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int pos = position+1;
+                if(mViewModel.getUserProfile().getValue().getGender() != null && mViewModel.getUserProfile().getValue().getGender().getI() != pos)
+                    mViewModel.setGender(pos);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+
         mOnDataSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -185,31 +172,53 @@ public class Info_Profile_Fragment extends Fragment {
                     newMonth = "0"+newMonth;
                 Log.e("date", year + " " + day + " " +newMonth);
                 mBirthdayTextView.setText(day + "." + newMonth  + "." + year);
-                mViewModel.setInfoIsEdited(true);
+                mViewModel.setDate(LocalDate.parse(mBirthdayTextView.getText().toString(), formatter));
             }
         };
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.gender_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mGenderSpinner.setAdapter(adapter);
-        setCurrentGenderSpinner(user);
-        mGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mDescriptionEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int pos = position+1;
-                if(mViewModel.getUserProfile().getValue().getGender() != null && mViewModel.getUserProfile().getValue().getGender().getI() != pos)
-                    mViewModel.setInfoIsEdited(true);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String desc = s.toString();
+                mViewModel.setDescription(desc);
 
             }
         });
 
-        if(user.getDescription() == null ||user.getDescription().isEmpty())
-            mDescriptionEditText.setHint(R.string.inspirational_quote);
 
+        mBirthdayTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));//"UTC"
+                if(mBirthdayTextView.getText().toString().isEmpty()){
+                    year = calendar.get(Calendar.YEAR);
+                    month = calendar.get(Calendar.MONTH);
+                    day = calendar.get(Calendar.DAY_OF_MONTH);
+                }else {
+                    year = mViewModel.getUserProfile().getValue().getBirthday().getYear();
+                    month = mViewModel.getUserProfile().getValue().getBirthday().getMonthValue();
+                    day = mViewModel.getUserProfile().getValue().getBirthday().getDayOfMonth();
+                }
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        getActivity(),
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mOnDataSetListener, year, month, day);
+                datePickerDialog.getDatePicker().setMinDate(1904);
+                datePickerDialog.getDatePicker().setMaxDate(calendar.getTime().getTime());
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.show();
+            }
+        });
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,18 +230,41 @@ public class Info_Profile_Fragment extends Fragment {
             public void onClick(View v) {
                 UserProfile currentUser = mViewModel.getUserProfile().getValue();
                 mViewModel.getUserProfile().setValue(currentUser);
-                mViewModel.setUsername(currentUser.getUserName());
-                mViewModel.setLocation(currentUser.getLocation());
-                mViewModel.setInfoIsEdited(false);
+                mViewModel.resetLiveData();
+
             }
         }));
-
         interestBtn.setOnClickListener(v -> {
             interestFragment = new Interest_UpdateUser_Fragment(mViewModel);// Interest_UpdateUser_Fragment.newInstance(mViewModel);
             interestFragment.show(getActivity().getSupportFragmentManager(), INTEREST_FRAGMENT);
         });
 
 
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //Log.e("Info", "onStart");
+
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.e("Info", "onAct");
+        /*
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.gender_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGenderSpinner.setAdapter(adapter);
+
+        setCurrentGenderSpinner(user);
+
+        if(user.getDescription() == null ||user.getDescription().isEmpty())
+            mDescriptionEditText.setHint(R.string.inspirational_quote);
+        */
         /* save configuration if user wants to swap
         if(mViewModel.getInfoIsEdited().getValue()) {
 
@@ -275,12 +307,11 @@ public class Info_Profile_Fragment extends Fragment {
             Snackbar.make(view, "Username cannot be empty",Snackbar.LENGTH_SHORT).show();
             return;
         }
-
         int newGender = mGenderSpinner.getSelectedItemPosition() + 1;
         String newLocation= mViewModel.getLocation().getValue();
         String newUsername = mViewModel.getUsername().getValue();
         String newDescription = mDescriptionEditText.getText().toString();
-        LocalDate newDate = LocalDate.parse(mBirthdayTextView.getText().toString(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        LocalDate newDate = LocalDate.parse(mBirthdayTextView.getText().toString(), formatter);
 
         UserProfile updatedUser = new UserProfile();
         updatedUser.setUserID(mViewModel.getUserProfile().getValue().getUserID());
@@ -291,7 +322,6 @@ public class Info_Profile_Fragment extends Fragment {
         updatedUser.setDescription(newDescription);
 
         mViewModel.updateUserInfo(updatedUser);
-        mViewModel.setInfoIsEdited(false);
     }
 
     private void setCurrentGenderSpinner(UserProfile user){
@@ -314,4 +344,6 @@ public class Info_Profile_Fragment extends Fragment {
         super.onDestroyView();
         Log.i("INFO", "Destroying view for info profile ...");
     }
+
+
 }

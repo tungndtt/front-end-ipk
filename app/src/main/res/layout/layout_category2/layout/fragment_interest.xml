@@ -6,31 +6,12 @@
     android:layout_height="wrap_content"
     tools:context=".Interest_UpdateUser_Fragment">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/interest_backBtn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@color/transparent"
-        android:drawableLeft="@drawable/ic_backspace"
-        app:layout_constraintEnd_toStartOf="@+id/interest_titleTV"
 
-
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/interest_titleTV"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:text="Interest"
-        android:textSize="@dimen/textSize_18"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/interest_backBtn"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include
+        android:id="@+id/interest_toolbar"
+        layout="@layout/toolbar"
+        >
+    </include>
 
     <TextView
         android:id="@+id/interest_descriptionTV"
@@ -43,9 +24,8 @@
         app:layout_constraintBottom_toTopOf="@+id/interest_RV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/interest_titleTV"
+        app:layout_constraintTop_toBottomOf="@id/interest_toolbar"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -96,6 +76,7 @@
 
     <ProgressBar
         android:id="@+id/interest_progressBar"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

@@ -3,6 +3,7 @@
     <style name="Theme.TinTok.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
     </style>
 
     <style name="Theme.TinTok.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

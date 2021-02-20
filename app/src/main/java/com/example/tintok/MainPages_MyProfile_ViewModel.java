@@ -16,9 +16,11 @@ import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.ResponseEvent;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
+import com.example.tintok.Model.UserSimple;
 import com.example.tintok.Utils.FileUtil;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,32 +34,28 @@ import retrofit2.Response;
 
 public class MainPages_MyProfile_ViewModel extends MainPages_Posts_ViewModel {
     MutableLiveData<String> username;
-    MutableLiveData<String> location;
-    MutableLiveData<Boolean> infoIsEdited;
-    MutableLiveData<boolean[]> newUserInterests;
+    MutableLiveData<String> location, description;
+    MutableLiveData<LocalDate> birthday;
+    MutableLiveData<Integer> gender;
+
     public MainPages_MyProfile_ViewModel(@NonNull Application application) {
         super(application);
         username = new MutableLiveData<>();
         location = new MutableLiveData<>();
-        infoIsEdited = new MutableLiveData<>();
-        newUserInterests = new MutableLiveData<>();
-        infoIsEdited.setValue(false);
+        birthday = new MutableLiveData<>();
+        gender = new MutableLiveData<>();
+        description = new MutableLiveData<>();
     }
 
-    public LiveData<boolean[]> getNewUserInterests(){
-        return newUserInterests;
-    }
-    public void setNewUserInterests(boolean[] interests){
-        newUserInterests.setValue(interests);
-    }
 
-    public LiveData<Boolean> getInfoIsEdited() {
-        return infoIsEdited;
+    public void resetLiveData(){
+        UserProfile user = getUserProfile().getValue();
+        setUsername(user.getUserName());
+        setLocation(user.getLocation());
+        setGender(user.getGender().getI());
+        setDate(user.getBirthday());
+        setDescription(user.getDescription());
     }
-    public void setInfoIsEdited(Boolean aBoolean) {
-        infoIsEdited.setValue(aBoolean);
-    }
-
     public LiveData<String> getUsername() {
         return username;
     }
@@ -69,6 +67,24 @@ public class MainPages_MyProfile_ViewModel extends MainPages_Posts_ViewModel {
     }
     public void setLocation(String loc) {
         location.setValue(loc);
+    }
+    public LiveData<String> getDescription() {
+        return description;
+    }
+    public void setDescription(String desc) {
+        description.setValue(desc);
+    }
+    public LiveData<LocalDate> getBirthday() {
+        return birthday;
+    }
+    public void setDate(LocalDate date) {
+        birthday.setValue(date);
+    }
+    public MutableLiveData<Integer> getGender() {
+        return gender;
+    }
+    public void setGender(Integer g) {
+        gender.setValue(g);
     }
 
     public MutableLiveData<ResponseEvent> getNetworkResponse(){

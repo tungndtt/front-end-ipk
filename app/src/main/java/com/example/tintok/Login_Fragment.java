@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -41,6 +43,7 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
     private TextView forget;
     private Login_SignUp_ViewModel viewModel;
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
     public void onStart() {
         super.onStart();
         init();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Tintok");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -59,7 +65,7 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
         loginButton = getView().findViewById(R.id.sign_inButton);
         registerButton = getView().findViewById(R.id.sign_upButton);
         status = getView().findViewById(R.id.status);
-        loadingBar = getView().findViewById(R.id.progressBar);
+        loadingBar = getView().findViewById(R.id.login_progressBar);
         email = getView().findViewById(R.id.emailInput);
         password = getView().findViewById(R.id.passInput);
         forget = getView().findViewById(R.id.forget_account_text);
@@ -111,6 +117,7 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
 
     @Override
     public void requestSuccess() {
+        loadingBar.setVisibility(View.INVISIBLE);
         Intent intent = new Intent(getActivity(), Activity_InitData.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.animation_in, R.anim.animation_out);
@@ -126,7 +133,8 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
 
     @Override
     public void connectionFail() {
+        loadingBar.setVisibility(View.INVISIBLE);
         status.setVisibility(View.VISIBLE);
-        status.setText("Signing in failed");
+        status.setText(R.string.error_connection_failed);
     }
 }

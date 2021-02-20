@@ -90,7 +90,7 @@ public class Profile_Picture_UploadFragment extends MyDialogFragment {
             }
         });
         cancelBtn.setOnClickListener(v -> {
-            mListener.onNewProfilePicture(null);
+            //mListener.onNewProfilePicture(null);
             getDialog().dismiss();
         });
 
@@ -189,7 +189,7 @@ public class Profile_Picture_UploadFragment extends MyDialogFragment {
                     // To dismiss the fragment when the back-button is pressed.
                     dismiss();
                     if(mListener != null)
-                        mListener.onNewProfilePicture(null);
+                        mListener = null;
                     return true;
                 }
                 // Otherwise, do nothing else

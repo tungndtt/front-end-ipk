@@ -21,7 +21,9 @@ import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.DataLayer.DataRepository_Interest;
 import com.example.tintok.DataLayer.ResponseEvent;
 import com.example.tintok.Model.Interest;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -30,12 +32,13 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
 
     private View view;
     private RecyclerView recyclerView;
-    private MaterialButton backBtn, saveBtn;
+    private MaterialButton saveBtn;
     private MainPages_MyProfile_ViewModel mViewModel;
     private InterestAdapter interestAdapter;
     private TextView errorTV;
     private ProgressBar mProgressBar;
     private ArrayList<Integer> result;
+    private MaterialToolbar toolbar;
 
     public Interest_UpdateUser_Fragment(MainPages_MyProfile_ViewModel mViewModel) {
         this.mViewModel = mViewModel;
@@ -58,10 +61,12 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_interest, container, false);
         recyclerView = view.findViewById(R.id.interest_RV);
-        backBtn = view.findViewById(R.id.interest_backBtn);
         saveBtn = view.findViewById(R.id.interest_saveBtn);
         errorTV = view.findViewById(R.id.interest_error);
         mProgressBar = view.findViewById(R.id.interest_progressBar);
+        toolbar = view.findViewById(R.id.interest_toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_backspace);
+        toolbar.setTitle(getResources().getString(R.string.interests));
         return view;
     }
 
@@ -166,7 +171,6 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
 
         DataRepository_Interest.setUserInterest(mViewModel.getUserProfile().getValue().getUserInterests().getValue());
         interestAdapter = new InterestAdapter(getContext(), DataRepository_Interest.getInterestArrayList());
-
         interestAdapter.setOnInterestClickListener(position -> {
             if(!saveBtn.isClickable()){
                 saveBtn.setBackgroundColor(getContext().getColor(R.color.background_black));
@@ -179,32 +183,46 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         saveBtn.setOnClickListener(v -> {
-            result = new ArrayList<>();
-            boolean isEmpty = true;
-            ArrayList<Interest> newChosenInterests = interestAdapter.getItems();
-            for(Interest interest: newChosenInterests){
-                if(interest.isSelected()){
-                    result.add(interest.getId());
-                    isEmpty = false;
-                }
-            }
-            if(isEmpty){
-                errorTV.setText("please choose some interest");
-                errorTV.setVisibility(View.VISIBLE);
-                return;
-            }
-            mViewModel.updateUserInterests(result);
+            if(hasInterests())
+                getDialog().dismiss();
         });
-        saveBtn.setBackgroundColor(getContext().getColor(R.color.green_dark)); //TODO
+        //TODO: background color
+        saveBtn.setBackgroundColor(getContext().getColor(R.color.green_dark));
         saveBtn.setClickable(false);
 
-        //TODO: TOOLBAR
-        backBtn.setOnClickListener(v -> {
-            getDialog().dismiss();
-
+        toolbar.setNavigationOnClickListener(v -> {
+            if(saveBtn.isClickable()){
+                MaterialAlertDialogBuilder alertDialog =  new MaterialAlertDialogBuilder(getActivity());
+                alertDialog.setTitle("Warning")
+                        .setMessage("Your current changes will be lost. Do you want to save?")
+                        .setPositiveButton("Save", (dialog, which) -> {
+                            if(hasInterests())
+                                getDialog().dismiss();})
+                        .setNegativeButton("Don't save", (dialog, which) -> {
+                            getDialog().dismiss();})
+                        .show();
+            }else getDialog().dismiss();
         });
+    }
 
-
+    public boolean hasInterests() {
+        result = new ArrayList<>();
+        boolean isEmpty = true;
+        ArrayList<Interest> newChosenInterests = interestAdapter.getItems();
+        for (Interest interest : newChosenInterests) {
+            if (interest.isSelected()) {
+                result.add(interest.getId());
+                isEmpty = false;
+            }
+        }
+        if (isEmpty) {
+            errorTV.setText(getResources().getString(R.string.interests_pleaseChose));
+            errorTV.setVisibility(View.VISIBLE);
+            return false;
+        } else {
+            mViewModel.updateUserInterests(result);
+            return true;
+        }
     }
 
 

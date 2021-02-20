@@ -142,7 +142,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
         notification = new MainPages_Notification_Fragment();
 
         mediaSurfing = new MainPages_Posts_Fragment(true, true);
-        myHomepage = new MainPages_MyProfile_Fragment(DataRepositoryController.getInstance().getUser().getValue());
+        myHomepage = new MainPages_MyProfile_Fragment();
         password_change_fragment = new Password_Change_Fragment();
 
 

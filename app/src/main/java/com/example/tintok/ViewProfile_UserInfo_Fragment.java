@@ -30,13 +30,16 @@ public class ViewProfile_UserInfo_Fragment extends Fragment {
     private UserProfile user;
     private String interests;
     Activity_ViewProfile_ViewModel mViewModel;
-
+/*
     public ViewProfile_UserInfo_Fragment(Activity_ViewProfile_ViewModel mViewModel) {
             this.mViewModel = mViewModel;
     }
 
-    public static ViewProfile_UserInfo_Fragment getInstance(Activity_ViewProfile_ViewModel mViewModel) {
-        ViewProfile_UserInfo_Fragment fragment = new ViewProfile_UserInfo_Fragment(mViewModel);
+ */
+    public ViewProfile_UserInfo_Fragment(){}
+
+    public static ViewProfile_UserInfo_Fragment getInstance(){ //(Activity_ViewProfile_ViewModel mViewModel) {
+        ViewProfile_UserInfo_Fragment fragment = new ViewProfile_UserInfo_Fragment(); //(mViewModel);
         return fragment;
     }
 
@@ -64,6 +67,7 @@ public class ViewProfile_UserInfo_Fragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if(mViewModel == null)
             mViewModel = new ViewModelProvider(getActivity()).get(Activity_ViewProfile_ViewModel.class);
+        Log.e("viewmodel", mViewModel.toString());
 
     }
 

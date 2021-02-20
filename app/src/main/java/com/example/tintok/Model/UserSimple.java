@@ -89,9 +89,9 @@ public class UserSimple  {
         switch(gender){
             //case 0: this.gender = Gender.UNKNOWN;
             //    break;
-            case 0: this.gender = Gender.MALE;
+            case 1: this.gender = Gender.MALE;
                 break;
-            case 1: this.gender = Gender.FEMALE;
+            case 2: this.gender = Gender.FEMALE;
                 break;
             default: this.gender = Gender.DIVERS;
         }
@@ -104,7 +104,7 @@ public class UserSimple  {
         this.location = location;
     }
     public enum Gender{
-        MALE(0), FEMALE(1), DIVERS(2);
+        MALE(1), FEMALE(2), DIVERS(3);
         private int i;
         Gender(int i) {
             this.i = i;

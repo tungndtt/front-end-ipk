@@ -46,26 +46,17 @@ public class DataRepository_Interest {
     public static ArrayList<Interest> getInterestArrayList() {
         return interestArrayList;
     }
-    public static ArrayList<Interest> getDefaultArrayList(){
-
-        return interestArrayList;
-    }
-
 
     public static void setUserInterest(ArrayList<Integer> userInterest){
         for(Interest interest: interestArrayList){
+            boolean tmp = false;
             for(int i = 0; i < userInterest.size(); i++ ){
                 if(interest.getId() == userInterest.get(i)){
-                    interest.setSelected(true);
+                    tmp = true;
                     break;
                 }
-                else interest.setSelected(false);
-
-
             }
-
+            interest.setSelected(tmp);
         }
     }
-
-
 }

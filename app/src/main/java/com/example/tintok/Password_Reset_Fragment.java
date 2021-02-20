@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -28,6 +30,7 @@ public class Password_Reset_Fragment extends Fragment implements Login_SignUp_Vi
     private TextView mEmailError, mNewPwError, mRetypePwError, mTitleTV;
     private ProgressBar mProgressBar;
     private Login_SignUp_ViewModel viewModel;
+
 
     public Password_Reset_Fragment(Login_SignUp_ViewModel viewModel){
         this.viewModel = viewModel;
@@ -55,9 +58,6 @@ public class Password_Reset_Fragment extends Fragment implements Login_SignUp_Vi
         mCurrentPwEditText.setHint("Email address");
         mCurrentPwEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         //TODO: change ICON
-        mTitleTV.setText("Reset Password");
-
-
 
 
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
@@ -84,17 +84,15 @@ public class Password_Reset_Fragment extends Fragment implements Login_SignUp_Vi
 
             }
         });
-        mBackBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getParentFragmentManager().popBackStack();
-
-
-            }
-        });
-
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Reset Password");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
 
     private void initViews(){
         mCurrentPwEditText = view.findViewById(R.id.reset_pw_oldPW);
@@ -106,10 +104,6 @@ public class Password_Reset_Fragment extends Fragment implements Login_SignUp_Vi
         mEmailError = view.findViewById(R.id.reset_pw_oldPWerror);
         mNewPwError = view.findViewById(R.id.reset_pw_newPWerror);
         mRetypePwError = view.findViewById(R.id.reset_pw_retypePWerror);
-        mBackBtn = view.findViewById(R.id.reset_pw_backBtn);
-        mTitleTV = view.findViewById(R.id.reset_pw_topTV);
-
-
     }
     private void handleInput() {
 

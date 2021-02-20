@@ -32,6 +32,10 @@
     <string name="Gender">Gender</string>
     <string name="options">Options</string>
     <string name="inspirational_quote">insert inspirational quote here</string>
+    <string name="location_hint">your location</string>
+    <string name="interests_clickToChose">click here to choose your interests</string>
+    <string name="interests_pleaseChose">please choose some interest</string>
+    <string name="interests">Interests</string>
 
     <string name="registration_signUp">Signing up...</string>
     <string name="registration_email_sent">Verification mail sent</string>

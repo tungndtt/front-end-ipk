@@ -99,6 +99,7 @@ public class Password_Change_Fragment extends MyDialogFragment {
 
             }
         });
+        /*
         mBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +108,8 @@ public class Password_Change_Fragment extends MyDialogFragment {
 
             }
         });
+
+         */
 
     }
 
@@ -128,7 +131,7 @@ public class Password_Change_Fragment extends MyDialogFragment {
         mCurrentPwError = view.findViewById(R.id.reset_pw_oldPWerror);
         mNewPwError = view.findViewById(R.id.reset_pw_newPWerror);
         mRetypePwError = view.findViewById(R.id.reset_pw_retypePWerror);
-        mBackBtn = view.findViewById(R.id.reset_pw_backBtn);
+    //    mBackBtn = view.findViewById(R.id.reset_pw_backBtn);
 
 
     }
