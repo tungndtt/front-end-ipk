@@ -42,6 +42,9 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     private DialogFragment interestFragment;
     private View view;
 
+    public Sign_up_Fragment(){
+
+    }
 
     public static Sign_up_Fragment newInstance(Login_SignUp_ViewModel viewModel) {
         return new Sign_up_Fragment(viewModel);
@@ -51,10 +54,18 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         this.viewModel = viewModel;
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.e("Sign-Up", "onCreate");
+        setRetainInstance(true);
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.e("onCreateView", "...");
+        Log.e("Sign-UP", "onCreateView");
         view = inflater.inflate(R.layout.sign_up_fragment, container, false);
         registerButton =view.findViewById(R.id.sign_upButton);
         status = view.findViewById(R.id.status);

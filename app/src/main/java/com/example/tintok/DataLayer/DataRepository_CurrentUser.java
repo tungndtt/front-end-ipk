@@ -138,16 +138,15 @@ public class DataRepository_CurrentUser {
     }
     public void updateUserInfo(UserProfile userProfile){
 
-        isUserUpdating.setValue(true);
         RestAPI api = Communication.getInstance().getApi();
-        UserForm userForm = new UserForm(userProfile.getUserName(), "", "");
-        userForm.setId(userProfile.getUserID());
-        userForm.setBirthday(userProfile.getBirthday().toString());
-        userForm.setLocation(userProfile.getLocation());
-        userForm.setDescription(userProfile.getDescription());
-        userForm.setGender(userProfile.getGender().getI());
-
         if(api != null){
+            isUserUpdating.setValue(true);
+            UserForm userForm = new UserForm(userProfile.getUserName(), "", "");
+            userForm.setId(userProfile.getUserID());
+            userForm.setBirthday(userProfile.getBirthday().toString());
+            userForm.setLocation(userProfile.getLocation());
+            userForm.setDescription(userProfile.getDescription());
+            userForm.setGender(userProfile.getGender().getI());
             api.updateUserInfo(userForm).enqueue(new Callback<UserForm>() {
                 @Override
                 public void onResponse(Call<UserForm> call, Response<UserForm> response) {
@@ -207,9 +206,9 @@ public class DataRepository_CurrentUser {
     }
 
     public void submitNewProfilePicture(Context mContext, Post newPost){
-        isUserUpdating.setValue(true);
         RestAPI api = Communication.getInstance().getApi();
         if(api != null){
+            isUserUpdating.setValue(true);
             MultipartBody.Part part = FileUtil.prepareImageFileBody(mContext, "upload", newPost.getImage());
             RequestBody user_id = RequestBody.create(MultipartBody.FORM, newPost.getAuthor_id());
             RequestBody status = RequestBody.create(MultipartBody.FORM, newPost.getStatus());

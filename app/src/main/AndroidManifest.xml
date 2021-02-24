@@ -78,10 +78,12 @@
                 <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </activity>
+        <!-- android:theme="@style/Theme.TinTok.NoActionBar"-->
         <activity
             android:name=".Activity_ChatRoom"
-            android:label="@string/title_activity__chat_room"
-            android:theme="@style/Theme.TinTok.NoActionBar">
+            android:label="@string/title_activity__chat_room">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

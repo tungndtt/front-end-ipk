@@ -32,6 +32,10 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
         return new Login_Fragment(viewModel);
     }
 
+    public Login_Fragment(){
+
+    }
+
     public Login_Fragment(Login_SignUp_ViewModel viewModel){
         this.viewModel = viewModel;
     }
@@ -40,8 +44,10 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
     private ProgressBar loadingBar;
     private TextView status;
     private EditText email,password;
-    private TextView forget;
+    private TextView forget, privacy;
     private Login_SignUp_ViewModel viewModel;
+    private Privacy_Fragment privacyFragment;
+
 
 
     @Override
@@ -69,6 +75,7 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
         email = getView().findViewById(R.id.emailInput);
         password = getView().findViewById(R.id.passInput);
         forget = getView().findViewById(R.id.forget_account_text);
+        privacy = getView().findViewById(R.id.login_privacy_policy);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -89,6 +96,11 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
                 getParentFragmentManager().beginTransaction().replace(R.id.fragment, Password_Reset_Fragment.newInstance(viewModel)).addToBackStack("Login").commit();
                 //getParentFragmentManager().beginTransaction().replace(R.id.fragment, ForgetPasswordFragment.newInstance(viewModel)).addToBackStack("Login").commit();
             }
+        });
+        privacy.setOnClickListener(v -> {
+            if(privacyFragment == null)
+                privacyFragment = Privacy_Fragment.newInstance();
+            privacyFragment.show(getActivity().getSupportFragmentManager(), "privacy_fragment");
         });
     }
 

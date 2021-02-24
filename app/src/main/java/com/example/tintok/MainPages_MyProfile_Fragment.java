@@ -66,7 +66,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
     private int selected;
 
 
-    private ImageView profilePic;
+    private ImageView profilePic, miniProfilePic;
     private View newPostBtn;
     private TextView followingNumber, followerNumber;
     private EditText username, location;
@@ -123,11 +123,13 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         profilePic = view.findViewById(R.id.post_profile);
         followingNumber = view.findViewById(R.id.followingsNumber);
         followerNumber = view.findViewById(R.id.follwersNumber);
-        backBtn = view.findViewById(R.id.backBtn);
+      //  backBtn = view.findViewById(R.id.backBtn);
         location = view.findViewById(R.id.profile_location);
         toolbar = view.findViewById(R.id.myProfile_toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_backspace);
+     //   toolbar.setNavigationIcon(R.drawable.ic_backspace);
+        miniProfilePic = view.findViewById(R.id.mini_post_profile_picture);
         //toolbar.setTitle("");
+
 
         profile_navigation_bar = view.findViewById(R.id.profile_navigation_bar);
         profile_navigation_bar.setSelectedItemId(this.selected);
@@ -226,12 +228,15 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             }
         });
 
+        /*
         backBtn.setOnClickListener(v -> {
             if(isUserEdited()){
                 getBackButtonAlertBuilder().show();
             }
             else getDialog().dismiss();
         });
+
+         */
         profilePic.setOnClickListener(v -> {
             Profile_Picture_BottomSheet profilePictureBottomSheet = new Profile_Picture_BottomSheet();
             profilePictureBottomSheet.show(getActivity().getSupportFragmentManager(), BOTTOM_SHEET);
@@ -299,13 +304,14 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         mViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
             if (userProfile == null)
                 return;
-            toolbar.setTitle(userProfile.getUserName().toUpperCase());
             username.setText(userProfile.getUserName().toUpperCase());
             if(userProfile.getLocation() == null || userProfile.getLocation().isEmpty())
                 location.setHint(getResources().getString(R.string.location_hint).toUpperCase());
             else location.setText(userProfile.getLocation().toUpperCase());
             Glide.with(this.getContext()).load(userProfile.getProfilePic().url)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
+            Glide.with(this.getContext()).load(userProfile.getProfilePic().url)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(miniProfilePic);
             followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));
             followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));
         });

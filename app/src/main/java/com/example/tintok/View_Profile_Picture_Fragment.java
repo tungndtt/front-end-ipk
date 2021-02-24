@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -20,15 +21,15 @@ import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
+import com.google.android.material.appbar.MaterialToolbar;
 
 
 public class View_Profile_Picture_Fragment extends MyDialogFragment {
 
-
-    MainPages_MyProfile_ViewModel mViewModel;
     private TextView mName, mStatus;
     private ImageView mImage;
     private View view;
+    private MaterialToolbar toolbar;
 
     public View_Profile_Picture_Fragment() {
         // Required empty public constructor
@@ -53,6 +54,11 @@ public class View_Profile_Picture_Fragment extends MyDialogFragment {
         mName = view.findViewById(R.id.picture_view_nameTV);
         mStatus = view.findViewById(R.id.picture_view_status);
         mImage = view.findViewById(R.id.picture_view_image);
+        toolbar = view.findViewById(R.id.picture_view_toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_backspace);
+        toolbar.setNavigationOnClickListener(v -> {
+            getDialog().dismiss();
+        });
         return view;
     }
 

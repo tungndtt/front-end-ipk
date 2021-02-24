@@ -34,13 +34,16 @@ public class DataRepository_Interest {
     public static ArrayList<Interest> interestArrayList = new ArrayList<Interest>();
     public static void initInterestArrayList(){
         if(interestArrayList.size() == 0) {
-            interestArrayList.add(new Interest(0, R.drawable.ic_edit, interests[0]));          //GAMING
-            interestArrayList.add(new Interest(1,R.drawable.ic_arrow_send, interests[1]));    //READING
-            interestArrayList.add(new Interest(2,R.drawable.ic_close, interests[2]));         //TRAVELLING
-            interestArrayList.add(new Interest(3,R.drawable.ic_key, interests[3]));           //SPORT
-            interestArrayList.add(new Interest(4,R.drawable.ic_backspace, interests[4]));     //SHOPPING
-            interestArrayList.add(new Interest(5,R.drawable.ic_backspace, interests[5]));     //LEARNING
-            interestArrayList.add(new Interest(6,R.drawable.ic_backspace, interests[6]));     //GOSSIP
+            interestArrayList.add(new Interest(0, R.drawable.ic_esports_24, interests[0]));          //GAMING
+            interestArrayList.add(new Interest(1,R.drawable.ic_reading_24, interests[1]));    //READING
+            interestArrayList.add(new Interest(2,R.drawable.ic_travel_24, interests[2]));         //TRAVELLING
+            interestArrayList.add(new Interest(3,R.drawable.ic_sports_basketball_24, interests[3]));           //SPORT
+            interestArrayList.add(new Interest(4,R.drawable.ic_shopping_24, interests[4]));     //SHOPPING
+            interestArrayList.add(new Interest(5,R.drawable.ic_school_24, interests[5]));     //LEARNING
+            interestArrayList.add(new Interest(6,R.drawable.ic_groups_24, interests[6]));     //GOSSIP
+          //  interestArrayList.add(new Interest(6,R.drawable.ic_music_24, interests[6]));     //music
+          //  interestArrayList.add(new Interest(6,R.drawable.ic_party_24, interests[6]));     //party
+
         }
     }
     public static ArrayList<Interest> getInterestArrayList() {

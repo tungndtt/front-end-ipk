@@ -55,7 +55,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     DrawerLayout drawerLayout;
     GestureDetector mGestureDetector;
     Fragment mediaSurfing, notification, messages;
-    DialogFragment peopleBrowsing, myHomepage, password_change_fragment;
+    DialogFragment peopleBrowsing, myHomepage, password_change_fragment, privacyFragment;
     boolean isOnDialogFragment;
     Fragment current;
 
@@ -64,7 +64,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     //GUI state
     int unseenNotifications;
     int unseenChatrooms;
-
+    public static final String ITEM_PRIVACY = "privacy_policy_fragment";
     public static final String ITEM_MATCHING_PEOPLE = "matching_people";
     public static final String ITEM_POSTS = "posts";
     public static final String ITEM_NOTIFICATIONS = "notifications";
@@ -185,6 +185,13 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
                 case R.id.change_password:
                     drawerLayout.closeDrawer(GravityCompat.START, false);
                     password_change_fragment.show(getSupportFragmentManager(), "PASSWORD_CHANGE_FRAGMENT");
+                    break;
+                case R.id.privacy_policy_item:
+                    if(privacyFragment == null)
+                        privacyFragment = new Privacy_Fragment();
+                    privacyFragment.show(getSupportFragmentManager(), ITEM_PRIVACY);
+                    break;
+
             }
             return true;
         });

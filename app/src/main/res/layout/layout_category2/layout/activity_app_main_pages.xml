@@ -34,6 +34,7 @@
                         android:id="@+id/actionBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/toolbar_background"
                         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/profileBtn"
@@ -41,7 +42,7 @@
                             android:layout_height="40dp"
                             android:layout_marginEnd="10dp"
                             android:layout_marginVertical="2dp"
-                            android:src="@drawable/ic_info"
+                            android:src="@drawable/ic_person_24"
                             android:scaleType="fitXY"
                             android:layout_gravity="right|center_vertical" />
                         <com.google.android.material.imageview.ShapeableImageView
@@ -50,7 +51,7 @@
                             android:layout_height="40dp"
                             android:layout_marginEnd="10dp"
                             android:layout_marginVertical="2dp"
-                            android:src="@drawable/ic_info"
+                            android:src="@drawable/ic_group_add_24"
                             android:scaleType="fitXY"
                             android:layout_gravity="right|center_vertical"/>
 

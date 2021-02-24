@@ -20,16 +20,20 @@ public class Activity_Login_Signup extends AppCompatActivity {
     public final String ID = "Login" ;
     private Login_SignUp_ViewModel viewModel;
     MaterialToolbar toolbar;
+
+    public Activity_Login_Signup() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("Activity_Login_Signup", "onCreate");
         setContentView(R.layout.activity_login_signup);
         toolbar =  findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
         Communication.getInstance();
         this.viewModel = new ViewModelProvider(this).get(Login_SignUp_ViewModel.class);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, Login_Fragment.newInstance(viewModel)).commit();
-
     }
 
     @Override

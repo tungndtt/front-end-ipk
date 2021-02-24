@@ -25,6 +25,7 @@ import com.example.tintok.Adapters_ViewHolder.InterestTagAdapter;
 import com.example.tintok.DataLayer.DataRepository_Interest;
 import com.example.tintok.DataLayer.DataRepository_MatchingPeople;
 import com.example.tintok.R;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.slider.LabelFormatter;
@@ -54,6 +55,7 @@ public class FilterDialogFragment extends DialogFragment {
     RecyclerView interestTag;
     FilterState currentFilterState;
     MaterialButton cancelBtn, applyBtn, resetBtn;
+    private MaterialToolbar toolbar;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -64,14 +66,17 @@ public class FilterDialogFragment extends DialogFragment {
         ageSlider = view.findViewById(R.id.rangeSlider);
         interestTag = view.findViewById(R.id.interestTag);
         applyBtn = view.findViewById(R.id.applyFilterBtn);
-        cancelBtn = view.findViewById(R.id.cancelBtn);
-        resetBtn = view.findViewById(R.id.resetBtn);
+        toolbar = view.findViewById(R.id.filter_toolbar);
+        toolbar.setTitle("Matching-Filter");
+       // cancelBtn = view.findViewById(R.id.cancelFilterBtn);
+        resetBtn = view.findViewById(R.id.resetFilterBtn);
         Log.e("filter","onCreateView");
         initComponents();
 
         resetBtn.setOnClickListener(v -> {
             resetFilter();
         });
+
     }
 
     @Override
@@ -165,10 +170,10 @@ public class FilterDialogFragment extends DialogFragment {
             mListener.onFilterApplyListener(currentFilterState);
             getDialog().dismiss();
         });
-        cancelBtn.setOnClickListener(v -> {
+        toolbar.setNavigationOnClickListener(v -> {
+            Log.e("toolbar", "called");
             mListener.onFilterApplyListener(null);
             getDialog().dismiss();
-
         });
     }
 

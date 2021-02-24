@@ -17,10 +17,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.DataLayer.ResponseEvent;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -35,6 +37,7 @@ public class Password_Change_Fragment extends MyDialogFragment {
     private TextView mCurrentPwError, mNewPwError, mRetypePwError;
     private ProgressBar mProgressBar;
     MainPages_MyProfile_ViewModel mViewModel;
+    MaterialToolbar toolbar;
 
     public Password_Change_Fragment(){
 
@@ -55,24 +58,23 @@ public class Password_Change_Fragment extends MyDialogFragment {
             mViewModel = new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class);
 
         mViewModel.getNetworkResponse().observe(this, responseEvent -> {  // = null or string
-          //  Log.e("RE", responseEvent.getContentIfNotHandled());
             if(responseEvent.getType() == ResponseEvent.Type.PASSWORD){
                 String response = responseEvent.getContentIfNotHandled(); // null or String
                 if(response != null && response.equals("Created")){
-                    Log.e("pw", "updated");
+                    resetUserInput();
                    // Snackbar.make(getActivity().getSupportFragmentManager().findFragmentById(.).getView(), "Updated", Snackbar.LENGTH_LONG);
                     //getActivity().getSupportFragmentManager().findFragmentById(R.id.mainPageContent).getView();
                     Snackbar.make(getView(), "Updated", Snackbar.LENGTH_LONG).show();
-
                 }
                 if(response != null && response.equals("Forbidden")){
-                    Log.e("pw", "wrong");
                     mCurrentPwError.setVisibility(View.VISIBLE);
                 }
-
             }
-
-
+        });
+        mViewModel.getIsUserUpdating().observe(this, aBoolean -> {
+            if(aBoolean)
+                mProgressBar.setVisibility(View.VISIBLE);
+            else mProgressBar.setVisibility(View.INVISIBLE);
         });
 
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
@@ -82,35 +84,15 @@ public class Password_Change_Fragment extends MyDialogFragment {
                 mCurrentPwError.setVisibility(View.INVISIBLE);
                 mNewPwError.setVisibility(View.INVISIBLE);
                 mRetypePwError.setVisibility(View.INVISIBLE);
-
                 handleInput();
             }
         });
         mCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                mCurrentPwError.setVisibility(View.INVISIBLE);
-                mNewPwError.setVisibility(View.INVISIBLE);
-                mRetypePwError.setVisibility(View.INVISIBLE);
-                mCurrentPwEditText.setText("");
-                mNewPwEditText.setText("");
-                mRetypePWEditText.setText("");
-
+               resetUserInput();
             }
         });
-        /*
-        mBackBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-
-
-            }
-        });
-
-         */
-
     }
 
 
@@ -131,7 +113,13 @@ public class Password_Change_Fragment extends MyDialogFragment {
         mCurrentPwError = view.findViewById(R.id.reset_pw_oldPWerror);
         mNewPwError = view.findViewById(R.id.reset_pw_newPWerror);
         mRetypePwError = view.findViewById(R.id.reset_pw_retypePWerror);
-    //    mBackBtn = view.findViewById(R.id.reset_pw_backBtn);
+        toolbar = view.findViewById(R.id.reset_pw_toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle("Change Password");
+        toolbar.setNavigationOnClickListener(v -> {
+          //  getActivity().onBackPressed();
+            dismiss();
+        });
 
 
     }
@@ -150,7 +138,7 @@ public class Password_Change_Fragment extends MyDialogFragment {
             return;
         }
         if(mCurrentPwEditText.getText().toString().equals(newPW)){
-            mNewPwError.setText("Your passwords have to be different");
+            mNewPwError.setText(getResources().getString(R.string.error_password_newPwMustDiffer));
             mNewPwError.setVisibility(View.VISIBLE);
             return;
         }
@@ -161,9 +149,17 @@ public class Password_Change_Fragment extends MyDialogFragment {
         }
 
         List<String> passwords = Arrays.asList(currentPW, newPW);
-        //hideKeyboard();
         mViewModel.changePassword(passwords);
 
+    }
+
+    private void resetUserInput(){
+        mCurrentPwError.setVisibility(View.INVISIBLE);
+        mNewPwError.setVisibility(View.INVISIBLE);
+        mRetypePwError.setVisibility(View.INVISIBLE);
+        mCurrentPwEditText.setText("");
+        mNewPwEditText.setText("");
+        mRetypePWEditText.setText("");
     }
 
 

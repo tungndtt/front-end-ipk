@@ -1,77 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
-    <RelativeLayout
-        android:id="@+id/line0"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancelBtn"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_close"
-            android:background="@color/transparent"
-            android:drawableTint="@color/black"
-            app:strokeColor="@color/black"
-            app:strokeWidth="10dp"
-            />
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="FILTER"
-            android:textColor = "@color/black"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true">
-        </com.google.android.material.textview.MaterialTextView>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/resetBtn"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_key"
-            android:background="@color/transparent"
-            android:drawableTint="@color/black"
-            app:strokeColor="@color/black"
-            app:strokeWidth="10dp"
-            android:layout_alignParentEnd="true"
-            />
-    </RelativeLayout>
+    >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.8dp"
-        android:background="@color/light_black"
-    android:layout_below="@+id/line0"></View>
+    <include
+        android:id="@+id/filter_toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></include>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/filter_nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/line0"
-        android:layout_above="@id/applyFilterBtn"
         android:fillViewport="true"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filter_toolbar">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:id="@+id/line1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginHorizontal="5dp">
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp">
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/checkbox_byname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
                     android:text="Filter By Name">
 
                 </com.google.android.material.checkbox.MaterialCheckBox>
@@ -83,8 +53,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_toRightOf="@id/checkbox_byname"
                     app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
-                    >
+                    app:boxStrokeWidthFocused="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/filterByName"
@@ -106,11 +75,12 @@
                 android:id="@+id/line2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line1"
-                android:layout_marginTop="10dp"
-                android:layout_marginHorizontal="5dp">
+                app:layout_constraintTop_toBottomOf="@id/line1">
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/gender"
                     android:layout_width="wrap_content"
@@ -118,66 +88,69 @@
                     android:background="@color/transparent"
                     android:drawableLeft="@drawable/ic_info"
                     android:text="Gender"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
+
                 <RadioGroup
                     android:id="@+id/gender_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/gender"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_below="@id/gender"
-                    android:orientation="horizontal"
-                    android:gravity="center_horizontal"
                     android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
                     <RadioButton
                         android:id="@+id/option_male"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:button="@drawable/custombutton"
+                        android:layout_marginHorizontal="10dp"
                         android:background="@drawable/custombutton"
-                        android:text="Male"
+                        android:button="@drawable/custombutton"
                         android:gravity="center"
-                        android:layout_marginHorizontal="10dp"></RadioButton>
+                        android:text="Male"></RadioButton>
 
                     <RadioButton
                         android:id="@+id/option_female"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:button="@drawable/custombutton"
+                        android:layout_marginHorizontal="10dp"
                         android:background="@drawable/custombutton"
-                        android:text="Female"
+                        android:button="@drawable/custombutton"
                         android:gravity="center"
-                        android:layout_marginHorizontal="10dp"></RadioButton>
+                        android:text="Female"></RadioButton>
 
                     <RadioButton
                         android:id="@+id/option_both"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:button="@drawable/custombutton"
-                        android:background="@drawable/custombutton"
-                        android:text="Both"
-                        android:gravity="center"
                         android:layout_marginHorizontal="10dp"
-                        android:checked="true"></RadioButton>
+                        android:background="@drawable/custombutton"
+                        android:button="@drawable/custombutton"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="Both"></RadioButton>
                 </RadioGroup>
             </RelativeLayout>
 
             <View
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.8dp"
-                android:background="@color/light_black"
-                ></View>
+                android:layout_marginTop="10dp"
+                android:background="@color/light_black"></View>
+
             <RelativeLayout
                 android:id="@+id/line3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line2"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="5dp">
+                app:layout_constraintTop_toBottomOf="@id/line2">
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/age"
                     android:layout_width="wrap_content"
@@ -185,32 +158,34 @@
                     android:background="@color/transparent"
                     android:drawableLeft="@drawable/ic_info"
                     android:text="Age"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/age">
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/minAge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="MinAge"
                         android:layout_marginLeft="50dp"
-                        android:textColor="@color/black"/>
+                        android:text="MinAge"
+                        android:textColor="@color/black" />
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/divider"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" - "
                         android:layout_toEndOf="@id/minAge"
-                        />
+                        android:text=" - " />
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/maxAge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="maxAge"
                         android:layout_toEndOf="@id/divider"
+                        android:text="maxAge"
                         android:textColor="@color/black"></com.google.android.material.textview.MaterialTextView>
 
                 </RelativeLayout>
@@ -218,28 +193,29 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:layout_below="@id/age"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="10dp"
+                    android:text="0" />
+
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="150"
                     android:layout_below="@id/age"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginRight="10dp"
-                    android:layout_alignParentEnd="true"/>
+                    android:text="150" />
 
                 <com.google.android.material.slider.RangeSlider
                     android:id="@+id/rangeSlider"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/age"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="2dp"
                     android:valueFrom="0"
                     android:valueTo="150"
-                    app:values="@array/initial_slider_values"
-                    android:layout_marginHorizontal="10dp"
-                    app:labelBehavior="withinBounds">
+                    app:labelBehavior="withinBounds"
+                    app:values="@array/initial_slider_values">
 
                 </com.google.android.material.slider.RangeSlider>
 
@@ -249,11 +225,11 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.8dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/light_black"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line3"
-                android:layout_marginTop="10dp"></View>
+                app:layout_constraintTop_toBottomOf="@id/line3"></View>
 
             <RelativeLayout
                 android:id="@+id/line4"
@@ -280,25 +256,55 @@
                     android:id="@+id/interestTag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/interest"
-                    android:layout_marginTop="5dp"
-                     />
+                    android:layout_below="@+id/interest"
 
+                    android:layout_marginTop="4dp" />
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.8dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/light_black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line4"></View>
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/applyFilterBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:backgroundTint="@color/endColor_background"
         android:text="APPLY FILTER"
-        android:backgroundTint="@color/blue"
-        android:layout_marginHorizontal="20dp"
-        android:layout_alignParentBottom="true"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/resetFilterBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filter_nestedScrollView"
+
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/resetFilterBtn"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="4dp"
+        android:text="Reset Filter"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/applyFilterBtn"
+        app:strokeColor="@color/startColor_background"
+
         />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

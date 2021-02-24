@@ -2,6 +2,7 @@ package com.example.tintok.CustomView;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -35,6 +36,8 @@ import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
 import com.example.tintok.R;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -42,7 +45,8 @@ public class PostUploadFragment extends MyDialogFragment {
 
     private EditTextSupportIME status;
     private ImageView image;
-
+    private MaterialToolbar toolbar;
+    private View view;
     MediaEntity chosenImage;
 
     // Code for get image from gallery
@@ -55,7 +59,7 @@ public class PostUploadFragment extends MyDialogFragment {
     public PostUploadFragment(onNewPostListener mListner){
         this.mListner = mListner;
     }
-
+/*
     @Override
     public void onResume() {
         super.onResume();
@@ -68,9 +72,7 @@ public class PostUploadFragment extends MyDialogFragment {
                 if ((keyCode ==  android.view.KeyEvent.KEYCODE_BACK))
                 {
                     // To dismiss the fragment when the back-button is pressed.
-                    dismiss();
-                    if(mListner != null)
-                        mListner.onNewPost(null);
+                    onCancel();
                     return true;
                 }
                 // Otherwise, do nothing else
@@ -79,16 +81,33 @@ public class PostUploadFragment extends MyDialogFragment {
         });
     }
 
+ */
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), getTheme()){
+            @Override
+            public void onBackPressed() {
+                onCancel();
+            }
+        };
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.post_upload_fragment, container, false);
+        view = inflater.inflate(R.layout.post_upload_fragment, container, false);
+        status = view.findViewById(R.id.new_post_status);
+        image = view.findViewById(R.id.new_post_image);
+        toolbar = view.findViewById(R.id.new_post_toolbar);
+        toolbar.setTitle("Create post");
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Toolbar toolbar = (Toolbar) getView().findViewById(R.id.new_post_activity_toolbar);
+
 
         String[] colors = {"Gallery", "Camera"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
@@ -100,10 +119,10 @@ public class PostUploadFragment extends MyDialogFragment {
                 askForPermission(REQUEST_CAMERA);
         });
 
-        this.status = getView().findViewById(R.id.new_post_status);
-        this.image = getView().findViewById(R.id.new_post_image);
-
         this.image.setOnClickListener(v -> builder.show());
+        toolbar.setNavigationOnClickListener(v -> {
+            onCancel();
+        });
 
         Button postBtn = getView().findViewById(R.id.new_post_submit);
         postBtn.setOnClickListener(v -> {
@@ -116,12 +135,6 @@ public class PostUploadFragment extends MyDialogFragment {
            } else {
                Toast.makeText(getContext(), "No image chosen", Toast.LENGTH_LONG).show();
            }
-        });
-
-        Button cancelBtn = getView().findViewById(R.id.cancelPost);
-        cancelBtn.setOnClickListener(v -> {
-            mListner.onNewPost(null);
-            getDialog().dismiss();
         });
 
         status.setKeyBoardInputCallbackListener((inputContentInfo, flags, opts) -> {
@@ -201,5 +214,23 @@ public class PostUploadFragment extends MyDialogFragment {
     public interface onNewPostListener {
        public void onNewPost(Post newPost);
 
+    }
+    public void onCancel(){
+        if(chosenImage != null || status == null || !status.getText().toString().isEmpty()){
+            MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(getContext());
+            alertBuilder.setCancelable(true)
+                    .setMessage("Your post will be discarded. Do you want to continue?")
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        dialog.cancel();})
+                    .setPositiveButton("Continue", (dialog, which) -> {
+                        if(mListner != null)
+                            mListner.onNewPost(null);
+                        dismiss();
+                    })
+                    .show();
+        }else if(mListner != null){
+            mListner.onNewPost(null);
+            dismiss();
+        }else dismiss();
     }
 }

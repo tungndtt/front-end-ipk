@@ -93,7 +93,7 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
                     return;
                 if(message.equals("Created")){
                     Snackbar.make(getActivity().getSupportFragmentManager().findFragmentByTag("MyProfile").getView(), "Updated", Snackbar.LENGTH_LONG).show();
-                    dismiss();
+                    getDialog().dismiss();
                 }
                 if(message.equals("forbidden"));
                     errorTV.setText("You can only change your interests every 30 minutes.");
@@ -183,8 +183,11 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         saveBtn.setOnClickListener(v -> {
-            if(hasInterests())
+            hasInterests();
+            /*if(hasInterests())
                 getDialog().dismiss();
+
+             */
         });
         //TODO: background color
         saveBtn.setBackgroundColor(getContext().getColor(R.color.green_dark));
@@ -196,15 +199,18 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
                 alertDialog.setTitle("Warning")
                         .setMessage("Your current changes will be lost. Do you want to save?")
                         .setPositiveButton("Save", (dialog, which) -> {
-                            if(hasInterests())
-                                getDialog().dismiss();})
+                            hasInterests();
+                            /*hasInterests())
+                                getDialog().dismiss();*/
+                                })
+
                         .setNegativeButton("Don't save", (dialog, which) -> {
                             getDialog().dismiss();})
                         .show();
             }else getDialog().dismiss();
         });
     }
-
+/*
     public boolean hasInterests() {
         result = new ArrayList<>();
         boolean isEmpty = true;
@@ -222,6 +228,25 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
         } else {
             mViewModel.updateUserInterests(result);
             return true;
+        }
+    }*/
+    public void hasInterests() {
+        result = new ArrayList<>();
+        boolean isEmpty = true;
+        ArrayList<Interest> newChosenInterests = interestAdapter.getItems();
+        for (Interest interest : newChosenInterests) {
+            if (interest.isSelected()) {
+                result.add(interest.getId());
+                isEmpty = false;
+            }
+        }
+        if (isEmpty) {
+            errorTV.setText(getResources().getString(R.string.interests_pleaseChose));
+            errorTV.setVisibility(View.VISIBLE);
+            return;
+        } else {
+            mViewModel.updateUserInterests(result);
+            ;
         }
     }
 

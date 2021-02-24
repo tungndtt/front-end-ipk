@@ -110,7 +110,6 @@ public class Interests_SignUp_Fragment extends MyDialogFragment {
         recyclerView.setNestedScrollingEnabled(false);
 
         toolbar.setTitle("Interests");
-        toolbar.setNavigationIcon(R.drawable.ic_backspace);
         toolbar.setNavigationOnClickListener(v -> {
             if(saveBtn.isClickable()){
                 MaterialAlertDialogBuilder alertDialog =  new MaterialAlertDialogBuilder(getActivity());

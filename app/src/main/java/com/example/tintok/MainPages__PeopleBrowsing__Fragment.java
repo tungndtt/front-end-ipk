@@ -31,6 +31,7 @@ import com.example.tintok.CustomView.FilterDialogFragment;
 import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.CustomView.Refreshable;
 import com.example.tintok.Model.UserSimple;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
@@ -48,7 +49,7 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
 
     private MainPages_PeopleBrowsing_ViewModel  mViewModel;
     MaterialButton filterBtn;
-
+    MaterialToolbar toolbar;
     private int currentItem = 0;
     private int offScreenPageLimit = 2;
 
@@ -85,14 +86,21 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
         mViewModel.getMatchingPeople().observe(this.getViewLifecycleOwner(), userSimples -> {
             adapter.setItems(userSimples);
         });
-        filterBtn = view.findViewById(R.id.filterBtn);
+        toolbar = view.findViewById(R.id.people_matching_toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            getDialog().dismiss();
+        });
+        filterBtn = toolbar.findViewById(R.id.filterBtn);
         filterBtn.setOnClickListener(v -> {
             handleFilterBtnClicked();
         });
+        /*
         backBtn = view.findViewById(R.id.backBtn);
         backBtn.setOnClickListener(v -> {
-            getDialog().dismiss();
+
         });
+
+         */
         initCardView(view);
         initButtonGroup(view);
     }

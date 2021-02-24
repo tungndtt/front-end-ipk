@@ -14,4 +14,7 @@
     <color name = "blue">#3B56DC</color>
     <color name = "light_black">#4D000000</color>
     <color name="green_dark">#153716</color>
+    <color name="startColor_background">#ffcd9bbe</color>
+    <color name="centerColor_background">#d9a365d7</color>
+    <color name="endColor_background">#E97530E2</color>
 </resources>

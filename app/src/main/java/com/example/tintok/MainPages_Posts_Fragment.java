@@ -39,6 +39,9 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
         this.allowViewCmt = allowViewCmt;
         this.allowViewAuthorProfile = allowViewAuthorProfile;
     }
+    public MainPages_Posts_Fragment(){
+
+    }
 
 
     public void setViewModel(MainPages_Posts_ViewModel mViewModel){
@@ -66,7 +69,6 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
         mViewModel.getPosts().observe(this.getViewLifecycleOwner(), posts -> {
             postAdapter.setItems(posts);
         });
-
         Log.i("INFO", "OnActivityCreated fragment for post fragment ...");
     }
 

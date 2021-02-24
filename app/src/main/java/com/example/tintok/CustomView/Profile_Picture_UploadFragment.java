@@ -28,14 +28,16 @@ import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
 import com.example.tintok.R;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class Profile_Picture_UploadFragment extends MyDialogFragment {
 
     private EditTextSupportIME status;
     private ImageView image;
     private MediaEntity chosenImage;
-    private Button saveBtn, cancelBtn;
+    private Button saveBtn;
     private View view;
+    private MaterialToolbar toolbar;
 
 
     // Code for get image from gallery
@@ -55,7 +57,8 @@ public class Profile_Picture_UploadFragment extends MyDialogFragment {
         status = view.findViewById(R.id.new_post_status);
         image = view.findViewById(R.id.new_post_image);
         saveBtn = view.findViewById(R.id.new_post_submit);
-        cancelBtn = view.findViewById(R.id.cancelPost);
+        toolbar = view.findViewById(R.id.new_post_toolbar);
+        toolbar.setTitle("New Profile Picture");
         return view;
     }
 
@@ -63,7 +66,6 @@ public class Profile_Picture_UploadFragment extends MyDialogFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Toolbar toolbar = (Toolbar) getView().findViewById(R.id.new_post_activity_toolbar);
 
         String[] colors = {"Gallery", "Camera"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
@@ -89,10 +91,11 @@ public class Profile_Picture_UploadFragment extends MyDialogFragment {
                 Toast.makeText(getContext(), "No image chosen", Toast.LENGTH_LONG).show();
             }
         });
-        cancelBtn.setOnClickListener(v -> {
-            //mListener.onNewProfilePicture(null);
+        //TODO: Alert Dialog
+        toolbar.setNavigationOnClickListener(v -> {
             getDialog().dismiss();
         });
+
 
         status.setKeyBoardInputCallbackListener((inputContentInfo, flags, opts) -> {
             Uri imgUri = inputContentInfo.getContentUri();

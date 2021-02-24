@@ -31,6 +31,7 @@ import com.example.tintok.Adapters_ViewHolder.PostAdapter;
 import com.example.tintok.CustomView.PostUploadFragment;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
@@ -47,8 +48,9 @@ public class Activity_ViewProfile extends AppCompatActivity{
     private TextView followingNumber, followerNumber;
     private MaterialButton followBtn, messageBtn;
     BottomNavigationView profile_navigation_bar;
-    View_Profile_Picture_Fragment viewProfilePictureFragment;
+    private View_Profile_Picture_Fragment viewProfilePictureFragment;
     Fragment postFragment;
+    MaterialToolbar toolbar;
 
     @SuppressLint("ResourceAsColor")
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -64,6 +66,10 @@ public class Activity_ViewProfile extends AppCompatActivity{
         followerNumber = findViewById(R.id.follwersNumber);
         followBtn = findViewById(R.id.followBtn);
         messageBtn = findViewById(R.id.messageBtn);
+        toolbar = findViewById(R.id.view_profile_toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
 
         profile_navigation_bar = findViewById(R.id.profile_navigation_bar);
         profile_navigation_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -84,7 +90,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
         this.viewModel.getUserProfile(author_id);
         Log.e("Act", viewModel.toString());
         infoFragment = ViewProfile_UserInfo_Fragment.getInstance();//(viewModel);//Info_Profile_Fragment.getInstance();
-
+       // imageFragment = ViewProfile_UserImages_Fragment.getInstance();
         this.selected = R.id.profile_info_item;
         profile_navigation_bar.setSelectedItemId( this.selected);
 
@@ -124,7 +130,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
             username.setText(userProfile.getUserName());
             Glide.with(this).load(userProfile.getProfilePic().url)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profile_pic);
-            imageFragment = Image_Profile_Fragment.getInstance();//viewModel.getProfile().getValue().myPosts.getValue());
+            imageFragment = ViewProfile_UserImages_Fragment.getInstance();//viewModel.getProfile().getValue().myPosts.getValue());
             initPosts();
 
             followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));

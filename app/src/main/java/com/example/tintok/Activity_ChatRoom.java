@@ -30,6 +30,7 @@ import com.example.tintok.Utils.AppNotificationChannelManager;
 import com.example.tintok.Utils.CustomItemAnimator;
 import com.example.tintok.Utils.EmoticonHandler;
 import com.example.tintok.Utils.FileUtil;
+import com.google.android.material.appbar.MaterialToolbar;
 
 
 import androidx.annotation.NonNull;
@@ -50,6 +51,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -58,6 +60,8 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
     //const
     private String roomID="";
     Activity_Chatroom_ViewModel mViewModel;
+    MaterialToolbar toolbar;
+    private TextView mProfileName;
 
     private final static int ALL_PERMISSIONS_RESULT = 107;
     private final static int PICK_FROM_GALLERY = 101;
@@ -109,13 +113,20 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
         emojiButton = findViewById(R.id.openEmojibtn);
         cameraBtn = findViewById(R.id.cameraBtn);
         galleryImgButton = findViewById(R.id.sendImgbtn);
-        profileImg = findViewById(R.id.profileImg);
+
         sendBtn = findViewById(R.id.sendButton);
 
+        toolbar =  findViewById(R.id.chatroom_toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+                finish(); //onBackPressed();
+        });
+
+        profileImg = toolbar.findViewById(R.id.profileImg);
+        mProfileName = toolbar.findViewById(R.id.chatroom_profile_name);
         nextMsg.requestFocus();
 
         profileImg.setOnClickListener(v -> {
-            //goToProfilePage
+            //TODO: goToProfilePage
         });
 
         emojiButton.setOnClickListener(v -> {
@@ -283,9 +294,12 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
 
     @Override
     public void onProfileChange(UserSimple user) {
-        if(mViewModel.getOtherUser().compareTo(user.getUserID())==0)
+        if(mViewModel.getOtherUser().compareTo(user.getUserID())==0){
             Glide.with(this).load(user.getProfilePic().url)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profileImg);
+            mProfileName.setText(user.getUserName());
+        }
+
     }
 
     @Override
@@ -295,6 +309,7 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
         UserSimple user = mViewModel.getUserbyID(mViewModel.getOtherUser());
         Glide.with(this).load(user.getProfilePic().url)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profileImg);
+        mProfileName.setText(user.getUserName());
         if(!this.roomID.isEmpty())
             this.mViewModel.joinChatRoom(this.roomID);
         else{

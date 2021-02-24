@@ -54,6 +54,7 @@ import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserSimple;
 import com.example.tintok.Utils.AppNotificationChannelManager;
 import com.example.tintok.Utils.EmoticonHandler;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
@@ -76,6 +77,7 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
     ImageView choosenImage;
     ImageButton deleteChoosenImg;
     EmoticonHandler mEmoHandler;
+    MaterialToolbar toolbar;
 
     private TextView nComment, nLike, status, author;
     private ImageView iv, notificationIcon, profile;
@@ -138,6 +140,10 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
 
         deleteChoosenImg.setOnClickListener(v -> onImageRemove());
 
+        toolbar = findViewById(R.id.comment_toolbar).findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
 
         nextMsg.requestFocus();
 
