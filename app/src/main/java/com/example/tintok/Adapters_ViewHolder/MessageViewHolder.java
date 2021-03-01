@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.tintok.App;
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.MediaEntity;
@@ -80,7 +81,7 @@ public class MessageViewHolder extends BaseViewHolder<MessageEntity> implements 
         }
 
         else{
-            view.setBackgroundResource(R.drawable.message_background_me);
+            view.setBackgroundResource(R.drawable.message_background_user);//view.setBackgroundResource(R.drawable.message_background_me);
 
             leftSide.setVisibility(View.GONE);
             messageLayout.setGravity(Gravity.RIGHT);

@@ -57,7 +57,7 @@ public class Password_Reset_Fragment extends Fragment implements Login_SignUp_Vi
             viewModel = new ViewModelProvider(this).get(Login_SignUp_ViewModel.class);
         mCurrentPwEditText.setHint("Email address");
         mCurrentPwEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        //TODO: change ICON
+        mCurrentPwEditText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email_black_24, 0, 0, 0);
 
 
         mSaveBtn.setOnClickListener(new View.OnClickListener() {

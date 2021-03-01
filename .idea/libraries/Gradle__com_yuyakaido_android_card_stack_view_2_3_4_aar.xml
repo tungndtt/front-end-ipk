@@ -2,8 +2,8 @@
   <library name="Gradle: com.yuyakaido.android:card-stack-view:2.3.4@aar">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f3f6b783048a29b76204b351e547c855/jetified-card-stack-view-2.3.4/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f3f6b783048a29b76204b351e547c855/jetified-card-stack-view-2.3.4/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f3f6b783048a29b76204b351e547c855/jetified-card-stack-view-2.3.4/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f3f6b783048a29b76204b351e547c855/jetified-card-stack-view-2.3.4/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.yuyakaido.android/card-stack-view/2.3.4/90814797968c9160098b3ceb1e1dfe1ece3968d1/card-stack-view-2.3.4-javadoc.jar!/" />

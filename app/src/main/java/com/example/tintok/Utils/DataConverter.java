@@ -33,7 +33,7 @@ public class DataConverter {
             UserSimple user = new UserSimple();
             user.setUserID(f.getId());
             user.setUserName(f.getUsername());
-            user.setDescription(""); //TODO: f.getDescription() ?
+            user.setDescription(f.getDescription()); //TODO: f.getDescription() ?
             user.setEmail(f.getEmail());
             user.setProfilePic(new MediaEntity(null, f.getImageUrl()));
             user.setBirthday(DateTimeUtil.getDateFromString(f.getBirthday()).toLocalDate());

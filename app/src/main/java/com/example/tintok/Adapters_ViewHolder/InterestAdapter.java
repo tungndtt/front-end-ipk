@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.example.tintok.Model.Interest;
 import com.example.tintok.R;
@@ -54,10 +55,11 @@ public class InterestAdapter extends BaseAdapter<Interest, InterestAdapter.ViewH
         }
         public void updateColor(Interest interest){
             if(interest.isSelected()){
-                cardView.setBackgroundResource(R.drawable.interest_background);
+                cardView.setCardBackgroundColor(getContext().getColor(R.color.startColor));
             }
             else {
-                cardView.setBackgroundResource(R.color.transparent);
+                cardView.setCardBackgroundColor(getContext().getColor(R.color.transparent));
+                cardView.setCardElevation(0);
             }
         }
         @Override

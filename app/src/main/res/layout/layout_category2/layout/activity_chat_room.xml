@@ -6,14 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity_Login_Signup"
-    android:background="@drawable/chatroom_background">
+    android:background="@drawable/test_himmbelau_salbei_reverse"> <!--@drawable/chatroom_background -->
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/chatroom_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@drawable/toolbar_background"
-        android:elevation="4dp"
         android:theme="@style/Theme.TinTok"
         app:titleMarginStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
@@ -45,17 +43,16 @@
                 android:layout_marginStart="8dp"
                 android:textSize="@dimen/textSize_18"
                 android:textStyle="bold"
+                android:textColor="@color/white"
 
                 />
     </com.google.android.material.appbar.MaterialToolbar>
-
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:paddingVertical="10dp"
@@ -193,7 +190,7 @@
                 android:id="@+id/sendButton"
                 android:scaleType="center"
                 android:src="@drawable/ic_send"
-                android:background="@color/transparent"></ImageButton>
+                android:background="@color/primaryColor"></ImageButton>
 
         </androidx.cardview.widget.CardView>
 

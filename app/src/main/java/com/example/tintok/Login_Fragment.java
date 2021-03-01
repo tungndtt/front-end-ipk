@@ -61,7 +61,7 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
     public void onStart() {
         super.onStart();
         init();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Tintok");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("TINTOK");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
     }

@@ -94,14 +94,15 @@
             android:name=".Activity_AppMainPages"
             android:label="@string/title_activity_app_main_pages"
             android:launchMode="singleTask"
-            android:theme="@style/MainPageTheme">
+         >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity_Login_Signup">
+        <activity android:name=".Activity_Login_Signup"
+        >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

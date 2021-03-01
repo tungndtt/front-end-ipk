@@ -36,7 +36,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterDialogFragment extends DialogFragment {
+public class FilterDialogFragment extends MyDialogFragment {
     public FilterDialogFragment(FilterState filterState, onFilterApplyListener mListener){
         this.currentFilterState = filterState;
         this.mListener = mListener;
@@ -85,6 +85,7 @@ public class FilterDialogFragment extends DialogFragment {
         Log.e("filter","onActivView");
     }
 
+    /*
     @Override
     public void onStart() {
         super.onStart();
@@ -95,6 +96,8 @@ public class FilterDialogFragment extends DialogFragment {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
     }
+
+     */
 
     public void resetFilter(){
         currentFilterState = new FilterState();

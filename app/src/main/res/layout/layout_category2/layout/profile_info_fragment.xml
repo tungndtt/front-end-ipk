@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/profile_email_text"
         style="@style/info_textview_style"
-        android:text="Email"
+        android:text="@string/email"
         app:layout_constraintBottom_toTopOf="@+id/profile_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -18,7 +18,7 @@
     <TextView
         android:id="@+id/profile_email"
         style="@style/info_sub_textview_style"
-        android:text="a@test.com"
+        tools:text="a@test.com"
 
         app:layout_constraintBottom_toTopOf="@+id/divider_0"
         app:layout_constraintEnd_toEndOf="@+id/profile_email_text"
@@ -38,7 +38,7 @@
     <TextView
         android:id="@+id/profile_age_text"
         style="@style/info_textview_style"
-        android:text="Age"
+        android:text="@string/age"
         app:layout_constraintBottom_toTopOf="@+id/profile_age"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -48,7 +48,7 @@
     <TextView
         android:id="@+id/profile_age"
         style="@style/info_sub_textview_style"
-        android:text="age"
+        tools:text="Age"
 
         app:layout_constraintBottom_toTopOf="@+id/profile_birthday"
         app:layout_constraintEnd_toEndOf="@+id/profile_age_text"
@@ -81,7 +81,7 @@
     <TextView
         android:id="@+id/profile_gender_text"
         style="@style/info_textview_style"
-        android:text="Gender"
+        android:text="@string/Gender"
         app:layout_constraintBottom_toTopOf="@+id/profile_gender"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -125,7 +125,7 @@
     <TextView
         android:id="@+id/profile_description_text"
         style="@style/info_textview_style"
-        android:text="Description"
+        android:text="@string/description"
         app:layout_constraintBottom_toTopOf="@+id/profile_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -139,8 +139,7 @@
         tools:text="0123456789012345678901234567890123456789"
         android:maxLength="40"
         android:layout_width="0dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginHorizontal="16dp"
         android:gravity="center"
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/divider_3"
@@ -161,50 +160,53 @@
     <TextView
         android:id="@+id/profile_interest_text"
         style="@style/info_textview_style"
-        android:text="Interest"
-        app:layout_constraintBottom_toTopOf="@+id/profile_interest"
+        android:text="@string/interests"
+        app:layout_constraintBottom_toTopOf="@+id/profile_interest_addBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider_3" />
 
+    <TextView
+        android:id="@+id/profile_interest_addBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        android:textAllCaps="true"
+        android:textColor="@color/primaryColor"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+        app:layout_constraintTop_toBottomOf="@id/profile_interest_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@id/profile_interest"
+        />
 
     <TextView
         android:id="@+id/profile_interest"
         style="@style/info_sub_textview_style"
         android:layout_width="0dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp"
+        android:layout_marginHorizontal="16dp"
         android:gravity="center"
         tools:text="interests"
         app:layout_constraintBottom_toTopOf="@+id/profile_edit_profile_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_interest_text" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_interest_addBtn" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/profile_interests_btn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/profile_interest"
-        app:layout_constraintTop_toBottomOf="@id/profile_interest_text"
-
-
-        />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/profile_edit_profile_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="16dp"
 
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
         android:drawableLeft="@drawable/ic_edit"
-        android:text="Edit Profile"
+        android:text="@string/edit_profile"
 
         app:layout_constraintBottom_toTopOf="@+id/profile_cancel_profile_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -214,14 +216,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/profile_cancel_profile_button"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
-
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
-        android:text="cancel"
+        android:layout_marginVertical="4dp"
+        android:layout_marginHorizontal="16dp"
+        style="?attr/materialButtonOutlinedStyle"
+        android:text="@string/cancel"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -240,5 +240,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

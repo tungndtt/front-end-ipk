@@ -17,4 +17,20 @@
     <color name="startColor_background">#ffcd9bbe</color>
     <color name="centerColor_background">#d9a365d7</color>
     <color name="endColor_background">#E97530E2</color>
+    <color name="primaryOnColor">#FFFFFFFF</color>
+    <color name="startColor">#81b7d2</color>
+    <color name="salmon">#ff9a8d</color>
+
+    <color name="tertiaryColor">#daf2dc</color>
+    <color name="darkBlue">#000c4c</color>
+    <color name="primaryColor">#303179</color>
+    <color name="primaryLightColor">#605aa9</color>
+    <color name="primaryDarkColor">#303179</color> <!--#000c4c -->
+    <color name="secondaryColor">#81b7d2</color>
+    <color name="secondaryLightColor">#b3e9ff</color>
+    <color name="secondaryDarkColor">#5087a1</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#000000</color>
+    <color name="onSurface">#daf2dc</color>
+
 </resources>

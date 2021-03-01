@@ -8,7 +8,7 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/myProfile"
-        android:icon="@drawable/ic_info"
+        android:icon="@drawable/ic_person_salmon_24"
         android:title="myProfile"
         app:showAsAction="always"
         />

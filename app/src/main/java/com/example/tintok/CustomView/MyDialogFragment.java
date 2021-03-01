@@ -20,9 +20,12 @@ public class MyDialogFragment extends DialogFragment {
         Window window = getDialog().getWindow();
         window.setGravity(Gravity.FILL);
         window.setWindowAnimations(R.style.MyAnimation_Window);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS|WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
     }
 
     @Override

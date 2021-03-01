@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/view_profile_age_title"
         style="@style/info_textview_style"
-        android:text="Age"
+        android:text="@string/age"
         app:layout_constraintBottom_toTopOf="@+id/view_profile_age"
         app:layout_constraintEnd_toEndOf="parent"
 
@@ -50,7 +50,7 @@
     <TextView
         android:id="@+id/view_profile_gender_title"
         style="@style/info_textview_style"
-        android:text="Gender"
+        android:text="@string/Gender"
         app:layout_constraintBottom_toTopOf="@+id/view_profile_gender"
         app:layout_constraintEnd_toEndOf="parent"
 
@@ -80,7 +80,7 @@
     <TextView
         android:id="@+id/view_profile_description_title"
         style="@style/info_textview_style"
-        android:text="Description"
+        android:text="@string/description"
         app:layout_constraintBottom_toTopOf="@+id/view_profile_description"
         app:layout_constraintEnd_toEndOf="parent"
 
@@ -109,7 +109,7 @@
     <TextView
         android:id="@+id/view_profile_interest_title"
         style="@style/info_textview_style"
-        android:text="Interest"
+        android:text="@string/interests"
         app:layout_constraintBottom_toTopOf="@+id/view_profile_interest"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

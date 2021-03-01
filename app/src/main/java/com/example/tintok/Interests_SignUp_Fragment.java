@@ -80,9 +80,8 @@ public class Interests_SignUp_Fragment extends MyDialogFragment {
         DataRepository_Interest.setUserInterest(mViewModel.getChosenInterests().getValue());
         interestAdapter = new InterestAdapter(this.getContext(), DataRepository_Interest.getInterestArrayList());
         interestAdapter.setOnInterestClickListener(position -> {
-            if(!saveBtn.isClickable()){
-                saveBtn.setBackgroundColor(getContext().getColor(R.color.background_black));
-                saveBtn.setClickable(true);
+            if(!saveBtn.isEnabled()){
+                saveBtn.setEnabled(true);
             }
             interestAdapter.getItems().get(position).setSelected(!(interestAdapter.getItems().get(position).isSelected()));
         });
@@ -111,7 +110,7 @@ public class Interests_SignUp_Fragment extends MyDialogFragment {
 
         toolbar.setTitle("Interests");
         toolbar.setNavigationOnClickListener(v -> {
-            if(saveBtn.isClickable()){
+            if(saveBtn.isEnabled()){
                 MaterialAlertDialogBuilder alertDialog =  new MaterialAlertDialogBuilder(getActivity());
                 alertDialog.setTitle("Warning")
                         .setMessage("Your current changes will be lost. Do you want to save?")
@@ -123,8 +122,7 @@ public class Interests_SignUp_Fragment extends MyDialogFragment {
                         .show();
             }else getDialog().dismiss();
         });
-        saveBtn.setBackgroundColor(getContext().getColor(R.color.green_dark));
-        saveBtn.setClickable(false);
+        saveBtn.setEnabled(false);
     }
 
     public boolean hasInterests() {

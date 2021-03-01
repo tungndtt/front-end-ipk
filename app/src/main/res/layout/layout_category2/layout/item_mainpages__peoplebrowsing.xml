@@ -26,8 +26,14 @@
         <ImageView
             android:id="@+id/profileimage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="TODO" />
+            android:layout_height="0dp"
+            android:contentDescription="TODO"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/profilename"
+
+            />
 
         <ImageView
             android:id="@+id/likeImg"
@@ -66,29 +72,48 @@
             android:id="@+id/profilename"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="4dp"
             android:text="Name, Age"
             android:background="@color/transparent"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/profileDes"
-            app:layout_constraintHorizontal_bias="0.501"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize_18"
+            app:layout_constraintBottom_toTopOf="@+id/browsing_age"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileimage"/>
+
+        <TextView
+            android:id="@+id/browsing_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="25"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/profileDes"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profilename"
+            />
 
         <TextView
             android:id="@+id/profileDes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:layout_marginBottom="12dp"
             android:background="@color/transparent"
-            android:textColor="@android:color/white"
+            android:textColor="@color/black"
             android:scrollbars="vertical"
             android:text="Description xx\n\n\n\n"
             android:maxLines="3"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/profileimage"
+            app:layout_constraintHorizontal_bias="0.5"
+
+            app:layout_constraintTop_toBottomOf="@id/browsing_age"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 

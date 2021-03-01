@@ -12,7 +12,7 @@
         layout="@layout/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></include>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/filter_nestedScrollView"
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
                     android:drawableLeft="@drawable/ic_info"
-                    android:text="Gender"
+                    android:text="@string/Gender"
                     android:textColor="@color/black" />
 
                 <RadioGroup
@@ -102,7 +102,7 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <RadioButton
+                    <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/option_male"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
@@ -110,9 +110,9 @@
                         android:background="@drawable/custombutton"
                         android:button="@drawable/custombutton"
                         android:gravity="center"
-                        android:text="Male"></RadioButton>
+                        android:text="@string/male"/>
 
-                    <RadioButton
+                    <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/option_female"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
@@ -120,9 +120,9 @@
                         android:background="@drawable/custombutton"
                         android:button="@drawable/custombutton"
                         android:gravity="center"
-                        android:text="Female"></RadioButton>
+                        android:text="@string/female"/>
 
-                    <RadioButton
+                    <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/option_both"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
                         android:button="@drawable/custombutton"
                         android:checked="true"
                         android:gravity="center"
-                        android:text="Both"></RadioButton>
+                        android:text="Both"/>
                 </RadioGroup>
             </RelativeLayout>
 
@@ -157,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
                     android:drawableLeft="@drawable/ic_info"
-                    android:text="Age"
+                    android:text="@string/age"
                     android:textColor="@color/black" />
 
                 <RelativeLayout
@@ -249,7 +249,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
                     android:drawableLeft="@drawable/ic_info"
-                    android:text="Interest"
+                    android:text="@string/interests"
                     android:textColor="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -278,10 +278,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:backgroundTint="@color/endColor_background"
-        android:text="APPLY FILTER"
-        android:textColor="@color/black"
+        android:text="@string/apply_filter"
         app:layout_constraintBottom_toTopOf="@id/resetFilterBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -295,15 +292,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="4dp"
-        android:text="Reset Filter"
-        android:textColor="@color/black"
+        android:layout_marginVertical="4dp"
+        android:text="@string/reset_filter"
         app:backgroundTint="@color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/applyFilterBtn"
-        app:strokeColor="@color/startColor_background"
+        app:strokeColor="@color/secondaryLightColor"
 
         />
 

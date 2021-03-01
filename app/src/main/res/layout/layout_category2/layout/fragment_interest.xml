@@ -7,11 +7,23 @@
     tools:context=".Interest_UpdateUser_Fragment">
 
 
-    <include
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/interest_toolbar"
-        layout="@layout/toolbar"
-        >
-    </include>
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:titleMarginStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:navigationIcon="@drawable/ic_backspace"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/MaterialToolbar"
+        > <!--
+     android:background="@color/primaryColor"
+     app:Theme="@style/MaterialToolbar"
+    -->
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <TextView
         android:id="@+id/interest_descriptionTV"
@@ -65,12 +77,11 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="50dp"
-        android:text="Save"
-        android:state_checked="true"
+        android:text="@string/save"
+        style="@style/ButtonColorStates"
         android:textSize="@dimen/textSize_16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/interest_error" />
 

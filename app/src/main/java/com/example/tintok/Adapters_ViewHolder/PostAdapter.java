@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
@@ -93,7 +94,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
             this.nComment = itemView.findViewById(R.id.post_numberOfComment);
             this.nCommentText = itemView.findViewById(R.id.post_comment);
 
-            cardView.setBackgroundResource(R.drawable.post_background);
+           cardView.setBackgroundResource(R.drawable.post_background_2);
 
             /*cardView.setOnClickListener((v) ->{
                 cardView.toggle();
@@ -199,10 +200,15 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
 
         private void updateLikeBtn(){
             if(isLiked()){
-                likeBtn.setBackgroundResource(R.color.blue);
+              //  likeBtn.setBackgroundDrawable(R.color.primaryColor);
+                likeBtn.setTextColor(getContext().getColor(R.color.salmon));
+                likeBtn.setBackgroundResource(R.color.transparent);
+                likeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_salmon_24, 0, 0, 0);
             }
             else{
+                likeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0);
                 likeBtn.setBackgroundResource(R.color.transparent);
+                likeBtn.setTextColor(getContext().getColor(R.color.black));
             }
         }
 

@@ -42,12 +42,12 @@ public class Info_Profile_Fragment extends Fragment {
 
     public static final String INTEREST_FRAGMENT = "interest_fragment";
     private MainPages_MyProfile_ViewModel mViewModel;
-    private TextView mEmailTextView, mAgeTextView, mBirthdayTextView, mInterestsTV;
+    private TextView mEmailTextView, mAgeTextView, mBirthdayTextView, mInterestsTV, interestBtn;
     private Spinner mGenderSpinner;
     private EditText mDescriptionEditText;
     View view;
     private ProgressBar mProgressBar;
-    private MaterialButton saveBtn, cancelBtn, interestBtn;
+    private MaterialButton saveBtn, cancelBtn;
     private DatePickerDialog.OnDateSetListener  mOnDataSetListener;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private int day, year, month;
@@ -86,7 +86,7 @@ public class Info_Profile_Fragment extends Fragment {
         cancelBtn = view.findViewById(R.id.profile_cancel_profile_button);
         mBirthdayTextView = view.findViewById(R.id.profile_birthday);
         mInterestsTV = view.findViewById(R.id.profile_interest);
-        interestBtn = view.findViewById(R.id.profile_interests_btn);
+        interestBtn = view.findViewById(R.id.profile_interest_addBtn);
         return view;
     }
 

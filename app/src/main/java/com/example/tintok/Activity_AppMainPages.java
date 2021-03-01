@@ -97,7 +97,8 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     private void initActionBar() {
         setSupportActionBar(findViewById(R.id.actionBar));
 
-        getSupportActionBar().setTitle(HtmlCompat.fromHtml("<font color=\"black\"><b>"+getString(R.string.app_name) + "</b></font>",HtmlCompat.FROM_HTML_MODE_LEGACY));
+        //getSupportActionBar().setTitle(HtmlCompat.fromHtml("<font color=\"black\"><b>"+getString(R.string.app_name) + "</b></font>",HtmlCompat.FROM_HTML_MODE_LEGACY));
+        getSupportActionBar().setTitle(getString(R.string.app_name_tintok));
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

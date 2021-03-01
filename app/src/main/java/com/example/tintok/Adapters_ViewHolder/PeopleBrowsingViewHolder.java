@@ -22,7 +22,7 @@ import com.yuyakaido.android.cardstackview.Direction;
 
 
 public class PeopleBrowsingViewHolder extends BaseViewHolder<UserSimple> {
-    TextView name, description;
+    TextView name, description, age;
     ImageView imageView, likeImg, dislikeImg;
     ScaleGestureDetector gestureDetector;
     Matrix mMatrix = new Matrix();
@@ -34,6 +34,7 @@ public class PeopleBrowsingViewHolder extends BaseViewHolder<UserSimple> {
         imageView = itemView.findViewById(R.id.profileimage);
         likeImg = itemView.findViewById(R.id.likeImg);
         dislikeImg = itemView.findViewById(R.id.dislikeImg);
+        age = itemView.findViewById(R.id.browsing_age);
 
         gestureDetector = new ScaleGestureDetector(itemView.getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener(){
             @Override
@@ -67,6 +68,7 @@ public class PeopleBrowsingViewHolder extends BaseViewHolder<UserSimple> {
         dislikeImg.setVisibility(View.INVISIBLE);
         likeImg.setVisibility(View.INVISIBLE);
         name.setText(itemData.getUserName());
+        age.setText(String.valueOf(itemData.getAge()));
         description.setText(itemData.getDescription());
         Glide.with(mAdapter.getContext()).load(itemData.getProfilePic().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(imageView);
     }

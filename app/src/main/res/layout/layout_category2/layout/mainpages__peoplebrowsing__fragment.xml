@@ -9,7 +9,7 @@
         android:id="@+id/people_matching_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@drawable/toolbar_background"
+        android:background="@color/primaryColor"
         android:elevation="4dp"
         android:theme="@style/Theme.TinTok"
         app:titleMarginStart="0dp"
@@ -21,10 +21,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/filterBtn"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add New Filter"
                 android:layout_gravity="center"
+                android:elevation="0dp"
                 >
             </com.google.android.material.button.MaterialButton>
 
