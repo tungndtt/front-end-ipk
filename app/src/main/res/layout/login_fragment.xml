@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns="http://schemas.android.com/apk/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbars="vertical">
 
     <EditText
         android:id="@+id/emailInput"

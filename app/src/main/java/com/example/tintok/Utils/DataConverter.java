@@ -1,5 +1,7 @@
 package com.example.tintok.Utils;
 
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.example.tintok.Communication.RestAPI_model.PostForm;
@@ -8,6 +10,7 @@ import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 import com.example.tintok.Model.UserSimple;
+import com.example.tintok.R;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

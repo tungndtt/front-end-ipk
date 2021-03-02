@@ -23,6 +23,7 @@ public class MediaEntity {
         this.url = url;
     }
 
+
     public MediaEntity(Bitmap bitmap){
         this.bitmap = bitmap;
         this.uri = null;

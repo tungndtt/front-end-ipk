@@ -69,7 +69,7 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         view = inflater.inflate(R.layout.sign_up_fragment, container, false);
         registerButton =view.findViewById(R.id.sign_upButton);
         status = view.findViewById(R.id.status);
-        loadingBar = view.findViewById(R.id.progressBar);
+        loadingBar = view.findViewById(R.id.sign_up_progressBar);
         name = view.findViewById(R.id.nameInput);
         email = view.findViewById(R.id.emailInput);
         password = view.findViewById(R.id.passInput);
