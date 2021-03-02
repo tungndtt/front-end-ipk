@@ -101,6 +101,7 @@ public class DataRepository_Notifications {
 
         socket.on(CommunicationEvent.MATCHING_NOTIFICATION, args -> {
             String author_id = (String) args[0];
+            Log.e("DataRepoNoti", "matching: "+author_id);
             Notification newNoti = new Notification(Notification.NotificationType.NEW_FRIEND, LocalDateTime.now(), author_id ,
                     null, null, null, null);
             ArrayList<Notification> notis = notifications.getValue();

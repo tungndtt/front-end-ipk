@@ -12,8 +12,10 @@ import com.example.tintok.Model.UserProfile;
 import com.example.tintok.Model.UserSimple;
 import com.example.tintok.R;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -22,7 +24,8 @@ public class DataConverter {
         ArrayList<Post> result = new ArrayList<>();
         if(received == null) return result;
         for(PostForm postForm: received){
-            Post e = new Post(postForm.getId(), postForm.getStatus(),postForm.getAuthor_id(), new MediaEntity(postForm.getImageUrl()));
+            Post e = new Post(postForm.getId(), postForm.getStatus(),postForm.getAuthor_id(), new MediaEntity(postForm.getImageUrl()),
+                    Instant.ofEpochMilli(postForm.getDate()).atZone(ZoneId.systemDefault()).toLocalDateTime());
             e.likers = postForm.getLikes() == null?new ArrayList<>():postForm.getLikes();
             result.add(e);
         }
@@ -58,7 +61,8 @@ public class DataConverter {
         currUser.userInterests.postValue(form.getInterests());//setUserInterests(form.getInterests()); //LIVEDATA
         ArrayList<Post> photos = currUser.getMyPosts().getValue();
         for(PostForm post : form.getPosts()){
-            Post tmp = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), new MediaEntity(post.getImageUrl()));
+            Post tmp = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), new MediaEntity(post.getImageUrl()),
+                    Instant.ofEpochMilli(post.getDate()).atZone(ZoneId.systemDefault()).toLocalDateTime());
             tmp.likers = post.getLikes() == null?new ArrayList<>():post.getLikes();
             photos.add(tmp);
         }

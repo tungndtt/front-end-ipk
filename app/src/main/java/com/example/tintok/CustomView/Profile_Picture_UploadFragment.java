@@ -30,6 +30,8 @@ import com.example.tintok.Model.Post;
 import com.example.tintok.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.time.LocalDateTime;
+
 public class Profile_Picture_UploadFragment extends MyDialogFragment {
 
     private EditTextSupportIME status;
@@ -83,7 +85,7 @@ public class Profile_Picture_UploadFragment extends MyDialogFragment {
             if(chosenImage != null){
                 Post mPost = new Post("", status.getText().toString(),
                         DataRepositoryController.getInstance().getUser().getValue().getUserID(),
-                        chosenImage );
+                        chosenImage, LocalDateTime.now());
                 mListener.onNewProfilePicture(mPost);
 
                 getDialog().dismiss();

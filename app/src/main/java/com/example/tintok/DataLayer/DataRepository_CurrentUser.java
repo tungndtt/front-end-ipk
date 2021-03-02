@@ -58,6 +58,7 @@ public class DataRepository_CurrentUser {
                     UserProfile currUser = DataConverter.ConvertToUserProfile(form);
                     currentUser.postValue( currUser);
                     lastSeen = form.getTime();
+                    Log.e("DataRepoUser", "lastSeen :"+ form.getTime());
                 } else {
                     Log.e("Info", "Response fails");
                 }

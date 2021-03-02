@@ -247,6 +247,7 @@ public class FilterDialogFragment extends MyDialogFragment {
                 FilterState ob = (FilterState) obj;
                 if(! (name.compareTo(ob.name) == 0 && minAge == ob.minAge && maxAge == ob.maxAge
                         && gender == ob.gender) ) return false;
+
                 for(int i = 0; i< ob.interestBitmap.length;i++){
                     if(interestBitmap[i] != ob.getInterestBitmap()[i])
                         return false;

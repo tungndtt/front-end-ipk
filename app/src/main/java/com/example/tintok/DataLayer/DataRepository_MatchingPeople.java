@@ -58,8 +58,9 @@ public class DataRepository_MatchingPeople {
         current.clear();
         ArrayList<UserSimple> newData = DataConverter.ConvertFromUserFormToSimple(users);
         for(UserSimple user : newData){
-            if(!current.contains(user))
-                current.add(user);
+            if(current.contains(user))
+                current.remove(user);
+            current.add(user);
         }
         this.matchingPeople.postValue(current);
     }
@@ -97,7 +98,6 @@ public class DataRepository_MatchingPeople {
             this.initData();
             return;
         }
-
         RestAPI api = Communication.getInstance().getApi();
         if(api != null){
             api.getFilteredUser(PeopleFilterRequest.fromFilterState(f)).enqueue(new Callback<ArrayList<UserForm>>() {

@@ -33,8 +33,9 @@ public class MainPages_PeopleBrowsing_ViewModel extends AndroidViewModel {
     }
 
     public void submitFilter(FilterDialogFragment.FilterState currentState) {
-        if(currentState.equals(new FilterDialogFragment.FilterState()))
+        if(currentState.equals(new FilterDialogFragment.FilterState())){
             currentState = null;
+        }
         DataRepositoryController.getInstance().findPeoplewithFilter(currentState);
     }
 

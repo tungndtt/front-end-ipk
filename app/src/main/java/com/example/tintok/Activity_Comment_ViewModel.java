@@ -127,7 +127,8 @@ public class Activity_Comment_ViewModel extends MainPages_Posts_ViewModel{
                     }
                     listComments.postValue(mComments);
                     PostForm p = response.body();
-                    Post post = new Post(post_id, p.getStatus(), p.getAuthor_id(), new MediaEntity(p.getImageUrl()));
+                    Post post = new Post(post_id, p.getStatus(), p.getAuthor_id(), new MediaEntity(p.getImageUrl()),
+                            Instant.ofEpochMilli(p.getDate()).atZone(ZoneId.systemDefault()).toLocalDateTime());
                     post.likers = p.getLikes() == null?new ArrayList<>():p.getLikes();
                     ArrayList<Post> posts = new ArrayList<>();
                     post.comments = listComments;

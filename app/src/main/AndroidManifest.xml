@@ -41,7 +41,6 @@
         android:theme="@style/Theme.TinTok"
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateHidden"
-
         >
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
@@ -49,7 +48,8 @@
         -->
         <activity
             android:name=".Activity_Comment"
-            android:label="@string/title_activity__comment">
+            android:label="@string/title_activity__comment"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,7 +62,8 @@
         -->
         <activity
             android:name=".Activity_InitData"
-            android:label="@string/title_activity__init_data">
+            android:label="@string/title_activity__init_data"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -71,7 +72,8 @@
         </activity>
         <activity
             android:name=".Activity_ViewProfile"
-            android:label="@string/title_activity__view_profile">
+            android:label="@string/title_activity__view_profile"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -81,9 +83,8 @@
         <!-- android:theme="@style/Theme.TinTok.NoActionBar"-->
         <activity
             android:name=".Activity_ChatRoom"
-            android:label="@string/title_activity__chat_room">
-
-
+            android:label="@string/title_activity__chat_room"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -94,6 +95,7 @@
             android:name=".Activity_AppMainPages"
             android:label="@string/title_activity_app_main_pages"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
          >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -102,7 +104,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity_Login_Signup"
-        >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

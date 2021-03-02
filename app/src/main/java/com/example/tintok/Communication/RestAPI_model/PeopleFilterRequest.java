@@ -9,7 +9,7 @@ import retrofit2.http.Body;
 
 public class PeopleFilterRequest {
     @SerializedName("name")
-    String name;
+    public String name;
     @SerializedName("age")
     ArrayList<Integer> age;
     @SerializedName("interests")

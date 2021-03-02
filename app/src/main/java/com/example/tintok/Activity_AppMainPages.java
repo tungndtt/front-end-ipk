@@ -274,16 +274,12 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
     }
 
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mViewModel.removeNewMessageListener(this);
-        mViewModel.removeNewNotificationListener(this);
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mViewModel.removeNewMessageListener(this);
+        mViewModel.removeNewNotificationListener(this);
         if(!isLogoutPressed)
             App.Logout(this);
     }

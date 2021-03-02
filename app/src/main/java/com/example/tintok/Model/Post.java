@@ -1,5 +1,6 @@
 package com.example.tintok.Model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -13,14 +14,16 @@ public class Post {
     private String status;
     private String author_id;
     private MediaEntity image;
+    private LocalDateTime dateTime;
     public ArrayList<String> likers;
     public MutableLiveData<ArrayList<Comment>> comments;
 
-    public Post(String id, String status, String author_id, MediaEntity image) {
+    public Post(String id, String status, String author_id, MediaEntity image, LocalDateTime dateTime) {
         this.id = id;
         this.status = status;
         this.author_id = author_id;
         this.image = image;
+        this.dateTime = dateTime;
         comments = null;
     }
 
@@ -65,4 +68,7 @@ public class Post {
         }
     }
 
+    public LocalDateTime getDateTime() {
+        return this.dateTime;
+    }
 }

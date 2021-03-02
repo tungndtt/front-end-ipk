@@ -26,6 +26,7 @@ import com.example.tintok.Model.Comment;
 import com.example.tintok.Model.UserSimple;
 import  com.example.tintok.R;
 import  com.example.tintok.Model.Post;
+import com.example.tintok.Utils.DateTimeUtil;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
@@ -79,10 +80,12 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
         MaterialButton likeBtn, commentBtn;
         private String author_current_post;
         private String post_id;
+        private TextView date;
         MaterialCardView cardView;
         GestureDetectorCompat mGestureDetector;
         public ViewHolder(@NonNull View itemView, BaseAdapter mAdapter) {
             super(itemView, mAdapter);
+            this.date = itemView.findViewById(R.id.date);
             this.nComment = itemView.findViewById(R.id.post_numberOfComment);
             this.nLike = itemView.findViewById(R.id.post_numberOfLike);
             this.status = itemView.findViewById(R.id.post_status);
@@ -143,6 +146,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
             });
 
             this.status.setText(itemData.getStatus());
+            this.date.setText(DateTimeUtil.ConvertTimeToString(itemData.getDateTime()));
             Glide.with(mAdapter.getContext()).load(itemData.getImage().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(iv);
             this.id = itemData.getAuthor_id();
             UserSimple user = DataRepositoryController.getInstance().getUserSimpleProfile(this.id) ;

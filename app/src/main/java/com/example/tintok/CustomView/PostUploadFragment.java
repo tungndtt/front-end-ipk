@@ -39,6 +39,7 @@ import com.example.tintok.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class PostUploadFragment extends MyDialogFragment {
@@ -129,7 +130,7 @@ public class PostUploadFragment extends MyDialogFragment {
            if(chosenImage != null){
                Post mPost = new Post("", status.getText().toString(),
                        DataRepositoryController.getInstance().getUser().getValue().getUserID(),
-                       chosenImage );
+                       chosenImage, LocalDateTime.now());
                mListner.onNewPost(mPost);
                getDialog().dismiss();
            } else {
