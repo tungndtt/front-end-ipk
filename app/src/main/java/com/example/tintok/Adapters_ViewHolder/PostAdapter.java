@@ -81,6 +81,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
         private String author_current_post;
         private String post_id;
         private TextView date;
+        Post currentPost;
         MaterialCardView cardView;
         GestureDetectorCompat mGestureDetector;
         public ViewHolder(@NonNull View itemView, BaseAdapter mAdapter) {
@@ -97,7 +98,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
             this.nComment = itemView.findViewById(R.id.post_numberOfComment);
             this.nCommentText = itemView.findViewById(R.id.post_comment);
 
-           cardView.setBackgroundResource(R.drawable.post_background_2);
+           cardView.setBackgroundResource(R.drawable.post_background);
 
             /*cardView.setOnClickListener((v) ->{
                 cardView.toggle();
@@ -128,9 +129,8 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
             this.nComment.setText(itemData.getNumberOfComments()+"");
             this.nLike.setText(itemData.getNumberOfLikes()+"");
              */
-
-
-
+            Log.e("PostAdapter","new Data"+itemData.getId()+" "+itemData.likers);
+            currentPost = itemData;
             mGestureDetector = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener(){
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
@@ -192,20 +192,21 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
         }
 
         private boolean isLiked(){
-            try {
+            /*try {
                 ArrayList<String> likers =((Post) mAdapter.items.get(getAdapterPosition())).likers;
 
                 return likers.contains(DataRepositoryController.getInstance().getUser().getValue().getUserID());
             }catch (Exception e){
                 e.printStackTrace();
                 return false;
-            }
+            }*/
+            return DataRepositoryController.getInstance().isThisUserLikedPost(currentPost);
         }
 
         private void updateLikeBtn(){
             if(isLiked()){
               //  likeBtn.setBackgroundDrawable(R.color.primaryColor);
-                likeBtn.setTextColor(getContext().getColor(R.color.salmon));
+                likeBtn.setTextColor(getContext().getColor(R.color.blue));
                 likeBtn.setBackgroundResource(R.color.transparent);
                 likeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_salmon_24, 0, 0, 0);
             }

@@ -6,15 +6,16 @@
         <shape android:shape="rectangle">
 
             <gradient
-                android:startColor="#ffffff"
-                android:centerColor="#ccffff"
+                android:startColor="#000000"
+                android:centerColor="#181818"
                 android:centerY="0.5"
-                android:endColor="#ccffcc"
+                android:endColor="#383838"
                 android:angle="225"
                 />
         </shape>
     </item>
     <!-- Define the progress properties like start color, end color etc -->
+    <!--
     <item
         android:left="0dp" android:right="0dp" android:top="0dp" android:bottom="500dp">
         <shape android:shape="rectangle"
@@ -32,5 +33,5 @@
 
 
         </shape>
-    </item>
+    </item> -->
 </layer-list>

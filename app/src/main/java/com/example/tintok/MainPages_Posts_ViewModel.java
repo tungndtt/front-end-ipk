@@ -50,13 +50,40 @@ public class MainPages_Posts_ViewModel extends AndroidViewModel {
     }
 
     public void UserPressLike(Post post){
-        if(post.likers.contains(getCurrentUserID())){
+        if(DataRepositoryController.getInstance().isThisUserLikedPost(post)){
             post.likers.remove(getCurrentUserID());
             unsubmitLike(post.getId());
         }
         else {
             post.likers.add(getCurrentUserID());
             submitLike(post.getId());
+        }
+
+        Log.e("Post_VM", "at post " + post.getId());
+
+        if(post.comments != null){
+            int type = 0;
+            ArrayList<Post> posts = DataRepositoryController.getInstance().getNewfeedPosts().getValue();
+            int index = posts.indexOf(post);
+            if(index == -1){
+                posts = DataRepositoryController.getInstance().getUser().getValue().myPosts.getValue();
+                index = posts.indexOf(post);
+                type = 1;
+            }
+
+            if(index != -1){
+                Post p = posts.get(index);
+                Log.e("Post_VM", "before "+p.likers);
+                if(p.likers.contains(getCurrentUserID()) )
+                    p.likers.remove(getCurrentUserID());
+                else
+                    p.likers.add(getCurrentUserID());
+                Log.e("Post_VM", "after "+p.likers);
+                if(type == 0)
+                    DataRepositoryController.getInstance().getNewfeedPosts().postValue(posts);
+                else
+                    DataRepositoryController.getInstance().getUser().getValue().myPosts.postValue(posts);
+            }
         }
     }
 

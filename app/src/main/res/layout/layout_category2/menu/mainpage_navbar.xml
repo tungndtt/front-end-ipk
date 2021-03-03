@@ -7,7 +7,7 @@
         android:title="@string/text_spaces" />
     <item
         android:id="@+id/notification"
-        android:icon="@android:drawable/ic_dialog_email"
+        android:icon="@drawable/ic_onnoti"
         android:title="@string/text_spaces"/>
     <item
         android:id="@+id/messagers"

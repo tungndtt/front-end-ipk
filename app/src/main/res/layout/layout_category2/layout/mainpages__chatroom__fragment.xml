@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainPages__Chatroom__Fragment"
-    android:background="@color/background_black"
-    android:backgroundTintMode="add">
+    android:background="@drawable/chatroom_background"
+    android:backgroundTintMode="multiply">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/search_bar"

@@ -67,6 +67,8 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
         recyclerView.setAdapter(postAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mViewModel.getPosts().observe(this.getViewLifecycleOwner(), posts -> {
+            Log.i("PostFrag", "Posts changed");
+            postAdapter.setItems(new ArrayList<>());
             postAdapter.setItems(posts);
         });
         Log.i("INFO", "OnActivityCreated fragment for post fragment ...");

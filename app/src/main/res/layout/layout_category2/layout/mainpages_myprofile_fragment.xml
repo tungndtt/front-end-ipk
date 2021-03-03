@@ -19,6 +19,7 @@
 
                 app:layout_scrollFlags="scroll|enterAlways"
                 android:fitsSystemWindows="true"
+
                 >
                     <include
                         android:id="@+id/myProfile_toolbar"

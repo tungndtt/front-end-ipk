@@ -33,4 +33,5 @@
     <color name="secondaryTextColor">#000000</color>
     <color name="onSurface">#daf2dc</color>
 
+    <color name="darkgray">#A9A9A9</color>
 </resources>

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity_Login_Signup"
-    android:background="@drawable/test_himmbelau_salbei_reverse"> <!--@drawable/chatroom_background -->
+    android:background="@drawable/chatroom_background"> <!--@drawable/chatroom_background -->
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/chatroom_toolbar"
@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        >
+        android:background="@drawable/chatroom_background">
         <androidx.cardview.widget.CardView
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -176,23 +176,17 @@
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
+
+        <ImageButton
+            android:id="@+id/sendButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:cardCornerRadius="50dp"
-            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY"
             android:layout_marginEnd="10dp"
-            app:cardElevation="0dp"
-            android:background="@color/transparent">
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/sendButton"
-                android:scaleType="center"
-                android:src="@drawable/ic_send"
-                android:background="@color/primaryColor"></ImageButton>
-
-        </androidx.cardview.widget.CardView>
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_send"
+            android:backgroundTint="@color/transparent"
+            ></ImageButton>
 
     </LinearLayout>
 

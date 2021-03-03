@@ -193,7 +193,7 @@
                 android:id="@+id/send_comment"
                 android:scaleType="center"
                 android:src="@drawable/ic_send"
-                android:background="@color/transparent"></ImageButton>
+                android:background="@color/darkgray"></ImageButton>
 
         </androidx.cardview.widget.CardView>
 
