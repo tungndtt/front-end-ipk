@@ -1,8 +1,6 @@
 package com.example.tintok.Adapters_ViewHolder;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +56,7 @@ public class InterestTagAdapter extends BaseAdapter<DataRepository_Interest.Inte
             if(itemData.isChecked)
                 tag.setBackgroundResource(R.drawable.interesttag_selected);
             else
-                tag.setBackgroundResource(R.drawable.intresttag_unselected);
+                tag.setBackgroundResource(R.drawable.interesttag_unselected);
         }
     }
 }

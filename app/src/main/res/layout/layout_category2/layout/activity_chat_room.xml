@@ -6,20 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity_Login_Signup"
-    android:background="@drawable/chatroom_background"> <!--@drawable/chatroom_background -->
+    android:background="@drawable/chatroom_background">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/chatroom_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:theme="@style/Theme.TinTok"
         app:titleMarginStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/ic_backspace"
+        app:navigationIcon="@drawable/ic_backspace_white_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/chatroom_background">
+        android:background="@color/black">
         <androidx.cardview.widget.CardView
             android:layout_width="50dp"
             android:layout_height="50dp"

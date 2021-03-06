@@ -23,7 +23,9 @@ import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 import com.google.android.material.appbar.MaterialToolbar;
 
-
+/**
+ *  Shows the picture, username and status of the post based on the arguments that are supplied when the fragment was instantiated
+ */
 public class View_Profile_Picture_Fragment extends MyDialogFragment {
 
     private TextView mName, mStatus;
@@ -36,7 +38,7 @@ public class View_Profile_Picture_Fragment extends MyDialogFragment {
     }
 
 
-    public static View_Profile_Picture_Fragment newInstance(String param1, String param2) {
+    public static View_Profile_Picture_Fragment newInstance() {
         View_Profile_Picture_Fragment fragment = new View_Profile_Picture_Fragment();
         return fragment;
     }
@@ -46,10 +48,18 @@ public class View_Profile_Picture_Fragment extends MyDialogFragment {
         super.onCreate(savedInstanceState);
     }
 
+
+    /**
+     * Inflates the layout for this fragment.
+     * Initialization of views and toolbar.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.profile_picture_view_fragment, container, false);
         mName = view.findViewById(R.id.picture_view_nameTV);
         mStatus = view.findViewById(R.id.picture_view_status);
@@ -65,13 +75,14 @@ public class View_Profile_Picture_Fragment extends MyDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /*
-        if(mViewModel == null)
-            mViewModel =  new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class);
 
-         */
     }
 
+    /**
+     * if the arguments is not null then username, status and image are set accordingly
+     * else nothing is shown.
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -83,27 +94,5 @@ public class View_Profile_Picture_Fragment extends MyDialogFragment {
             Glide.with(this.getContext()).load(bundle.getString("url"))
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(mImage);
         }
-
-
-
-        /*
-        mViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
-            mName.setText(userProfile.getUserName());
-            String url = userProfile.getProfilePic().url;
-            String status = "";
-            for(Post p: userProfile.getMyPosts().getValue()){
-                if(p.getImage().url.equals(url))
-                    status = p.getStatus();
-            }
-            mStatus.setText(status);
-            Glide.with(this.getContext()).load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(mImage);
-
-        });
-
-         */
-
-
-
     }
 }

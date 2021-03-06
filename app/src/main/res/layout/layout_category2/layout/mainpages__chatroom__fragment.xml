@@ -29,6 +29,7 @@
             app:startIconDrawable="@android:drawable/ic_menu_search"
             app:endIconMode="clear_text"
             app:boxBackgroundColor="@color/transparent">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/search_text"
                 android:layout_width="match_parent"
@@ -40,20 +41,20 @@
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"></com.google.android.material.textfield.TextInputEditText>
+                android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/roomList"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="10dp"
         app:layout_constraintTop_toBottomOf="@id/search_bar"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintLeft_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"></androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

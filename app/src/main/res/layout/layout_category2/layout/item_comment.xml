@@ -6,9 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="left">
+    android:gravity="left"
+    android:background="@color/transparent"
+   >
     <com.google.android.material.card.MaterialCardView
-
         android:id="@+id/view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,13 +17,15 @@
         app:contentPadding="5dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
-        android:background="@drawable/message_background_me">
+        app:cardPreventCornerOverlap="false"
+       >
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:showDividers="middle"
             app:divider="@drawable/divider"
-            android:visibility="visible">
+            android:visibility="visible"
+           >
             <com.google.android.material.card.MaterialCardView
                 android:layout_height="40dp"
                 android:layout_width="40dp"
@@ -42,18 +45,19 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="4dp">
                 <TextView
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginTop="5dp"
                     android:alpha="1.0"
                     android:fontFamily="sans-serif-black"
                     android:lineSpacingExtra="10sp"
                     android:maxLines="1"
-                    android:text="aaaaaaw"
+                    android:text="012345678901234"
+
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="18sp"
                     android:typeface="normal"
@@ -79,6 +83,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:lineSpacingExtra="10sp"
                     android:maxLines="1"
+
                     android:text="aaaaaaw"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="16sp"
@@ -101,8 +106,6 @@
             </LinearLayout>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-
 
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

@@ -9,7 +9,7 @@
         android:id="@+id/people_matching_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/primaryColor"
+        android:background="@color/white"
         android:elevation="4dp"
         android:theme="@style/Theme.TinTok"
         app:titleMarginStart="0dp"
@@ -19,16 +19,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/filterBtn"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add New Filter"
-                android:layout_gravity="center"
-                android:elevation="0dp"
-                >
-            </com.google.android.material.button.MaterialButton>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="48dp"
+            >
+
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/filter_icon"
+                android:src="@drawable/ic_filter_black"
+                android:backgroundTint="@color/white"
+                android:scaleType="fitXY"
+                android:padding="0dp"
+                android:adjustViewBounds="true"
+                android:layout_marginEnd="8dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
 
 
     </com.google.android.material.appbar.MaterialToolbar>
@@ -56,36 +67,45 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card_stack_view">
 
-        <ImageButton
-            android:id="@+id/dislikeBtn"
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="2"
-            android:background="@drawable/ic_dislike_24"
-            />
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="2"
+                android:padding="12dp"
+                android:scaleType="fitXY"
+                android:id="@+id/dislikeBtn"
+                android:src="@drawable/ic_thumb_down_24"
+                android:background="@drawable/round_button_shape"
+                />
 
 
         <ImageButton
             android:id="@+id/profileBtn"
-            android:layout_width="10dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:layout_weight="2"
-            android:background="@drawable/ic_account_circle_48"/>
+            android:padding="0dp"
+            android:src="@drawable/ic_person_white_24"
+            android:background="@drawable/round_button_shape"
+            android:scaleType="fitXY"/>
 
         <ImageButton
             android:id="@+id/likeBtn"
-            android:layout_width="10dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="40dp"
             android:layout_marginTop="5dp"
+            android:layout_marginStart="40dp"
             android:layout_marginBottom="5dp"
             android:layout_weight="2"
-            android:background="@drawable/ic_favorite_24"/>
+            android:padding="12dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_like_blue_24"
+            android:background="@drawable/round_button_shape"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,10 +33,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainPages_MyProfile_ViewModel extends MainPages_Posts_ViewModel {
-    MutableLiveData<String> username;
-    MutableLiveData<String> location, description;
-    MutableLiveData<LocalDate> birthday;
-    MutableLiveData<Integer> gender;
+    private MutableLiveData<String> username;
+    private MutableLiveData<String> location, description;
+    private MutableLiveData<LocalDate> birthday;
+    private MutableLiveData<Integer> gender;
+    private MutableLiveData<UserSimple> editedUserProfile;
 
     public MainPages_MyProfile_ViewModel(@NonNull Application application) {
         super(application);
@@ -45,16 +46,42 @@ public class MainPages_MyProfile_ViewModel extends MainPages_Posts_ViewModel {
         birthday = new MutableLiveData<>();
         gender = new MutableLiveData<>();
         description = new MutableLiveData<>();
+        editedUserProfile = new MutableLiveData<>();
     }
 
+    public LiveData<UserSimple> getEditedProfile(){
+        return editedUserProfile;
+    }
+    public void setEditedProfile(UserSimple profile){
+        editedUserProfile.setValue(profile);
+    }
+
+    /**
+     *
+     * @return
+     */
+
+    public boolean isUserEdited(){
+        UserProfile currUser = getUserProfile().getValue();
+        UserSimple editedUser = editedUserProfile.getValue();
+        if(currUser.getUserName().toUpperCase().equals(editedUser.getUserName().toUpperCase()) &&
+                currUser.getLocation().toUpperCase().equals(editedUser.getLocation().toUpperCase()) &&
+                currUser.getBirthday().isEqual(editedUser.getBirthday()) &&
+                currUser.getGender().getI() == editedUser.getGender().getI() &&
+                currUser.getDescription().equals(editedUser.getDescription()))
+            return false;
+        else return true;
+    }
 
     public void resetLiveData(){
         UserProfile user = getUserProfile().getValue();
-        setUsername(user.getUserName());
-        setLocation(user.getLocation());
-        setGender(user.getGender().getI());
-        setDate(user.getBirthday());
-        setDescription(user.getDescription());
+        UserSimple userSimple = editedUserProfile.getValue();
+        userSimple.setUserName(user.getUserName());
+        userSimple.setLocation(user.getLocation());
+        userSimple.setGender(user.getGender().getI());
+        userSimple.setBirthday(user.getBirthday());
+        userSimple.setDescription(user.getDescription());
+        setEditedProfile(userSimple);
     }
     public LiveData<String> getUsername() {
         return username;

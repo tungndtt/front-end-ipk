@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.CompositePageTransformer;
@@ -18,9 +17,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.tintok.Adapters_ViewHolder.ImagePage2Adapter;
 import com.example.tintok.Model.Post;
 
-import java.util.ArrayList;
-
+/**
+ * Shows all uploaded posts and profile pictures from another user.
+ * Allows the user to click on a content and let it show.
+ */
 public class ViewProfile_UserImages_Fragment extends Fragment {
+
 
     private ImagePage2Adapter adapter;
     private ViewPager2 vp2;
@@ -28,9 +30,10 @@ public class ViewProfile_UserImages_Fragment extends Fragment {
     private View view;
     private Activity_ViewProfile_ViewModel mViewModel;
     private View_Profile_Picture_Fragment  viewProfilePictureFragment;
+
+
     public  ViewProfile_UserImages_Fragment(){
     }
-
     public static ViewProfile_UserImages_Fragment getInstance(){
         ViewProfile_UserImages_Fragment fragment = new  ViewProfile_UserImages_Fragment();
         return fragment;
@@ -43,10 +46,17 @@ public class ViewProfile_UserImages_Fragment extends Fragment {
         Log.i("INFO", "Creating new profile image...");
     }
 
+    /**
+     * Inflates the layout for this fragment.
+     * Initialization of views
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         Log.i("INFO", "Creating view for displaying photo profile ...");
         view = inflater.inflate(R.layout.profile_image_fragment, container, false);
         vp2 = view.findViewById(R.id.profile_image_list_page);
@@ -54,6 +64,13 @@ public class ViewProfile_UserImages_Fragment extends Fragment {
     }
 
 
+    /**
+     * Instantiation of Activity_ViewProfile_ViewModel if it is null and ImagePage2Adapter.
+     * Shows all uploaded content in a ViewPager2.
+     * The user can click on an item to show the item at View_Profile_Picture_Fragment
+     * @see View_Profile_Picture_Fragment
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -64,6 +81,10 @@ public class ViewProfile_UserImages_Fragment extends Fragment {
             mViewModel = new ViewModelProvider(getActivity()).get(Activity_ViewProfile_ViewModel.class);
         Log.e("viewmodel", mViewModel.toString());
 
+        /*
+            Setting up ImagePage2Adapter with all available content of the other user
+            and an onImageClickListener to show to picture if the user clicks on it
+         */
         adapter = new ImagePage2Adapter(this.getContext(), mViewModel.getPosts().getValue());
         adapter.setOnImageClickListener(url -> {
             if(viewProfilePictureFragment == null)
@@ -79,8 +100,8 @@ public class ViewProfile_UserImages_Fragment extends Fragment {
             bundle.putString("url", url);
             viewProfilePictureFragment.setArguments(bundle);
             viewProfilePictureFragment.show(getActivity().getSupportFragmentManager(), "VIEW_PROFILE_PICTURE");
-
         });
+
         vp2.setAdapter(adapter);
         vp2.setOffscreenPageLimit(offScreenPageLimit);
         CompositePageTransformer transformer = new CompositePageTransformer();

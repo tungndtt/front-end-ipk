@@ -15,6 +15,7 @@ import com.example.tintok.Adapters_ViewHolder.PeopleBrowsingAdapter;
 
 import java.util.ArrayList;
 
+//TODO: DELETE?
 public class StackViewPager {
     ViewPager2 viewPager2;
     int offScreenPageLimit;

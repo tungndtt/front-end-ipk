@@ -157,15 +157,12 @@ public class DataRepository_CurrentUser {
                         newUser.setUserID(currentUser.getValue().getUserID());
                         newUser.setUserName(currentUser.getValue().getUserName());
                         newUser.setProfilePic(new MediaEntity(currentUser.getValue().getProfilePic().url));
-                        DataRepositoryController.getInstance().dataRepository_userSimple.updateUserSimpleInCache(newUser);
-                        //TODO send status
-                        Log.e("onResp", response.message());
+                        //TODO:
+                      //  DataRepositoryController.getInstance().dataRepository_userSimple.updateUserSimpleInCache(newUser);
                         networkStatus.postValue(new ResponseEvent(ResponseEvent.Type.USER_UPDATE, response.message()));
                     }
                     isUserUpdating.postValue(false);
-
                 }
-
                 @Override
                 public void onFailure(Call<UserForm> call, Throwable t) {
                     Log.e("response", "failed");

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -61,7 +62,7 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
     public void onStart() {
         super.onStart();
         init();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("TINTOK");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(HtmlCompat.fromHtml("<font color=\"black\"><b>"+getString(R.string.app_name) + "</b></font>",HtmlCompat.FROM_HTML_MODE_LEGACY));
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
     }

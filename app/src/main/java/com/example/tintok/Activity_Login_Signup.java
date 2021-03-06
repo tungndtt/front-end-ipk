@@ -2,6 +2,7 @@ package com.example.tintok;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.HtmlCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -30,7 +31,6 @@ public class Activity_Login_Signup extends AppCompatActivity {
         Log.i("Activity_Login_Signup", "onCreate");
         setContentView(R.layout.activity_login_signup);
         toolbar =  findViewById(R.id.login_toolbar);
-        toolbar.setBackgroundColor(getColor(R.color.primaryColor));
         setSupportActionBar(toolbar);
         Communication.getInstance();
         this.viewModel = new ViewModelProvider(this).get(Login_SignUp_ViewModel.class);

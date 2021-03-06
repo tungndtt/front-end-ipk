@@ -140,7 +140,8 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
 
         deleteChoosenImg.setOnClickListener(v -> onImageRemove());
 
-        toolbar = findViewById(R.id.comment_toolbar).findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.comment_toolbar);
+        toolbar.setTitle("Comments");
         toolbar.setNavigationOnClickListener(v -> {
             finish();
         });

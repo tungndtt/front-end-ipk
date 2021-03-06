@@ -5,63 +5,62 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.example.tintok.DataLayer.DataRepository_Interest;
-import com.example.tintok.Model.UserProfile;
-
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Shows the user information age, gender, interests and description of another user
+ *
+ */
 public class ViewProfile_UserInfo_Fragment extends Fragment {
 
-
-    private TextView  mAgeTV, mBirthdayTV, mGenderTV, mInterestsTV, mDescriptionTV;
-    private DateTimeFormatter formatter;
+    private TextView  mAgeTV, mGenderTV, mInterestsTV, mDescriptionTV;
     View view;
-    private UserProfile user;
     private String interests;
     Activity_ViewProfile_ViewModel mViewModel;
-/*
-    public ViewProfile_UserInfo_Fragment(Activity_ViewProfile_ViewModel mViewModel) {
-            this.mViewModel = mViewModel;
-    }
 
- */
+
     public ViewProfile_UserInfo_Fragment(){}
-
-    public static ViewProfile_UserInfo_Fragment getInstance(){ //(Activity_ViewProfile_ViewModel mViewModel) {
-        ViewProfile_UserInfo_Fragment fragment = new ViewProfile_UserInfo_Fragment(); //(mViewModel);
+    public static ViewProfile_UserInfo_Fragment getInstance(){
+        ViewProfile_UserInfo_Fragment fragment = new ViewProfile_UserInfo_Fragment();
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Inflates the layout of this fragment.
+     * Initialization of views.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.view_profile_info_fragment, container, false);
         mAgeTV = view.findViewById(R.id.view_profile_age);
-        mBirthdayTV = view.findViewById(R.id.view_profile_birthday);
         mGenderTV = view.findViewById(R.id.view_profile_gender);
         mDescriptionTV = view.findViewById(R.id.view_profile_description);
         mInterestsTV = view.findViewById(R.id.view_profile_interest);
         return view;
     }
 
-
+    /**
+     * Instantiation of Activity_ViewProfile_ViewModel if it is null
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -71,24 +70,26 @@ public class ViewProfile_UserInfo_Fragment extends Fragment {
 
     }
 
+    /** Uses the viewmodel to observe the chosen UserProfile.
+     *  Initialize its user information age, gender, description and interests accordingly
+     *  age, gender and interests cannot be null or empty
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
         mViewModel.getProfile().observe(getViewLifecycleOwner(), userProfile -> {
             if(userProfile == null)
                 return;
             Log.e("UserInfoFrag", "at "+userProfile.getBirthday());
             mAgeTV.setText(String.valueOf(userProfile.getAge()));
-            mBirthdayTV.setText(formatter.format(userProfile.getBirthday()));
             mGenderTV.setText(userProfile.getGender().toString().toLowerCase());
-            if(userProfile.getDescription() == null)
+            if(userProfile.getDescription() == null || userProfile.getDescription().isEmpty())
                 mDescriptionTV.setVisibility(View.GONE);
             else mDescriptionTV.setText(userProfile.getDescription());
             interests = "";
             for(int i = 0; i < userProfile.getUserInterests().getValue().size(); i++){
-                interests += DataRepository_Interest.interests[userProfile.getUserInterests().getValue().get(i)] + " ";
+                interests += DataRepository_Interest.interests[userProfile.getUserInterests().getValue().get(i)].toLowerCase() + "\n";
             }
             mInterestsTV.setText(interests);
         });

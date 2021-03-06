@@ -1,15 +1,12 @@
 package com.example.tintok;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
@@ -22,18 +19,13 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 
 import com.example.tintok.Adapters_ViewHolder.PeopleBrowsingAdapter;
-import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.CustomView.FilterDialogFragment;
 import com.example.tintok.CustomView.MyDialogFragment;
-import com.example.tintok.CustomView.Refreshable;
 import com.example.tintok.Model.UserSimple;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.imageview.ShapeableImageView;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -48,7 +40,6 @@ import java.util.ArrayList;
 public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
 
     private MainPages_PeopleBrowsing_ViewModel  mViewModel;
-    MaterialButton filterBtn;
     MaterialToolbar toolbar;
     private int currentItem = 0;
     private int offScreenPageLimit = 2;
@@ -59,9 +50,9 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
 
     DialogFragment filterFragment = null;
     FilterDialogFragment.FilterState currentState ;
-    ShapeableImageView backBtn;
 
-    ImageButton likeBtn, dislikeBtn, profileBtn;
+
+    ImageButton likeBtn, dislikeBtn, profileBtn, filterBtn;
 
     public MainPages__PeopleBrowsing__Fragment() {
         currentState = new FilterDialogFragment.FilterState();
@@ -90,17 +81,11 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
         toolbar.setNavigationOnClickListener(v -> {
             getDialog().dismiss();
         });
-        filterBtn = toolbar.findViewById(R.id.filterBtn);
+        filterBtn = toolbar.findViewById(R.id.filter_icon);
         filterBtn.setOnClickListener(v -> {
             handleFilterBtnClicked();
         });
-        /*
-        backBtn = view.findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(v -> {
 
-        });
-
-         */
         initCardView(view);
         initButtonGroup(view);
     }
@@ -132,9 +117,11 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
 
     void updateFilterBtn(){
         if(currentState.equals(new FilterDialogFragment.FilterState()))
-            filterBtn.setText("ADD NEW FILTER");
+           filterBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter_black));//.setText("ADD NEW FILTER");
         else
-            filterBtn.setText("MODIFY CURRENT FILTER");
+            filterBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_filter_gray));//filterBtn.setText("MODIFY CURRENT FILTER");
+
+
     }
 
 

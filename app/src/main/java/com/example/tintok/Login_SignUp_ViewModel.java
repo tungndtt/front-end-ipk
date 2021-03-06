@@ -92,7 +92,8 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
         this.api.postRegisterData(form).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()) listener.requestSuccess();
+                if(response.isSuccessful())
+                    listener.requestSuccess();
                 else listener.requestFail("Something wrong while sign up!");
             }
 

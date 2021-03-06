@@ -7,10 +7,6 @@
     app:titleMarginStart="0dp"
     app:contentInsetStartWithNavigation="0dp"
     app:navigationIcon="@drawable/ic_backspace"
-    android:background="@color/white"
-    > <!--
-     android:background="@color/primaryColor"
-     app:Theme="@style/MaterialToolbar"
-    -->
-
+    android:elevation="4dp"
+    >
 </com.google.android.material.appbar.MaterialToolbar>

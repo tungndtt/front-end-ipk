@@ -158,7 +158,7 @@ public class DataRepositoryController {
         return dataRepository_currentUser.lastSeen;
     }
     public boolean isThisUserLikedPost(Post p){
-        if(p.likers == null)
+        if(p.likers == null || p.likers.size() == 0)
             return false;
         return p.likers.contains(getUser().getValue().getUserID());
     }

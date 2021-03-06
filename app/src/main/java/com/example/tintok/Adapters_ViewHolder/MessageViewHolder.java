@@ -1,7 +1,6 @@
 package com.example.tintok.Adapters_ViewHolder;
 
 
-import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,7 +13,6 @@ import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.tintok.App;
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.MediaEntity;
@@ -54,8 +52,8 @@ public class MessageViewHolder extends BaseViewHolder<MessageEntity> implements 
         this.userID = itemData.getAuthorID();
 
         if(!itemData.getAuthorID().equals(DataRepositoryController.getInstance().getUser().getValue().getUserID())){
-            view.setBackgroundResource(R.drawable.message_background_other);
 
+             view.setBackgroundResource(R.drawable.message_background_other);
             leftSide.setVisibility(View.VISIBLE);
             messageLayout.setGravity(Gravity.LEFT);
             rightSide.setVisibility(View.GONE);
@@ -81,8 +79,7 @@ public class MessageViewHolder extends BaseViewHolder<MessageEntity> implements 
         }
 
         else{
-            view.setBackgroundResource(R.drawable.message_background_user);//view.setBackgroundResource(R.drawable.message_background_me);
-
+            view.setBackgroundResource(R.drawable.message_background_user);
             leftSide.setVisibility(View.GONE);
             messageLayout.setGravity(Gravity.RIGHT);
             rightSide.setVisibility(View.VISIBLE);

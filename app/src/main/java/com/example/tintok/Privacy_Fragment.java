@@ -15,7 +15,9 @@ import android.widget.TextView;
 import com.example.tintok.CustomView.MyDialogFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 
-
+/**
+ *  Privacy_Fragment shows privacy policy of this application
+ */
 public class Privacy_Fragment extends MyDialogFragment {
 
     private MaterialToolbar toolbar;
@@ -37,6 +39,15 @@ public class Privacy_Fragment extends MyDialogFragment {
 
     }
 
+    /**
+     * Inflates the layout of this fragment.
+     * Initialization of views.
+     * loads privacy policy out of string.xml as html-format
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View of inflated layout with all views
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

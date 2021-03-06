@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 
 
 import com.bumptech.glide.Glide;
@@ -55,6 +56,7 @@ public class CommentAdapter extends BaseAdapter<Comment, CommentAdapter.ViewHold
 
         private TextView name, status, date;
         private ImageView profile_pic, content_pic;
+        private CardView view;
         String id;
         public ViewHolder(@NonNull View itemView, BaseAdapter mAdapter) {
             super(itemView, mAdapter);
@@ -63,6 +65,7 @@ public class CommentAdapter extends BaseAdapter<Comment, CommentAdapter.ViewHold
             this.date = itemView.findViewById(R.id.leftdate);
             this.profile_pic = itemView.findViewById(R.id.leftprofilePic);
             this.content_pic = itemView.findViewById(R.id.leftImg);
+            this.view = itemView.findViewById(R.id.view);
         }
 
         @Override
@@ -70,6 +73,7 @@ public class CommentAdapter extends BaseAdapter<Comment, CommentAdapter.ViewHold
             id = itemData.getAuthorID();
             this.status.setText(itemData.getBuilder());
             this.date.setText(itemData.getDatePosted().toString());
+            view.setBackgroundResource(R.drawable.comment_background);
             UserSimple user = DataRepositoryController.getInstance().getUserSimpleProfile(itemData.getAuthorID());
             if(user != null) {
                 this.onProfileChange(user);

@@ -6,24 +6,10 @@
     android:layout_height="wrap_content"
     tools:context=".Interest_UpdateUser_Fragment">
 
-
-    <com.google.android.material.appbar.MaterialToolbar
+    <include
         android:id="@+id/interest_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        app:titleMarginStart="0dp"
-        app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/ic_backspace"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        style="@style/MaterialToolbar"
-        > <!--
-     android:background="@color/primaryColor"
-     app:Theme="@style/MaterialToolbar"
-    -->
-
-    </com.google.android.material.appbar.MaterialToolbar>
+        layout="@layout/toolbar"
+        />
 
     <TextView
         android:id="@+id/interest_descriptionTV"

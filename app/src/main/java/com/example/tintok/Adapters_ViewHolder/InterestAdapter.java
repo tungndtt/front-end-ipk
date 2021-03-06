@@ -47,7 +47,7 @@ public class InterestAdapter extends BaseAdapter<Interest, InterestAdapter.ViewH
          MaterialCardView cardView;
 
 
-        public ViewHolder(@NonNull View itemView, BaseAdapter mAdapter) {
+        public ViewHolder (@NonNull View itemView, BaseAdapter mAdapter) {
             super(itemView, mAdapter);
             this.interestIcon = itemView.findViewById(R.id.item_interest_image);
             this.interestTV = itemView.findViewById(R.id.item_interest_tv);
@@ -55,7 +55,7 @@ public class InterestAdapter extends BaseAdapter<Interest, InterestAdapter.ViewH
         }
         public void updateColor(Interest interest){
             if(interest.isSelected()){
-                cardView.setCardBackgroundColor(getContext().getColor(R.color.startColor));
+                cardView.setCardBackgroundColor(getContext().getColor(R.color.secondaryBlue));
             }
             else {
                 cardView.setCardBackgroundColor(getContext().getColor(R.color.transparent));

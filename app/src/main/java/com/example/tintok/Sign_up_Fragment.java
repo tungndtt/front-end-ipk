@@ -28,28 +28,35 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
+/**
+ * This fragment is used to register the user for the application.
+ * The user must specify its name, email address, birthday, interests and password.
+ * Only if all parameter are set by the user then the user can sign in and will receive an email for validation.
+ */
 public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel.requestListener {
 
     public static final String INTERESTS_SIGN_UP = "interests_sign_up";
     private Button registerButton;
     private ProgressBar loadingBar;
-    private TextView status;
+    private TextView status, mInterestTV;
     private EditText name, email,password, retypepassword, day,month,year;
     private Login_SignUp_ViewModel viewModel;
     private RadioGroup mGenderGroup;
-    private TextView mInterestTV;
     private String selectedInterest;
     private DialogFragment interestFragment;
     private View view;
 
     public Sign_up_Fragment(){
-
     }
 
     public static Sign_up_Fragment newInstance(Login_SignUp_ViewModel viewModel) {
         return new Sign_up_Fragment(viewModel);
     }
 
+    /**
+     * creates a Sign_up_Fragment with given viewmodel
+     * @param viewModel of Activity_Login_Signup
+     */
     public Sign_up_Fragment(Login_SignUp_ViewModel viewModel){
         this.viewModel = viewModel;
     }
@@ -62,6 +69,14 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         setRetainInstance(true);
     }
 
+    /**
+     * Inflates the layout of this fragment.
+     * Initialization of views.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View of inflated layout with all views
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -82,6 +97,12 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         return view;
     }
 
+
+    /**
+     * Instantiation of Login_SignUp_ViewModel if it is null and of ArrayList<Interest>
+     * Sets empty ArrayList for chosen users interests
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -93,6 +114,12 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         viewModel.setChosenInterests(new ArrayList<>());
     }
 
+
+    /**
+     * uses the Login_SignUp_ViewModel to observe the LiveData of chosen interests which are selected in Interest_SignUp_Fragment by the user
+     * sets onClickListener for handling the given user input and for open Interests_SignUp_Fragment
+     * @see Interests_SignUp_Fragment
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onStart() {
         super.onStart();
@@ -110,28 +137,24 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
             status.setVisibility(View.INVISIBLE);
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-                HandleSignUp();
-            }
-        });
+        registerButton.setOnClickListener(v -> HandleSignUp());
 
-        mInterestTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(interestFragment == null)
-                    interestFragment = Interests_SignUp_Fragment.newInstance();
-                interestFragment.show(getChildFragmentManager(), INTERESTS_SIGN_UP);
-            }
+        mInterestTV.setOnClickListener(v -> {
+            if(interestFragment == null)
+                interestFragment = Interests_SignUp_Fragment.newInstance();
+            interestFragment.show(getChildFragmentManager(), INTERESTS_SIGN_UP);
         });
 
     }
 
+    /**
+     * Handles user inputs.
+     * Checks if username and birth dates are not empty, if the email address is valid, if  passwords are identical and at least 6 characters long, if a gender and at least one interest are chosen.
+     * If not, a corresponding error shows up.
+     * If all conditions pass a sign up request is send to server using the viewmodel.
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void HandleSignUp(){
-        Log.e("handle", "again");
         email.onEditorAction(EditorInfo.IME_ACTION_DONE);
         if(name.getText().toString().isEmpty()){
             setErrorStatus(R.string.error_username_empty);
@@ -189,7 +212,10 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     }
 
 
-
+    /**
+     * Makes the status visible as an red text based on given error code.
+     * @param error Error as an ID for a String. If a condition in HandleSignUp do not pass, a specific error code is given to this function.
+     */
     private void setErrorStatus(int error){
         status.setVisibility(View.VISIBLE);
         status.setText(error);
@@ -197,21 +223,23 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     }
 
 
+    /**
+     * shows a Snackbar that a verification mail is send and let the user go back to Login_Fragment
+     */
     @Override
     public void requestSuccess() {
         loadingBar.setVisibility(View.INVISIBLE);
         Snackbar.make(getView(), R.string.registration_email_sent, Snackbar.LENGTH_LONG);
-        //TODO:
-        //getActivity().getSupportFragmentManager().popBackStack();//.beginTransaction().replace(R.id.fragment, )
         getActivity().onBackPressed();
     }
 
+    /**
+     * shows an red error text that the registration failed
+     */
     @Override
     public void requestFail(String reason) {
-       // setErrorStatus(R.string.error_registration_failed);
         status.setText(reason);
         loadingBar.setVisibility(View.INVISIBLE);
-        //TODO: reset email textfield?
     }
 
     @Override

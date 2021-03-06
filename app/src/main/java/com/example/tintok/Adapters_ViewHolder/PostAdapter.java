@@ -1,9 +1,6 @@
 package com.example.tintok.Adapters_ViewHolder;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -13,16 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.DataRepository_UserSimple;
-import com.example.tintok.Model.Comment;
 import com.example.tintok.Model.UserSimple;
 import  com.example.tintok.R;
 import  com.example.tintok.Model.Post;
@@ -30,7 +24,6 @@ import com.example.tintok.Utils.DateTimeUtil;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
-import java.io.Console;
 import java.util.ArrayList;
 
 
@@ -208,7 +201,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
               //  likeBtn.setBackgroundDrawable(R.color.primaryColor);
                 likeBtn.setTextColor(getContext().getColor(R.color.blue));
                 likeBtn.setBackgroundResource(R.color.transparent);
-                likeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_salmon_24, 0, 0, 0);
+                likeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_blue_24, 0, 0, 0);
             }
             else{
                 likeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0);

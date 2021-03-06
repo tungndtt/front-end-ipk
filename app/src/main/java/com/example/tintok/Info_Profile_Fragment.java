@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.tintok.DataLayer.DataRepository_Interest;
 import com.example.tintok.DataLayer.ResponseEvent;
 import com.example.tintok.Model.UserProfile;
+import com.example.tintok.Model.UserSimple;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -42,7 +43,7 @@ public class Info_Profile_Fragment extends Fragment {
 
     public static final String INTEREST_FRAGMENT = "interest_fragment";
     private MainPages_MyProfile_ViewModel mViewModel;
-    private TextView mEmailTextView, mAgeTextView, mBirthdayTextView, mInterestsTV, interestBtn;
+    private TextView mEmailTextView, mAgeTextView, mBirthdayTextView, mInterestsTV, interestBtn, mBirthdayBtn;
     private Spinner mGenderSpinner;
     private EditText mDescriptionEditText;
     View view;
@@ -76,17 +77,18 @@ public class Info_Profile_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.i("INFO", "Creating view for info profile ...");
-        view = inflater.inflate(R.layout.profile_info_fragment, container, false);
+        view = inflater.inflate(R.layout.profile_info_fragment_test, container, false);
         mEmailTextView = view.findViewById(R.id.profile_email);
-        mAgeTextView = view.findViewById(R.id.profile_age);
+    //    mAgeTextView = view.findViewById(R.id.profile_age);
         mGenderSpinner = view.findViewById(R.id.profile_gender);
         mDescriptionEditText = view.findViewById(R.id.profile_description);
         mProgressBar = view.findViewById(R.id.profile_progressBar);
         saveBtn = view.findViewById(R.id.profile_edit_profile_button);
-        cancelBtn = view.findViewById(R.id.profile_cancel_profile_button);
+     //   cancelBtn = view.findViewById(R.id.profile_cancel_profile_button);
         mBirthdayTextView = view.findViewById(R.id.profile_birthday);
         mInterestsTV = view.findViewById(R.id.profile_interest);
         interestBtn = view.findViewById(R.id.profile_interest_addBtn);
+        mBirthdayBtn = view.findViewById(R.id.profile_birthday_editBtn);
         return view;
     }
 
@@ -106,17 +108,17 @@ public class Info_Profile_Fragment extends Fragment {
 
         UserProfile user = mViewModel.getUserProfile().getValue();
         mEmailTextView.setText(user.getEmail());
+        //TODO
         mViewModel.setDate(user.getBirthday());
         mViewModel.setGender(user.getGender().getI());
         mViewModel.setDescription(user.getDescription());
-
 
 
         mViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
 
             if(userProfile == null)
                 return;
-            mAgeTextView.setText(Integer.toString(userProfile.getAge()));
+         //   mAgeTextView.setText(Integer.toString(userProfile.getAge()));
             mBirthdayTextView.setText(formatter.format(userProfile.getBirthday()));
             setCurrentGenderSpinner(userProfile);
             if(userProfile.getDescription() == null || userProfile.getDescription().isEmpty())
@@ -128,6 +130,7 @@ public class Info_Profile_Fragment extends Fragment {
                 mProgressBar.setVisibility(View.VISIBLE);
             else{mProgressBar.setVisibility(View.INVISIBLE);}
         });
+
         mViewModel.getNetworkResponse().observe(getViewLifecycleOwner(), responseEvent -> {
             if(responseEvent.getType() == ResponseEvent.Type.USER_UPDATE){
                 String response = responseEvent.getContentIfNotHandled();
@@ -143,8 +146,14 @@ public class Info_Profile_Fragment extends Fragment {
         mViewModel.getUserProfile().getValue().getUserInterests().observe(getViewLifecycleOwner(), integers -> {
             interests="";
             for(int i=0; i<integers.size();i++)
-                interests += DataRepository_Interest.interests[integers.get(i)] + " ";
+                interests += DataRepository_Interest.interests[integers.get(i)] + "\n";
             mInterestsTV.setText(interests.toLowerCase());
+        });
+
+        mViewModel.getEditedProfile().observe(getViewLifecycleOwner(), editedProfile -> {
+            if(mViewModel.isUserEdited())
+                saveBtn.setVisibility(View.VISIBLE);
+            else saveBtn.setVisibility(View.GONE);
         });
 
         mGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -153,6 +162,9 @@ public class Info_Profile_Fragment extends Fragment {
                 int pos = position+1;
                 if(mViewModel.getUserProfile().getValue().getGender() != null && mViewModel.getUserProfile().getValue().getGender().getI() != pos)
                     mViewModel.setGender(pos);
+                    UserSimple user = mViewModel.getEditedProfile().getValue();
+                    user.setGender(pos);
+                    mViewModel.setEditedProfile(user);
             }
 
             @Override
@@ -173,6 +185,9 @@ public class Info_Profile_Fragment extends Fragment {
                 Log.e("date", year + " " + day + " " +newMonth);
                 mBirthdayTextView.setText(day + "." + newMonth  + "." + year);
                 mViewModel.setDate(LocalDate.parse(mBirthdayTextView.getText().toString(), formatter));
+                UserSimple user = mViewModel.getEditedProfile().getValue();
+                user.setBirthday(LocalDate.parse(mBirthdayTextView.getText().toString(), formatter));
+                mViewModel.setEditedProfile(user);
             }
         };
 
@@ -191,33 +206,32 @@ public class Info_Profile_Fragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 String desc = s.toString();
                 mViewModel.setDescription(desc);
-
+                UserSimple user = mViewModel.getEditedProfile().getValue();
+                user.setDescription(desc);
+                mViewModel.setEditedProfile(user);
             }
         });
 
 
-        mBirthdayTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));//"UTC"
-                if(mBirthdayTextView.getText().toString().isEmpty()){
-                    year = calendar.get(Calendar.YEAR);
-                    month = calendar.get(Calendar.MONTH);
-                    day = calendar.get(Calendar.DAY_OF_MONTH);
-                }else {
-                    year = mViewModel.getUserProfile().getValue().getBirthday().getYear();
-                    month = mViewModel.getUserProfile().getValue().getBirthday().getMonthValue();
-                    day = mViewModel.getUserProfile().getValue().getBirthday().getDayOfMonth();
-                }
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getActivity(),
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mOnDataSetListener, year, month, day);
-                datePickerDialog.getDatePicker().setMinDate(1904);
-                datePickerDialog.getDatePicker().setMaxDate(calendar.getTime().getTime());
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                datePickerDialog.show();
+        mBirthdayBtn.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.systemDefault()));//"UTC"
+            if(mBirthdayTextView.getText().toString().isEmpty()){
+                year = calendar.get(Calendar.YEAR);
+                month = calendar.get(Calendar.MONTH);
+                day = calendar.get(Calendar.DAY_OF_MONTH);
+            }else {
+                year = mViewModel.getUserProfile().getValue().getBirthday().getYear();
+                month = mViewModel.getUserProfile().getValue().getBirthday().getMonthValue();
+                day = mViewModel.getUserProfile().getValue().getBirthday().getDayOfMonth();
             }
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getActivity(),
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    mOnDataSetListener, year, month-1, day);
+            datePickerDialog.getDatePicker().setMinDate(1904);
+            datePickerDialog.getDatePicker().setMaxDate(calendar.getTime().getTime());
+            datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            datePickerDialog.show();
         });
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,20 +239,17 @@ public class Info_Profile_Fragment extends Fragment {
                 handleInput();
             }
         });
-        cancelBtn.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserProfile currentUser = mViewModel.getUserProfile().getValue();
-                mViewModel.getUserProfile().setValue(currentUser);
-                mViewModel.resetLiveData();
-
-            }
-        }));
+        saveBtn.setVisibility(View.GONE);
+        /*
+        cancelBtn.setOnClickListener((v -> {
+            UserProfile currentUser = mViewModel.getUserProfile().getValue();
+            mViewModel.getUserProfile().setValue(currentUser);
+            mViewModel.resetLiveData();
+        }));*/
         interestBtn.setOnClickListener(v -> {
             interestFragment = new Interest_UpdateUser_Fragment(mViewModel);// Interest_UpdateUser_Fragment.newInstance(mViewModel);
             interestFragment.show(getActivity().getSupportFragmentManager(), INTEREST_FRAGMENT);
         });
-
 
     }
 
@@ -246,10 +257,7 @@ public class Info_Profile_Fragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        //Log.e("Info", "onStart");
-
-
-    }
+      }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -301,8 +309,13 @@ public class Info_Profile_Fragment extends Fragment {
 
     }
 
+    /**
+     * 
+     * @return if user is edited, but username is empty
+     */
     private void handleInput() {
 
+        /*
         if(mViewModel.getUsername().getValue().isEmpty()){
             Snackbar.make(view, "Username cannot be empty",Snackbar.LENGTH_SHORT).show();
             return;
@@ -310,6 +323,17 @@ public class Info_Profile_Fragment extends Fragment {
         int newGender = mGenderSpinner.getSelectedItemPosition() + 1;
         String newLocation= mViewModel.getLocation().getValue();
         String newUsername = mViewModel.getUsername().getValue();
+        String newDescription = mDescriptionEditText.getText().toString();
+        LocalDate newDate = LocalDate.parse(mBirthdayTextView.getText().toString(), formatter);
+         */
+        UserSimple editedUser = mViewModel.getEditedProfile().getValue();
+        if(editedUser.getUserName().isEmpty()){
+            Snackbar.make(view, "Username cannot be empty",Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        int newGender = mGenderSpinner.getSelectedItemPosition() + 1;
+        String newLocation= editedUser.getLocation();
+        String newUsername = editedUser.getUserName();
         String newDescription = mDescriptionEditText.getText().toString();
         LocalDate newDate = LocalDate.parse(mBirthdayTextView.getText().toString(), formatter);
 

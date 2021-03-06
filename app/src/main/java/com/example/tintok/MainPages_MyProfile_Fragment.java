@@ -50,6 +50,7 @@ import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.ResponseEvent;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
+import com.example.tintok.Model.UserSimple;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -72,12 +73,13 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
     private EditText username, location;
     private View view;
     private MaterialToolbar toolbar;
-    ShapeableImageView backBtn;
     BottomNavigationView profile_navigation_bar;
     Profile_Picture_UploadFragment profilePictureUploadFragment;
     View_Profile_Picture_Fragment viewProfilePictureFragment;
     PostUploadFragment post = null;
     MainPages_MyProfile_ViewModel mViewModel;
+    View_Followers_Fragment viewFollowersFragment;
+
 
     private final static String NEW_POST = "New Post";
     private final static String NEW_PROFILE_PICTURE = "New Profile Picture";
@@ -91,8 +93,6 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         this.selected = R.id.profile_info_item;
         this.infoFragment = Info_Profile_Fragment.getInstance();
         this.imageFragment = Image_Profile_Fragment.getInstance();//this.user.getMyPosts().getValue());
-       // getChildFragmentManager().beginTransaction().add(R.id.profile_sub_fragment, infoFragment, null)
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -123,10 +123,8 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         profilePic = view.findViewById(R.id.post_profile);
         followingNumber = view.findViewById(R.id.followingsNumber);
         followerNumber = view.findViewById(R.id.follwersNumber);
-      //  backBtn = view.findViewById(R.id.backBtn);
         location = view.findViewById(R.id.profile_location);
-        toolbar = view.findViewById(R.id.myProfile_toolbar);
-     //   toolbar.setNavigationIcon(R.drawable.ic_backspace);
+        toolbar = view.findViewById(R.id.myProfile_toolbar).findViewById(R.id.toolbar);
         miniProfilePic = view.findViewById(R.id.mini_post_profile_picture);
         //toolbar.setTitle("");
 
@@ -143,7 +141,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                     username.setEnabled(true);
                     location.setEnabled(true);
                 }
-                else if(isUserEdited() && item.getItemId() == R.id.profile_photo_item)
+                else if(mViewModel.isUserEdited() && item.getItemId() == R.id.profile_photo_item)
                     getFragmentChangeAlertBuilder().show();
                 else{
                     location.setEnabled(false);
@@ -166,9 +164,16 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             mViewModel = new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class);
         Log.e("MyProfile", mViewModel.toString());
         initPosts();
+        UserSimple userSimple = new UserSimple();
+        userSimple.setUserName(mViewModel.getUserProfile().getValue().getUserName());
+        userSimple.setLocation(mViewModel.getUserProfile().getValue().getLocation());
+        userSimple.setBirthday(mViewModel.getUserProfile().getValue().getBirthday());
+        userSimple.setGender(mViewModel.getUserProfile().getValue().getGender().getI());
+        userSimple.setDescription(mViewModel.getUserProfile().getValue().getDescription());
+        mViewModel.setEditedProfile(userSimple);
 
         toolbar.setNavigationOnClickListener(v -> {
-            if(isUserEdited()){
+            if(mViewModel.isUserEdited()){
                 getBackButtonAlertBuilder().show();
             }
             else getDialog().dismiss();
@@ -199,6 +204,10 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             public void afterTextChanged(Editable s) {
                 String input = s.toString();
                 mViewModel.setLocation(input);
+                UserSimple user = mViewModel.getEditedProfile().getValue();
+                user.setLocation(input);
+                mViewModel.setEditedProfile(user);
+
             }
         });
         username.addTextChangedListener(new TextWatcher() {
@@ -212,7 +221,11 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             }
             @Override
             public void afterTextChanged(Editable s) {
-                mViewModel.setUsername(s.toString());
+                String name = s.toString();
+                mViewModel.setUsername(name);
+                UserSimple user = mViewModel.getEditedProfile().getValue();
+                user.setUserName(name);
+                mViewModel.setEditedProfile(user);
             }
         });
 
@@ -226,6 +239,24 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                 }
 
             }
+        });
+        followerNumber.setOnClickListener(v -> {
+            if(viewFollowersFragment == null){
+                viewFollowersFragment = View_Followers_Fragment.newInstance();
+            }
+            Bundle bundle = new Bundle();
+            bundle.putInt("FOLLOW", 0);
+            viewFollowersFragment.setArguments(bundle);
+            viewFollowersFragment.show(getChildFragmentManager(), "VIEW_FOLLOWERS_FRAGMENT");
+        });
+        followingNumber.setOnClickListener(v -> {
+            if(viewFollowersFragment == null){
+                viewFollowersFragment = View_Followers_Fragment.newInstance();
+            }
+            Bundle bundle = new Bundle();
+            bundle.putInt("FOLLOW", 1);
+            viewFollowersFragment.setArguments(bundle);
+            viewFollowersFragment.show(getChildFragmentManager(), "VIEW_FOLLOWING_FRAGMENT");
         });
 
         /*
@@ -261,7 +292,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                             break;
                     case 1: // select profile picture
                         profilePictureBottomSheet.dismiss();
-                        if(isUserEdited() && profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item){
+                        if(mViewModel.isUserEdited() && profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item){
                             getFragmentChangeAlertBuilder().show();
                         }else if (profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item) {
                             profile_navigation_bar.setSelectedItemId(R.id.profile_photo_item);
@@ -271,9 +302,9 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                         break;
                     case 2: // add profile picture
                         profilePictureBottomSheet.dismiss();
-                        if(isUserEdited())
+                        if(mViewModel.isUserEdited())
                             getBackButtonAlertBuilder().show();
-                        if(!isUserEdited() && profilePictureUploadFragment == null){
+                        if(!mViewModel.isUserEdited() && profilePictureUploadFragment == null){
                             profilePictureUploadFragment = new Profile_Picture_UploadFragment();
                             profilePictureUploadFragment.show(getChildFragmentManager(), NEW_PROFILE_PICTURE);
                             profilePictureUploadFragment.setOnNewProfilePictureListener(newPost -> {
@@ -551,7 +582,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             @Override
             public void onBackPressed() {
 
-                if(isUserEdited()){
+                if(mViewModel.isUserEdited()){
                     MaterialAlertDialogBuilder dialogBuilder = getBackButtonAlertBuilder();
                     dialogBuilder.show();
                 }else super.onBackPressed();
@@ -559,6 +590,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         };
     }
 
+    /*
     private boolean isUserEdited(){
         UserProfile user = mViewModel.getUserProfile().getValue();
         if(username.getText().toString().toUpperCase().equals(user.getUserName().toUpperCase()) &&
@@ -567,6 +599,8 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                 mViewModel.getGender().getValue() == user.getGender().getI() &&
                 mViewModel.getDescription().getValue().equals(user.getDescription()))
             return false;
-        return true;
+        else return true;
     }
+
+     */
 }
