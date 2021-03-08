@@ -2,9 +2,10 @@ package com.example.tintok.Model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.widget.ImageView;
 
-
+/**
+ *  This class represents a MediaEntity that can either hold an URI, URL or Bitmap
+ */
 public class MediaEntity {
     public Uri uri;
     public String url;

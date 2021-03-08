@@ -2,10 +2,13 @@ package com.example.tintok.Model;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class represents a Emoji.
+ * Existing of name and drawable
+ */
 public class EmojiModel {
 
     private final String resourceImgName;
@@ -19,11 +22,15 @@ public class EmojiModel {
     public String getResourceImgName() {
         return resourceImgName;
     }
-
     public Drawable getResource() {
         return resource;
     }
 
+    /**
+     * Loads all Emoji from assets folder into ArrayList
+     * @param context
+     * @return ArrayList of all available Emojis at assets folder
+     */
     public static ArrayList<EmojiModel> getEmojis(Context context){
         ArrayList<EmojiModel> emojis = new ArrayList<>();
         String dataname = "emoticon (";

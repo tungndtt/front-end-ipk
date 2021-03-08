@@ -1,16 +1,12 @@
 package com.example.tintok;
 
 import androidx.lifecycle.ViewModelProvider;
-
-import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,24 +14,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
 import com.example.tintok.Adapters_ViewHolder.ChatroomAdapter;
 import com.example.tintok.CustomView.NoSpaceRecyclerViewDecoration;
-import com.example.tintok.DataLayer.DataRepositiory_Chatrooms;
 import com.example.tintok.Model.ChatRoom;
-import com.example.tintok.Model.MessageEntity;
-import com.example.tintok.Model.Notification;
-
 import java.util.ArrayList;
 
+/**
+ * This fragment is used to display all chatrooms that are available for the user.
+ * Users can search for chatpartner in the list of their chatrooms.
+ * If the user clicks on an item a new activity is started.
+ * @see Activity_ChatRoom
+ */
 public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomAdapter.onChatRoomClickListener {
 
     EditText searchBar;
     RecyclerView chatrooms;
     ChatroomAdapter adapter;
     private MainPages_Chatroom_ViewModel mViewModel;
-
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -47,15 +42,14 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(MainPages_Chatroom_ViewModel.class);
-        // TODO: Use the ViewModel
         init();
         initChatRoom();
-       mViewModel.getChatrooms().observe(this.getViewLifecycleOwner(), chatRooms -> {
+        mViewModel.getChatrooms().observe(this.getViewLifecycleOwner(), chatRooms -> {
            adapter.setItems(chatRooms);
            Log.e("ChatRoom_Frag", "rooms:"+chatRooms);
-       });
-       ArrayList<ChatRoom> mChatRooms = mViewModel.getChatrooms().getValue();
-       for(int i = 0 ; i < mChatRooms.size();i++){
+        });
+        ArrayList<ChatRoom> mChatRooms = mViewModel.getChatrooms().getValue();
+        for(int i = 0 ; i < mChatRooms.size();i++){
            int finalI = i;
            mChatRooms.get(i).getMessageEntities().observe(this.getViewLifecycleOwner(), messageEntities -> {
                 adapter.notifyItemChanged(finalI);
@@ -64,7 +58,9 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
     }
 
 
-
+    /**
+     * Initialize of views and TextChangeListener for the searchBar
+     */
     void init(){
         searchBar = getView().findViewById(R.id.search_text);
         chatrooms = getView().findViewById(R.id.roomList);
@@ -87,6 +83,9 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
         });
     }
 
+    /**
+     *  Initialize of chatroom items in recyclerview
+     */
     void initChatRoom(){
         this.adapter = new ChatroomAdapter(this.getContext(), new ArrayList<>(),this);
         chatrooms.setAdapter(adapter);
@@ -97,6 +96,10 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
     }
 
 
+    /**
+     * starts chatroom activity based on the item position.
+     * @param pos of ChatRoom-item in adapter
+     */
     @Override
     public void OnClick(int pos) {
         App.startActivityChatroom(this.requireContext(), adapter.getItems().get(pos).getChatRoomID());

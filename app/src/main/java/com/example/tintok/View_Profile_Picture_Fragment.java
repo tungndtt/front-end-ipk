@@ -79,7 +79,7 @@ public class View_Profile_Picture_Fragment extends MyDialogFragment {
     }
 
     /**
-     * if the arguments is not null then username, status and image are set accordingly
+     * if arguments are not null then username, status and image are set accordingly
      * else nothing is shown.
      * @param savedInstanceState
      */

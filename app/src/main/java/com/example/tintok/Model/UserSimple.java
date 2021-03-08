@@ -1,11 +1,14 @@
 package com.example.tintok.Model;
 
 import androidx.annotation.Nullable;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 
+/**
+ * This class represents the basic user information.
+ * Those are an unique ID, username, email address, gender, location, profile picture, age and birthday, description of his person or a quote.
+ */
 public class UserSimple  {
     private String userID;
     private String userName;
@@ -16,7 +19,6 @@ public class UserSimple  {
     private Gender gender;
     private String location;
     private MediaEntity profilePic;
-    private String newPassword;
 
     public String getUserID() {
         return userID;
@@ -69,6 +71,10 @@ public class UserSimple  {
     public int getAge(){
         return age;
     }
+
+    /**
+     * calculate age based on birthday an local time
+     */
     private void setAge(){
         if(birthday != null){
             LocalDate today = LocalDate.now(ZoneId.systemDefault());
@@ -81,10 +87,19 @@ public class UserSimple  {
     public LocalDate getBirthday() {
         return birthday;
     }
+
+    /**
+     * set birthday and age of the user
+     * @param birthday users birthday
+     */
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
         setAge();
     }
+
+    /**
+     * @param gender gender as integer 1=male, 2=female, 3=divers
+     */
     public void setGender(int gender) {
         switch(gender){
             //case 0: this.gender = Gender.UNKNOWN;

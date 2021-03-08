@@ -1,11 +1,14 @@
 package com.example.tintok.Model;
 
 import androidx.lifecycle.MutableLiveData;
-
-import com.example.tintok.Communication.RestAPI_model.ChatForm;
-
 import java.util.ArrayList;
 
+/**
+ * This class represents a ChatRoom for two users.
+ * Each ChatRoom has an ID and both members are identified by an ID.
+ * All Messages between to those two persons are hold in LiveData as ArrayList of MessageEntity
+ * @see MessageEntity
+ */
 public class ChatRoom  {
     private String chatRoomID;
     private ArrayList<String> memberIDs;

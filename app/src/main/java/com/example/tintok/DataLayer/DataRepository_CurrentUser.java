@@ -2,11 +2,7 @@ package com.example.tintok.DataLayer;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.CommunicationEvent;
 import com.example.tintok.Communication.RestAPI;
@@ -18,14 +14,10 @@ import com.example.tintok.Model.UserProfile;
 import com.example.tintok.Model.UserSimple;
 import com.example.tintok.Utils.DataConverter;
 import com.example.tintok.Utils.FileUtil;
-
-import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -33,6 +25,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * This class used RestAPI to send different requests to server that are related to the current user and receive the response.
+ */
 public class DataRepository_CurrentUser {
     MutableLiveData<UserProfile> currentUser;
     DataRepositoryController controller;
@@ -48,6 +43,10 @@ public class DataRepository_CurrentUser {
     }
 
 
+    /**
+     * get the users relevant information after login from the server by sending a UserForm request
+     * @see UserForm
+     */
     public void initData() {
         RestAPI api = Communication.getInstance().getApi();
         api.getUser().enqueue(new Callback<UserForm>() {
@@ -76,6 +75,12 @@ public class DataRepository_CurrentUser {
         });
     }
 
+    /**
+     * splits a created post into several RequestBodies and uploads the file to the server.
+     * Receives a PostForm and updates LiveData of users posts if response is successful.
+     * @param mContext
+     * @param newPost the user created
+     */
     public void submitNewPost(Context mContext, Post newPost) {
         RestAPI api = Communication.getInstance().getApi();
         if(api != null){
@@ -111,7 +116,6 @@ public class DataRepository_CurrentUser {
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
                     }
-                    //Toast.makeText(getApplication(), "Connection fails", Toast.LENGTH_LONG).show();
                 }
             });
         } else {
@@ -119,6 +123,10 @@ public class DataRepository_CurrentUser {
         }
     }
 
+    /**
+     * Removes or add user's subscription to a post and updates LiveData
+     * @param p post user subscribe or unsubscribe
+     */
     public void UpdateSubcribedPost(Post p) {
         ArrayList<String> followingPost = this.currentUser.getValue().getFollowingPost().getValue();
         if(followingPost.contains(p.getId()))
@@ -127,6 +135,12 @@ public class DataRepository_CurrentUser {
             followingPost.add(p.getId());
         this.currentUser.getValue().getFollowingPost().postValue(followingPost);
     }
+
+    /**
+     * Converts UserForm into UserProfile. Only used for basic user information
+     * @param userForm received from server
+     * @return updated UserProfile
+     */
     private UserProfile setUpdatedUserProfile(UserForm userForm){
         UserProfile userProfile = currentUser.getValue();
         userProfile.setUserName(userForm.getUsername());
@@ -137,6 +151,13 @@ public class DataRepository_CurrentUser {
         return userProfile;
 
     }
+
+    /**
+     * Updates basic user information.
+     * Convert UserProfile into UserForm to send updated information to server.
+     * If response is successful, the current user LiveData is updated.
+     * @param userProfile edited userprofile
+     */
     public void updateUserInfo(UserProfile userProfile){
 
         RestAPI api = Communication.getInstance().getApi();
@@ -153,10 +174,12 @@ public class DataRepository_CurrentUser {
                 public void onResponse(Call<UserForm> call, Response<UserForm> response) {
                     if(response.isSuccessful()){
                         currentUser.postValue(setUpdatedUserProfile(response.body()));
+                       /*
                         UserSimple newUser = new UserSimple();
                         newUser.setUserID(currentUser.getValue().getUserID());
                         newUser.setUserName(currentUser.getValue().getUserName());
                         newUser.setProfilePic(new MediaEntity(currentUser.getValue().getProfilePic().url));
+                        */
                         //TODO:
                       //  DataRepositoryController.getInstance().dataRepository_userSimple.updateUserSimpleInCache(newUser);
                         networkStatus.postValue(new ResponseEvent(ResponseEvent.Type.USER_UPDATE, response.message()));
@@ -174,6 +197,11 @@ public class DataRepository_CurrentUser {
 
     }
 
+    /**
+     * Convert password-strings to UserForm.
+     * Response tells user if password could be changed or the current password was wrong.
+     * @param passwords current and new password
+     */
     public void updateUserPassword(List<String> passwords){
         isUserUpdating.setValue(true);
         RestAPI api = Communication.getInstance().getApi();
@@ -203,6 +231,12 @@ public class DataRepository_CurrentUser {
 
     }
 
+    /**
+     * since post is the same as a profile picture the behaviour is like submitting a post, but includes to change the profile picture of the user.
+     * @see #submitNewPost(Context, Post)
+     * @param mContext
+     * @param newPost
+     */
     public void submitNewProfilePicture(Context mContext, Post newPost){
         RestAPI api = Communication.getInstance().getApi();
         if(api != null){
@@ -226,17 +260,20 @@ public class DataRepository_CurrentUser {
                         ArrayList<Post> mPosts = currentUser.getValue().myPosts.getValue();
                         mPosts.add(0, newPost);
                         currentUser.getValue().myPosts.postValue(mPosts);
-                        // update UserProfile and User in Cache
+                        // update UserProfile
                         MediaEntity tmpMediaEntity = new MediaEntity(form.getImageUrl());
                         UserProfile tmpUser = currentUser.getValue();
                         tmpUser.setProfilePic(tmpMediaEntity);
                         currentUser.postValue(tmpUser);
 
+                        //TODO:
+                        /*
                         UserSimple newUser = new UserSimple();
                         newUser.setUserID(tmpUser.getUserID());
                         newUser.setUserName(tmpUser.getUserName());
                         newUser.setProfilePic(tmpMediaEntity);
                         DataRepositoryController.getInstance().dataRepository_userSimple.updateUserSimpleInCache(newUser);
+                         */
                     }
                     networkStatus.postValue(new ResponseEvent(ResponseEvent.Type.PROFILE_PICTURE_UPDATE, response.message()));
                     isUserUpdating.postValue(false);
@@ -256,6 +293,10 @@ public class DataRepository_CurrentUser {
         }
     }
 
+    /**
+     * updates the profile picture on server-side and sets new profile picture
+     * @param url of an already created posts
+     */
     public void updateUserProfilePicture(String url){
         RestAPI api = Communication.getInstance().getApi();
         if(api != null){
@@ -273,11 +314,14 @@ public class DataRepository_CurrentUser {
                         tmpUser.setProfilePic(tmpMediaEntity);
                         currentUser.postValue(tmpUser);
 
+                        //TODO:
+                        /*
                         UserSimple newUser = new UserSimple();
                         newUser.setUserID(tmpUser.getUserID());
                         newUser.setUserName(tmpUser.getUserName());
                         newUser.setProfilePic(tmpMediaEntity);
                         DataRepositoryController.getInstance().dataRepository_userSimple.updateUserSimpleInCache(newUser);
+                         */
                     }
                     networkStatus.postValue(new ResponseEvent(ResponseEvent.Type.PROFILE_PICTURE_UPDATE, response.message()));
                    // isUserUpdating.postValue(false);
@@ -295,6 +339,11 @@ public class DataRepository_CurrentUser {
 
     }
 
+    /**
+     * Convert list of integers into UserForm to send an update-request to server.
+     * If response is successful, LiveData of interests are updated.
+     * @param newInterests new chosen interests by user
+     */
     public void updateUserInterests(ArrayList<Integer> newInterests){
         RestAPI api = Communication.getInstance().getApi();
         if(api != null){
@@ -306,7 +355,7 @@ public class DataRepository_CurrentUser {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                     if(response.isSuccessful())
-                       currentUser.getValue().setUserInterests(newInterests); //DataRepositoryController.getInstance().dataRepository_currentUser.currentUser.getValue().setUserInterests(newInterests);
+                       currentUser.getValue().setUserInterests(newInterests);
 
                     networkStatus.postValue(new ResponseEvent(ResponseEvent.Type.INTEREST_UPDATE, response.message()));
                     isUserUpdating.postValue(false);
@@ -319,6 +368,12 @@ public class DataRepository_CurrentUser {
             });
         }
     }
+
+    /**
+     * Checks if other user is already a person the user follows or not.
+     * In both cases a communication event is triggered
+     * @param user other profile user wants to follow or unfollow
+     */
     public void UserPressFollow(String user) {
         UserProfile currentUser = this.currentUser.getValue();
         ArrayList<String> currentFollowing = currentUser.getFollowing().getValue();
@@ -333,6 +388,10 @@ public class DataRepository_CurrentUser {
         this.currentUser.getValue().getFollowing().postValue(currentFollowing);
     }
 
+    /**
+     * @param user user id of other user
+     * @return true if user already follows the other user, else false
+     */
     public boolean isCurrentUserFollowingUser(String user){
         UserProfile currentUser = this.currentUser.getValue();
         ArrayList<String> currentFollowing = currentUser.getFollowing().getValue();

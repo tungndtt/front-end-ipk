@@ -21,7 +21,7 @@ public class MainPages_Posts_ViewModel extends AndroidViewModel {
     public MainPages_Posts_ViewModel(@NonNull Application application) {
         super(application);
     }
-    // TODO: Implement the ViewModel
+
 
     public MutableLiveData<ArrayList<Post>> getPosts(){
 

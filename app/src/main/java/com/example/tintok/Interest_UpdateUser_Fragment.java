@@ -1,21 +1,16 @@
 package com.example.tintok;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.example.tintok.Adapters_ViewHolder.InterestAdapter;
 import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.DataLayer.DataRepository_Interest;
@@ -25,9 +20,15 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 
+/**
+ * This class allows an user to change its interests.
+ * Interests are saved separately and not as basic user information.
+ * User has to choose at least one interest.
+ * Nearly the same behaviour as
+ * @see Interests_SignUp_Fragment
+ */
 public class Interest_UpdateUser_Fragment extends MyDialogFragment {
 
     private View view;
@@ -76,15 +77,19 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         if(mViewModel == null)
             mViewModel = new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class);
-
+        /*
+            LiveData observer for boolean. Stays true while sending request and waiting for server response
+            If true a progressbar is shown.
+         */
         mViewModel.getIsUserUpdating().observe(getViewLifecycleOwner(), aBoolean -> {
             if(aBoolean)
                 mProgressBar.setVisibility(View.VISIBLE);
             else mProgressBar.setVisibility(View.INVISIBLE);
         });
-
-
-        //TODO: network response in backend
+         /*
+            LiveData observer for ResponseEvent.
+            If ResponseEvent type is INTEREST_UPDATE then the dialog gets either dismissed and a Snackbar with Updated pops up or an error message appears.
+         */
         mViewModel.getNetworkResponse().observe(getViewLifecycleOwner(), responseEvent -> {
 
             if(responseEvent.getType() == ResponseEvent.Type.INTEREST_UPDATE){
@@ -99,76 +104,16 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
                     errorTV.setText("You can only change your interests every 30 minutes.");
             }
         });
-
     }
-
-    /*
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.e("onStart", "test");
-        newInterests = new boolean[DataRepository_Interest.interests.length];
-        mViewModel.setNewUserInterests(newInterests);
-
-
-        DataRepository_Interest.setUserInterest(mViewModel.getUserProfile().getValue().getUserInterests().getValue());
-        interestAdapter = new InterestAdapter(getContext(), DataRepository_Interest.getInterestArrayList());
-
-        interestAdapter.setOnInterestClickListener(position -> {
-            if(!saveBtn.isClickable()){
-                saveBtn.setBackgroundColor(getContext().getColor(R.color.blue));
-                saveBtn.setClickable(true);
-            }
-            Log.e("pos", String.valueOf(position));
-            interestAdapter.getItems().get(position).setSelected(!(interestAdapter.getItems().get(position).isSelected()));
-            Log.e("newInt bef", String.valueOf(newInterests[position]));
-            newInterests[position] = !newInterests[position];
-            Log.e("newInt bef", String.valueOf(newInterests[position]));
-            mViewModel.setNewUserInterests(newInterests);
-
-        });
-
-        recyclerView.setAdapter(interestAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-
-        saveBtn.setOnClickListener(v -> {
-
-            Log.e("onStart", "click listener");
-
-            boolean isEmpty = true;
-            ArrayList<Integer> result = new ArrayList<>();
-            newInterests = mViewModel.getNewUserInterests().getValue();
-            for(int i=0; i<newInterests.length; i++){
-                if(newInterests[i]){
-                    isEmpty = false;
-                    result.add(i);
-                }
-            }
-            if(isEmpty){
-                errorTV.setText("please choose some interest");
-                errorTV.setVisibility(View.VISIBLE);
-                return;
-            }
-            mViewModel.updateUserInterests(result);
-        });
-        saveBtn.setBackgroundColor(getContext().getColor(R.color.green_dark)); //TODO
-        saveBtn.setClickable(false);
-
-        //TODO: TOOLBAR
-        backBtn.setOnClickListener(v -> {
-            getDialog().dismiss();
-
-        });
-
-    }
-
-
-     */
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        /*
+            initialize interestAdapter with current chosen interests.
+            selected item changes its background
+         */
         DataRepository_Interest.setUserInterest(mViewModel.getUserProfile().getValue().getUserInterests().getValue());
         interestAdapter = new InterestAdapter(getContext(), DataRepository_Interest.getInterestArrayList());
         interestAdapter.setOnInterestClickListener(position -> {
@@ -183,10 +128,6 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
 
         saveBtn.setOnClickListener(v -> {
             hasInterests();
-            /*if(hasInterests())
-                getDialog().dismiss();
-
-             */
         });
 
         saveBtn.setEnabled(false);
@@ -198,8 +139,6 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
                         .setMessage("Your current changes will be lost. Do you want to save?")
                         .setPositiveButton("Save", (dialog, which) -> {
                             hasInterests();
-                            /*hasInterests())
-                                getDialog().dismiss();*/
                                 })
 
                         .setNegativeButton("Don't save", (dialog, which) -> {
@@ -208,26 +147,11 @@ public class Interest_UpdateUser_Fragment extends MyDialogFragment {
             }else getDialog().dismiss();
         });
     }
-/*
-    public boolean hasInterests() {
-        result = new ArrayList<>();
-        boolean isEmpty = true;
-        ArrayList<Interest> newChosenInterests = interestAdapter.getItems();
-        for (Interest interest : newChosenInterests) {
-            if (interest.isSelected()) {
-                result.add(interest.getId());
-                isEmpty = false;
-            }
-        }
-        if (isEmpty) {
-            errorTV.setText(getResources().getString(R.string.interests_pleaseChose));
-            errorTV.setVisibility(View.VISIBLE);
-            return false;
-        } else {
-            mViewModel.updateUserInterests(result);
-            return true;
-        }
-    }*/
+
+    /**
+     * @see Interests_SignUp_Fragment#hasInterests()
+     * uses {@link MainPages_MyProfile_ViewModel} instead for updating user interests
+     */
     public void hasInterests() {
         result = new ArrayList<>();
         boolean isEmpty = true;

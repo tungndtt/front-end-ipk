@@ -2,21 +2,30 @@ package com.example.tintok;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.example.tintok.DataLayer.DataRepositiory_Chatrooms;
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.Model.ChatRoom;
 import com.example.tintok.Model.UserSimple;
-
 import java.util.ArrayList;
 
+/**
+ * This ViewModel is used to get all known (available) chatrooms for the user and to search for specific chatpartner by name
+ */
 public class MainPages_Chatroom_ViewModel extends ViewModel {
 
 
+    /**
+     * Getter
+     * @return LiveData of ArrayList with all available chatrooms
+     */
     public MutableLiveData<ArrayList<ChatRoom>> getChatrooms(){
         return DataRepositoryController.getInstance().getChatRooms();
     }
 
+    /**
+     * search for a (previous) chat partner  at user's available chatrooms
+     * @param filter name or part of the name the user is looking for
+     * @return list of chatsrooms that match the given user input
+     */
     public ArrayList<ChatRoom> filterByName(String filter){
         if(filter.isEmpty())
             return this.getChatrooms().getValue();

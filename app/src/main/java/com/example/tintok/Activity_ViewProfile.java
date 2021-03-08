@@ -1,42 +1,36 @@
 package com.example.tintok;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.tintok.Adapters_ViewHolder.PostAdapter;
-import com.example.tintok.CustomView.PostUploadFragment;
 import com.example.tintok.Model.Post;
-import com.example.tintok.Model.UserProfile;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
-
+/**
+ * Within this activity the user can see another user profile.
+ * User can see other username, location (if stated), profile picture, number of followers and following person as well as all posts of this user.
+ * In addition, the user can follow this person by clicking a button,
+ * view the profile picture by clicking on the profile picture {@link View_Profile_Picture_Fragment}
+ * and starting a chat with this person.
+ * Furthermore,
+ * @see ViewProfile_UserInfo_Fragment for additional user information and
+ * @see ViewProfile_UserImages_Fragment are all images shown.
+ *
+ */
 public class Activity_ViewProfile extends AppCompatActivity{
 
     private Activity_ViewProfile_ViewModel viewModel;
@@ -58,9 +52,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
-
-        //this.viewModel.setFragment(this);
-        // info of displayed user. Currently just user name for testing
+        // info of displayed user.
         username = findViewById(R.id.profile_name);
         followingNumber = findViewById(R.id.followingsNumber);
         followerNumber = findViewById(R.id.follwersNumber);
@@ -71,6 +63,9 @@ public class Activity_ViewProfile extends AppCompatActivity{
             finish();
         });
 
+        /*
+            to switch between info and image fragment
+         */
         profile_navigation_bar = findViewById(R.id.profile_navigation_bar);
         profile_navigation_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -83,28 +78,19 @@ public class Activity_ViewProfile extends AppCompatActivity{
                 return true;
             }
         });
-       // infoFragment = ViewProfile_UserInfo_Fragment.getInstance();//Info_Profile_Fragment.getInstance();
 
         this.viewModel = new ViewModelProvider(this).get(Activity_ViewProfile_ViewModel.class);
         String author_id = getIntent().getStringExtra("author_id");
         this.viewModel.getUserProfile(author_id);
         Log.e("Act", viewModel.toString());
-        infoFragment = ViewProfile_UserInfo_Fragment.getInstance();//(viewModel);//Info_Profile_Fragment.getInstance();
-       // imageFragment = ViewProfile_UserImages_Fragment.getInstance();
+        infoFragment = ViewProfile_UserInfo_Fragment.getInstance();
+
         this.selected = R.id.profile_info_item;
         profile_navigation_bar.setSelectedItemId( this.selected);
 
-
-       // String author_id = getIntent().getStringExtra("author_id");
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.view_profile_activity_toolbar);
-        if (toolbar != null){
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-            toolbar.setTitle("Profile");
-        }*/
-       // this.viewModel.getUserProfile(author_id);
-
+        /*
+            to show profile picture
+         */
         profile_pic = findViewById(R.id.profile_picture);
         profile_pic.setOnClickListener(v -> {
             if(viewProfilePictureFragment == null)
@@ -123,6 +109,10 @@ public class Activity_ViewProfile extends AppCompatActivity{
             viewProfilePictureFragment.show(getSupportFragmentManager(), "VIEW_PROFILE_PICTURE");
         });
 
+
+        /*
+            sets username, location and profile picture, number of followers and following persons
+         */
         viewModel.getProfile().observe(this, userProfile -> {
             if (userProfile == null)
                 return;
@@ -130,7 +120,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
             username.setText(userProfile.getUserName());
             Glide.with(this).load(userProfile.getProfilePic().url)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profile_pic);
-            imageFragment = ViewProfile_UserImages_Fragment.getInstance();//viewModel.getProfile().getValue().myPosts.getValue());
+            imageFragment = ViewProfile_UserImages_Fragment.getInstance();
             initPosts();
 
             followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));
@@ -143,21 +133,21 @@ public class Activity_ViewProfile extends AppCompatActivity{
             viewModel.UserPressFollow();
             UpdateFollowBtn();
         });
-
+        // to start chatroom
         messageBtn.setOnClickListener(v -> {
            App.startActivityChatroom(Activity_ViewProfile.this, viewModel.openChatRoomWithUser().getChatRoomID());
         });
     }
 
+    /**
+     *  if user follows this person then the follow button is blue else black
+     */
     private void UpdateFollowBtn(){
-        if(viewModel.isFollowing()){
+        if(viewModel.isFollowing())
             followBtn.setTextColor(Color.parseColor("#03b5fc"));
-        }
-
-        else{
+        else
             followBtn.setTextColor(Color.BLACK);
 
-        }
     }
 
     @Override
@@ -166,6 +156,9 @@ public class Activity_ViewProfile extends AppCompatActivity{
         finish();
     }
 
+    /**
+     * setup all posts of this person
+     */
     void initPosts(){
         postFragment = new MainPages_Posts_Fragment(true, true);
         ((MainPages_Posts_Fragment)postFragment).setViewModel(this.viewModel);

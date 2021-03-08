@@ -1,22 +1,21 @@
 package com.example.tintok;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.text.HtmlCompat;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebView;
-
 import com.example.tintok.Communication.Communication;
 import com.google.android.material.appbar.MaterialToolbar;
 
-
+/**
+ * Activity instantiate communication class and allows the user to either login, register or reset its password.
+ * The default Fragment is Login_Fragment.
+ * @see Login_Fragment
+ * @see Sign_up_Fragment
+ * @see Password_Reset_Fragment
+ */
 public class Activity_Login_Signup extends AppCompatActivity {
     public final String ID = "Login" ;
     private Login_SignUp_ViewModel viewModel;
@@ -25,6 +24,10 @@ public class Activity_Login_Signup extends AppCompatActivity {
     public Activity_Login_Signup() {
     }
 
+    /**
+     * set toolbar, instantiate {@link Communication}, default page is Login-Fragment
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

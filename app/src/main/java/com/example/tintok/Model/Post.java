@@ -2,13 +2,14 @@ package com.example.tintok.Model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-
-import android.graphics.Bitmap;
-
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+/**
+ * This class represents a Post of a user.
+ * A post is identified by ID, contains a status/text, the author of the post as ID, a MediaEntity,
+ * date of creation, users who liked this post and comments related to this post.
+ */
 public class Post {
     private String id;
     private String status;
@@ -18,6 +19,14 @@ public class Post {
     public ArrayList<String> likers;
     public MutableLiveData<ArrayList<Comment>> comments;
 
+    /**
+     * Post-Constructor
+     * @param id of the post for unique identification
+     * @param status text/message to this post from author.
+     * @param author_id unique id to identify author
+     * @param image MediaEntity that the user took from gallery or from camera
+     * @param dateTime date of creation
+     */
     public Post(String id, String status, String author_id, MediaEntity image, LocalDateTime dateTime) {
         this.id = id;
         this.status = status;
@@ -67,7 +76,6 @@ public class Post {
             return super.equals(obj);
         }
     }
-
     public LocalDateTime getDateTime() {
         return this.dateTime;
     }

@@ -19,7 +19,7 @@ import com.example.tintok.Model.Post;
 
 /**
  * Shows all uploaded posts and profile pictures from another user.
- * Allows the user to click on a content and let it show.
+ * Allows the user to click on an image and let it show in another fragment
  */
 public class ViewProfile_UserImages_Fragment extends Fragment {
 

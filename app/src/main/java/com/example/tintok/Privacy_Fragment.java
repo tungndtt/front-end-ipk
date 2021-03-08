@@ -1,10 +1,6 @@
 package com.example.tintok;
 
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -16,7 +12,8 @@ import com.example.tintok.CustomView.MyDialogFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 
 /**
- *  Privacy_Fragment shows privacy policy of this application
+ *  Privacy_Fragment shows privacy policy of this application.
+ *  Loads the privacy policy from string value.
  */
 public class Privacy_Fragment extends MyDialogFragment {
 

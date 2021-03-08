@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Shows the user information age, gender, interests and description of another user
- *
  */
 public class ViewProfile_UserInfo_Fragment extends Fragment {
 

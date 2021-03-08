@@ -2,16 +2,19 @@ package com.example.tintok;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.widget.ProgressBar;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.Utils.AppNotificationChannelManager;
 import com.example.tintok.Utils.AsynTaskRunner;
 import com.example.tintok.Utils.CustomCallable;
 
+/**
+ * This activity is used to load the user specific data, e.g. user information, chatrooms or posts,
+ * from the server and to instantiate a notification channel for notifications and for chat messages.
+ * After the initialisation is done, the main activity will be started.
+ * @see Activity_AppMainPages
+ */
 public class Activity_InitData extends AppCompatActivity implements CustomCallable<String> {
 
     private ProgressBar progressBar;

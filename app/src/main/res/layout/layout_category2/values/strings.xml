@@ -68,6 +68,6 @@
     <string name="apply_filter">APPLY FILTER</string>
     <string name="reset_filter">Reset Filter</string>
     <string name="follow">Follow</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="change_password">Change Password</string>
 
 </resources>

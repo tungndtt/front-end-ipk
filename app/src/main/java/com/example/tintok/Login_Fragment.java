@@ -1,18 +1,16 @@
 package com.example.tintok;
 
 import androidx.annotation.RequiresApi;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,19 +20,19 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.tintok.Communication.Communication;
-import com.example.tintok.Communication.RestAPI_Entity;
-import com.google.gson.JsonObject;
-
+/**
+ * This class is mainly used to either securely login the user or forward the user to a registration page.
+ * User can login if he is already registers. Therefore, user must enter email and password.
+ * If request is successful, then he will be logged in, else an error is shown.
+ * Also, user can click on password forgot, on register now or on privacy policy to get redirect to the corresponding page.
+ */
 public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.requestListener {
-
-
-    public static Login_Fragment newInstance(Login_SignUp_ViewModel viewModel) {
-        return new Login_Fragment(viewModel);
-    }
 
     public Login_Fragment(){
 
+    }
+    public static Login_Fragment newInstance(Login_SignUp_ViewModel viewModel) {
+        return new Login_Fragment(viewModel);
     }
 
     public Login_Fragment(Login_SignUp_ViewModel viewModel){
@@ -67,6 +65,10 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
 
     }
 
+    /**
+     * Initialization of views.
+     * Setting up onClickListener for login, registration, password forgot and privacy policy.
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     void init(){
         loginButton = getView().findViewById(R.id.sign_inButton);
@@ -78,25 +80,10 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
         forget = getView().findViewById(R.id.forget_account_text);
         privacy = getView().findViewById(R.id.login_privacy_policy);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-                HandleLogin();
-            }
-        });
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getParentFragmentManager().beginTransaction().replace(R.id.fragment, Sign_up_Fragment.newInstance(viewModel)).addToBackStack("Login").commit();
-            }
-        });
-        forget.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getParentFragmentManager().beginTransaction().replace(R.id.fragment, Password_Reset_Fragment.newInstance(viewModel)).addToBackStack("Login").commit();
-                //getParentFragmentManager().beginTransaction().replace(R.id.fragment, ForgetPasswordFragment.newInstance(viewModel)).addToBackStack("Login").commit();
-            }
+        loginButton.setOnClickListener(v -> HandleLogin());
+        registerButton.setOnClickListener(v -> getParentFragmentManager().beginTransaction().replace(R.id.fragment, Sign_up_Fragment.newInstance(viewModel)).addToBackStack("Login").commit());
+        forget.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction().replace(R.id.fragment, Password_Reset_Fragment.newInstance(viewModel)).addToBackStack("Login").commit();
         });
         privacy.setOnClickListener(v -> {
             if(privacyFragment == null)
@@ -108,26 +95,33 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // TODO: Use the ViewModel
     }
 
+    /**
+     * Checks if email is valid and password has at least 6 characters.
+     * If so, email and password are passed to ViewModel to send a login request to server.
+     *
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void HandleLogin(){
         email.onEditorAction(EditorInfo.IME_ACTION_DONE);
-        if(email.getText().toString().length() <= 5 || password.getText().toString().length()<=5){
+        if(!Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches() || password.getText().toString().length()<=5){
             status.setVisibility(View.VISIBLE);
             status.setText("Invalid Email or Password");
             return;
         }
-
         status.setVisibility(View.VISIBLE);
         status.setText("Signing in...");
         loadingBar.setVisibility(View.VISIBLE);
-        // Communication.getInstance().emitEvent("login", data);
+
         viewModel.loginRequest(email.getText().toString(), password.getText().toString(), this);
     }
 
 
+    /**
+     * User is authenticated and will be logged in and activity loads user specific content
+     * @see Activity_InitData
+     */
     @Override
     public void requestSuccess() {
         loadingBar.setVisibility(View.INVISIBLE);
@@ -137,6 +131,9 @@ public class Login_Fragment extends Fragment implements Login_SignUp_ViewModel.r
         getActivity().finish();
     }
 
+    /**
+     * request failed due to reason, e.g no valid email, incorrect password
+     */
     @Override
     public void requestFail(String reason) {
         status.setVisibility(View.VISIBLE);

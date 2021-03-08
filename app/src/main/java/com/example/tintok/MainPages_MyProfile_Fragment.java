@@ -4,69 +4,47 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.tintok.Adapters_ViewHolder.PostAdapter;
 import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.CustomView.PostUploadFragment;
 import com.example.tintok.CustomView.Profile_Picture_BottomSheet;
 import com.example.tintok.CustomView.Profile_Picture_UploadFragment;
-import com.example.tintok.DataLayer.DataRepositoryController;
 import com.example.tintok.DataLayer.ResponseEvent;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Model.UserProfile;
 import com.example.tintok.Model.UserSimple;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-
+/**
+ * This class provides several features for the user .
+ * In general, user can switch between {@link Info_Profile_Fragment} and {@link Image_Profile_Fragment}.
+ * The {@link Info_Profile_Fragment} allows in combination with this fragment to change the basic user information: username, location, birthday, gender, description, interests.
+ * The {@link Image_Profile_Fragment} shows all images from self uploaded posts and let the user select one of those images as a profile picture.
+ * User can create a new post and see its own posts at the bottom of this fragment.
+ * Furthermore, user can click on profile picture to choose between viewing, selecting or creating a new profile picture. A new profile picture is a new post.
+ */
 public class MainPages_MyProfile_Fragment extends MyDialogFragment implements PostUploadFragment.onNewPostListener {
 
     private Fragment infoFragment, imageFragment, postFragment;
     private int selected;
-
-
     private ImageView profilePic, miniProfilePic;
     private View newPostBtn;
     private TextView followingNumber, followerNumber;
@@ -80,19 +58,19 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
     MainPages_MyProfile_ViewModel mViewModel;
     View_Followers_Fragment viewFollowersFragment;
 
-
     private final static String NEW_POST = "New Post";
     private final static String NEW_PROFILE_PICTURE = "New Profile Picture";
     private final static String BOTTOM_SHEET = "profile picture bottom sheet";
     private final static String VIEW_PROFILE_PICTURE = "view profile picture";
 
+
+    //TODO: change empty constructor
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public MainPages_MyProfile_Fragment() { // and other data of user to display (location, gender, images, ...)
-        // Required empty public constructor
+    public MainPages_MyProfile_Fragment() {
         Log.i("Init", "Initialize profile fragment...");
         this.selected = R.id.profile_info_item;
         this.infoFragment = Info_Profile_Fragment.getInstance();
-        this.imageFragment = Image_Profile_Fragment.getInstance();//this.user.getMyPosts().getValue());
+        this.imageFragment = Image_Profile_Fragment.getInstance();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -109,7 +87,13 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
     }
 
 
-
+    /**
+     * setup of views, NavigationBar
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -117,7 +101,6 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         Log.i("INFO", "Creating view for profile fragment ...");
         view = inflater.inflate(R.layout.mainpages_myprofile_fragment, container, false);
         //this.viewModel.setFragment(this);
-
         username = view.findViewById(R.id.profile_name);
         newPostBtn = view.findViewById(R.id.newPostBtn);
         profilePic = view.findViewById(R.id.post_profile);
@@ -126,31 +109,30 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         location = view.findViewById(R.id.profile_location);
         toolbar = view.findViewById(R.id.myProfile_toolbar).findViewById(R.id.toolbar);
         miniProfilePic = view.findViewById(R.id.mini_post_profile_picture);
-        //toolbar.setTitle("");
-
 
         profile_navigation_bar = view.findViewById(R.id.profile_navigation_bar);
         profile_navigation_bar.setSelectedItemId(this.selected);
 
-        profile_navigation_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                selected = item.getItemId();
-                if (item.getItemId() == R.id.profile_info_item){
-                    getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, infoFragment).commit();
-                    username.setEnabled(true);
-                    location.setEnabled(true);
-                }
-                else if(mViewModel.isUserEdited() && item.getItemId() == R.id.profile_photo_item)
-                    getFragmentChangeAlertBuilder().show();
-                else{
-                    location.setEnabled(false);
-                    username.setEnabled(false);
-                    getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();
-
-                }
-                return true;
+        /*
+            enables/disables username and location, so that the user cannot edit any information if he is not at Info_Profile_Fragment
+            Tests, if any basic user information is edited. If so, an alert pops up to ask user if he wants to continue and discard all changes or not.
+         */
+        profile_navigation_bar.setOnNavigationItemSelectedListener(item -> {
+            selected = item.getItemId();
+            if (item.getItemId() == R.id.profile_info_item){
+                getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, infoFragment).commit();
+                username.setEnabled(true);
+                location.setEnabled(true);
             }
+            else if(mViewModel.isUserEdited() && item.getItemId() == R.id.profile_photo_item)
+                getFragmentChangeAlertBuilder().show();
+            else{
+                location.setEnabled(false);
+                username.setEnabled(false);
+                getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();
+
+            }
+            return true;
         });
         setupFullscreen();
         return view;
@@ -164,6 +146,9 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             mViewModel = new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class);
         Log.e("MyProfile", mViewModel.toString());
         initPosts();
+        /*
+            sets editedSimpleUser values to current user values
+         */
         UserSimple userSimple = new UserSimple();
         userSimple.setUserName(mViewModel.getUserProfile().getValue().getUserName());
         userSimple.setLocation(mViewModel.getUserProfile().getValue().getLocation());
@@ -188,6 +173,9 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             username.setEnabled(false);
             getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();}
 
+        /*
+            notify data change to editedUserSimple of ViewModel
+         */
         location.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -203,7 +191,6 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             @Override
             public void afterTextChanged(Editable s) {
                 String input = s.toString();
-                mViewModel.setLocation(input);
                 UserSimple user = mViewModel.getEditedProfile().getValue();
                 user.setLocation(input);
                 mViewModel.setEditedProfile(user);
@@ -222,24 +209,26 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             @Override
             public void afterTextChanged(Editable s) {
                 String name = s.toString();
-                mViewModel.setUsername(name);
                 UserSimple user = mViewModel.getEditedProfile().getValue();
                 user.setUserName(name);
                 mViewModel.setEditedProfile(user);
             }
         });
 
-        newPostBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(post == null){
-                    post = new PostUploadFragment(MainPages_MyProfile_Fragment.this::onNewPost);
-                    post.show(getChildFragmentManager(), NEW_POST);
-                }
-
+        /*
+            Instantiate a new PostUploadFragment, so that the user can upload new content.
+         */
+        newPostBtn.setOnClickListener(v -> {
+            if(post == null){
+                post = new PostUploadFragment(MainPages_MyProfile_Fragment.this::onNewPost);
+                post.show(getChildFragmentManager(), NEW_POST);
             }
+
         });
+        /**
+            If user clicks on followerNumber, he can see all of its followers
+            {@link View_Followers_Fragment}
+         */
         followerNumber.setOnClickListener(v -> {
             if(viewFollowersFragment == null){
                 viewFollowersFragment = View_Followers_Fragment.newInstance();
@@ -249,6 +238,10 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             viewFollowersFragment.setArguments(bundle);
             viewFollowersFragment.show(getChildFragmentManager(), "VIEW_FOLLOWERS_FRAGMENT");
         });
+        /**
+            If user clicks on followingNumber, he can see all of its persons he follows.
+            {@link View_Followers_Fragment}
+         */
         followingNumber.setOnClickListener(v -> {
             if(viewFollowersFragment == null){
                 viewFollowersFragment = View_Followers_Fragment.newInstance();
@@ -260,13 +253,8 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         });
 
         /*
-        backBtn.setOnClickListener(v -> {
-            if(isUserEdited()){
-                getBackButtonAlertBuilder().show();
-            }
-            else getDialog().dismiss();
-        });
-
+            onClick, user gets redirected to either view his own profile picture,
+            add a new profile picture or selecting one of its uploaded pictures as a profile picture.
          */
         profilePic.setOnClickListener(v -> {
             Profile_Picture_BottomSheet profilePictureBottomSheet = new Profile_Picture_BottomSheet();
@@ -316,11 +304,13 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             });
         });
 
-
     }
 
 
 
+    /**
+     * Initialisation of a new {@link MainPages_Posts_Fragment} to show all uploaded posts by the user.
+     */
     void initPosts(){
         postFragment = new MainPages_Posts_Fragment(true,false);
         ((MainPages_Posts_Fragment)postFragment).setViewModel(this.mViewModel);
@@ -328,6 +318,12 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
 
     }
 
+    /**
+     * Setup observers of LiveData from the current user and from network response.
+     * If UserProfile changes, then username, location, profile picture and number of follower and of following person are set accordingly.
+     * If the a new profile picture is created or an old one is picked, then a snackbar gives the user feedback about the successfully request.
+     *
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState ) {
         super.onActivityCreated(savedInstanceState);
@@ -357,175 +353,6 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         });
     }
 
-   /*
-    @Override
-    public void onStart() {
-        super.onStart();
-
-      //  if(mViewModel == null)
-      //      mViewModel = new ViewModelProvider(this).get(MainPages_MyProfile_ViewModel.class);
-
-
-        Log.e("MyProfile", mViewModel.toString());
-        initPosts();
-
-        mViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
-            Log.e("userProfile", "observed");
-            if (userProfile == null)
-                return;
-            username.setText(userProfile.getUserName().toUpperCase());
-            if(userProfile.getLocation().isEmpty())
-                location.setHint("Your location".toUpperCase());
-            else location.setText(userProfile.getLocation().toUpperCase());
-            Glide.with(this.getContext()).load(userProfile.getProfilePic().url)
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
-            followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));
-            followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));
-        });
-        mViewModel.getNetworkResponse().observe(getViewLifecycleOwner(), responseEvent -> {
-            if(responseEvent.getType() == ResponseEvent.Type.PROFILE_PICTURE_UPDATE || responseEvent.getType() == ResponseEvent.Type.PROFILE_PICTURE_UPLOAD){
-                String response = responseEvent.getContentIfNotHandled();
-                if(response != null && response.equals("Created"))
-                    Snackbar.make(getView(), "Profile Picture Updated", Snackbar.LENGTH_LONG).show();
-                if(response != null && response.equals("Ok"))
-                    Snackbar.make(getView(), "Profile Picture Saved", Snackbar.LENGTH_LONG).show();
-            }
-        });
-        if (profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item)
-            getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, infoFragment).commit();
-        else
-            getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();
-
-
-        mViewModel.setUsername(mViewModel.getUserProfile().getValue().getUserName());
-        mViewModel.setLocation(mViewModel.getUserProfile().getValue().getLocation());
-        newPostBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(post == null){
-                    post = new PostUploadFragment(MainPages_MyProfile_Fragment.this::onNewPost);
-                    post.show(getChildFragmentManager(), NEW_POST);
-                }
-
-            }
-        });
-
-       //-> comment
-        location.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String input = s.toString();
-                mViewModel.setLocation(input);
-                Log.e("text", "isedited");
-                mViewModel.setInfoIsEdited(true);
-            }
-        });
-        username.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                mViewModel.setUsername(s.toString());
-                mViewModel.setInfoIsEdited(true);
-            }
-        });
-
-
-        backBtn.setOnClickListener(v -> {
-            if(mViewModel.getInfoIsEdited().getValue()){
-                MaterialAlertDialogBuilder dialogBuilder = getAlertBuilder();
-                dialogBuilder.show();
-            }
-            else getDialog().dismiss();
-        });
-
-        profilePic.setOnClickListener(v -> {
-            Profile_Picture_BottomSheet profilePictureBottomSheet = new Profile_Picture_BottomSheet();
-            profilePictureBottomSheet.show(getActivity().getSupportFragmentManager(), BOTTOM_SHEET);
-            profilePictureBottomSheet.setOnTextViewClickListener(position -> {
-                switch (position){
-                    case 0:
-                        profilePictureBottomSheet.dismiss();
-                        if(viewProfilePictureFragment == null)
-                            viewProfilePictureFragment = new View_Profile_Picture_Fragment();
-                        viewProfilePictureFragment.show(getChildFragmentManager(), VIEW_PROFILE_PICTURE);
-                        break;
-                    case 1:
-                        profilePictureBottomSheet.dismiss();
-                        if(profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item){
-                            selected = R.id.profile_photo_item;
-                            getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();
-                        }else Snackbar.make(getView(), "Click on your picture", Snackbar.LENGTH_SHORT).show();
-                        break;
-                    case 2:
-                        profilePictureBottomSheet.dismiss();
-                        if(profilePictureUploadFragment == null){
-                            profilePictureUploadFragment = new Profile_Picture_UploadFragment();
-                            profilePictureUploadFragment.show(getChildFragmentManager(), NEW_PROFILE_PICTURE);
-                            profilePictureUploadFragment.setOnNewProfilePictureListener(newPost -> {
-                                mViewModel.submitNewProfilePicture(newPost);
-                            });
-                        }profilePictureUploadFragment = null;
-                        break;
-                }
-            });
-        });
-
-        Log.e("onViewCreated", "__");
-        mViewModel.setInfoIsEdited(false);
-    }
-    */
-        /*
-        mViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
-            if (userProfile == null)
-                return;
-            username.setText(userProfile.getUserName().toUpperCase());
-            if(userProfile.getLocation().isEmpty())
-                location.setHint("Your location".toUpperCase());
-            else location.setText(userProfile.getLocation().toUpperCase());
-            Glide.with(this.getContext()).load(userProfile.getProfilePic().url)
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profilePic);
-            followerNumber.setText(String.valueOf(userProfile.getFollowers().getValue().size()));
-            followingNumber.setText(String.valueOf(userProfile.getFollowing().getValue().size()));
-        });
-        mViewModel.getNetworkResponse().observe(getViewLifecycleOwner(), responseEvent -> {
-            if(responseEvent.getType() == ResponseEvent.Type.PROFILE_PICTURE_UPDATE || responseEvent.getType() == ResponseEvent.Type.PROFILE_PICTURE_UPLOAD){
-                String response = responseEvent.getContentIfNotHandled();
-                if(response != null && response.equals("Created"))
-                    Snackbar.make(getView(), "Profile Picture Updated", Snackbar.LENGTH_LONG).show();
-                if(response != null && response.equals("Ok"))
-                    Snackbar.make(getView(), "Profile Picture Saved", Snackbar.LENGTH_LONG).show();
-            }
-        });
-        if (profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item)
-            getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, infoFragment).commit();
-        else
-            getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();
-
-      // if(mViewModel.getInfoIsEdited().getValue())
-        Log.e("onStart", "???");
-        mViewModel.setInfoIsEdited(false);
-    }
-    */
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -539,6 +366,11 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
             mViewModel.submitNewPost(newPost);
     }
 
+    /**
+     * This dialog will be shown if the user edited his profile and pressed the BackButton.
+     * User can either cancel the action and further edit his profile and save his changes or continue his action and thus discard his changes.
+     * @return MaterialAlertDialogBuilder
+     */
     private MaterialAlertDialogBuilder getBackButtonAlertBuilder(){
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext());
         dialogBuilder.setCancelable(true)
@@ -552,6 +384,11 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         return dialogBuilder;
     }
 
+    /**
+     * Like {@link #getBackButtonAlertBuilder()}but is triggered,
+     * if user wants to leave this fragment by choosing one option in BottomSheetFragment or selecting ImageFragment of profile navigation bar
+     * @return
+     */
     private MaterialAlertDialogBuilder getFragmentChangeAlertBuilder(){
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext());
         dialogBuilder.setCancelable(true)
@@ -570,7 +407,7 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
                         getChildFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();
                     username.setEnabled(false);
                     location.setEnabled(false);
-                  ;})
+                  })
                 .create();
         return dialogBuilder;
     }
@@ -590,17 +427,4 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         };
     }
 
-    /*
-    private boolean isUserEdited(){
-        UserProfile user = mViewModel.getUserProfile().getValue();
-        if(username.getText().toString().toUpperCase().equals(user.getUserName().toUpperCase()) &&
-                location.getText().toString().toUpperCase().equals(user.getLocation().toUpperCase()) &&
-                mViewModel.getBirthday().getValue().isEqual(user.getBirthday()) &&
-                mViewModel.getGender().getValue() == user.getGender().getI() &&
-                mViewModel.getDescription().getValue().equals(user.getDescription()))
-            return false;
-        else return true;
-    }
-
-     */
 }

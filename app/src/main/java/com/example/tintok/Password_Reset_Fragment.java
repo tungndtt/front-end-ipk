@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
  *  User needs to input a valid email address and a new passwords with at least 6 characters and correctly retype the password.
  *  If all conditions pass, a forgot password request is send to server.
  *  If not an error indicates the wrong input.
+ *  Only accessible from {@link Activity_Login_Signup}
  */
 public class Password_Reset_Fragment extends Fragment implements Login_SignUp_ViewModel.requestListener {
 

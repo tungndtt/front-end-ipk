@@ -1,40 +1,28 @@
 package com.example.tintok;
-
-import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
-import android.view.View;
-
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI;
-import com.example.tintok.Communication.RestAPI_Entity;
 import com.example.tintok.Communication.RestAPI_model.LoginResponseForm;
 import com.example.tintok.Communication.RestAPI_model.UnknownUserForm;
 import com.example.tintok.Communication.RestAPI_model.UserForm;
-import com.example.tintok.Model.Interest;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.JsonObject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * This ViewModel class is used to send either a login, sign up or forgot password request to the server via RestAPI.
+ * Based on server response the requestListener is triggered.
+ */
 public class Login_SignUp_ViewModel extends AndroidViewModel {
     private RestAPI api;
     private MutableLiveData<ArrayList<Integer>> chosenInterests;
@@ -45,6 +33,11 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
         chosenInterests = new MutableLiveData<>();
         chosenInterests.setValue(new ArrayList<Integer>());
     }
+
+    /**
+     * Getter and Setter for the chosen interests of user
+     * @return List of integers that stand for interests chosen by user
+     */
     public LiveData<ArrayList<Integer>> getChosenInterests(){
         return chosenInterests;
     }
@@ -52,6 +45,15 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
         chosenInterests.setValue(interests);
     }
 
+    /**
+     * Uses RestAPI to send login request to server containing an UnknownUserForm with provided email and password.
+     * Sets token for communication if response is successful.
+     * Triggers requestListener on successful response, on server response with client error  or on connection failures.
+     * @see Login_Fragment
+     * @param email user's typed in email address
+     * @param password  user's typed in password
+     * @param listener of Login_Fragment
+     */
     public void loginRequest(String email, String password, requestListener listener){
         this.api.postLoginData(new UnknownUserForm("",email,password)).enqueue(new Callback<LoginResponseForm>() {
             @Override
@@ -84,6 +86,18 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
         });
     }
 
+    /**
+     * Uses RestAPI to send registration request to server containing an UnknownUserForm with provided username, email, password, birthday, gender and interests.
+     * Triggers requestListener on successful response, on server response with client error or on connection failures.
+     * @see Sign_up_Fragment
+     * @param username user's typed in name
+     * @param email user's email address
+     * @param birthday user's birthday
+     * @param password user's password
+     * @param gender user's gender
+     * @param interests user's interests
+     * @param listener Sign_up_Fragment listener
+     */
     public void signUpRequest(String username, String email, String birthday, String password, int gender, ArrayList<Integer> interests, requestListener listener){
         UnknownUserForm form = new UnknownUserForm(username, email, password);
         form.setBirthday(birthday);
@@ -109,16 +123,23 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
         });
     }
 
+    /**
+     * Uses RestAPI to send password forget request to server containing an UserForm with provided email, password
+     * Triggers requestListener on successful response, on server response with client error  or on connection failures.
+     * @see Password_Reset_Fragment
+     * @param email user's email address
+     * @param password user's password
+     * @param listener Password_Reset_Fragment listener
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void resetPassword(String email, String password,  requestListener listener){
         this.api.resetPassword(new UserForm("",email,password)).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                   // snackBarShow("Sending to email");
                     listener.requestSuccess();
                 } else {
-                    listener.requestFail("No user with given email available");//snackBarShow("No email available!");
+                    listener.requestFail("No user with given email available");
                 }
             }
 
@@ -129,19 +150,9 @@ public class Login_SignUp_ViewModel extends AndroidViewModel {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
-                listener.connectionFail();//snackBarShow("Some errors occur in reset password!");
+                listener.connectionFail();
             }
         });
-    }
-
-    private void snackBarShow(String msg){
-        Snackbar snackbar = Snackbar.make(((Activity)this.getApplication().getApplicationContext()).findViewById(R.id.fragment), msg, Snackbar.LENGTH_LONG);
-        snackbar.setAction("Hide", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar.dismiss();
-            }
-        }).show();
     }
 
     interface requestListener{
