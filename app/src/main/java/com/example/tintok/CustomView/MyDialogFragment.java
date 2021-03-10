@@ -42,7 +42,7 @@ public class MyDialogFragment extends DialogFragment {
         }
     }
 
-    @Override
+   /* @Override
     public void onResume() {
         super.onResume();
         getDialog().setOnKeyListener(new DialogInterface.OnKeyListener()
@@ -61,5 +61,5 @@ public class MyDialogFragment extends DialogFragment {
                 else return false;
             }
         });
-    }
+    }*/
 }

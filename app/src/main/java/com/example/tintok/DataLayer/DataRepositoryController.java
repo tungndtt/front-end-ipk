@@ -39,13 +39,8 @@ public class DataRepositoryController {
     DataRepository_UserSimple dataRepository_userSimple;
 
 
-    public void submitNewPost(Context mContext, Post newPost) {
-        this.dataRepository_currentUser.submitNewPost(mContext, newPost);
-    }
 
-    public boolean isDataReady(){
-        return true;
-    }
+
 
 
     private DataRepositoryController(){
@@ -87,6 +82,11 @@ public class DataRepositoryController {
         Log.e("DataRepo","InitDataDone ");
 
 
+    }
+
+    public boolean isDataReady(){
+        return dataRepositiory_chatrooms.isReady() && dataRepository_currentUser.isReady() &&
+                dataRepository_matchingPeople.isReady() && dataRepository_notifications.isReady && dataRepository_posts.isReady();
     }
 
 //region Chat Rooms
@@ -193,6 +193,10 @@ public class DataRepositoryController {
     //region NewFeedPosts
     public MutableLiveData<ArrayList<Post>> getNewfeedPosts() {
         return dataRepository_posts.getNewfeedPosts();
+    }
+
+    public void submitNewPost(Context mContext, Post newPost) {
+        this.dataRepository_currentUser.submitNewPost(mContext, newPost);
     }
 
     public void refreshPost(AfterRefreshCallBack e) {

@@ -28,7 +28,7 @@ import retrofit2.Response;
 /**
  * This class used RestAPI to send different requests to server that are related to the current user and receive the response.
  */
-public class DataRepository_CurrentUser {
+public class DataRepository_CurrentUser extends AbstractDataRepository  {
     MutableLiveData<UserProfile> currentUser;
     DataRepositoryController controller;
     public long lastSeen;
@@ -58,6 +58,7 @@ public class DataRepository_CurrentUser {
                     currentUser.postValue( currUser);
                     lastSeen = form.getTime();
                     Log.e("DataRepoUser", "lastSeen :"+ form.getTime());
+                    setReady();
                 } else {
                     Log.e("Info", "Response fails");
                 }

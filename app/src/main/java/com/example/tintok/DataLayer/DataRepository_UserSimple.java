@@ -14,7 +14,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DataRepository_UserSimple {
+public class DataRepository_UserSimple  {
     HashMap<String, UserSimple> cacheQueriedUserSimple;
     public DataRepository_UserSimple(){
         cacheQueriedUserSimple = new HashMap<>();

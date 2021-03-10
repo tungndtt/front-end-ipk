@@ -21,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DataRepository_MatchingPeople {
+public class DataRepository_MatchingPeople extends AbstractDataRepository {
     MutableLiveData<ArrayList<UserSimple>> matchingPeople;
     DataRepositoryController controller;
 
@@ -65,6 +65,7 @@ public class DataRepository_MatchingPeople {
         this.matchingPeople.postValue(current);
     }
 
+    @Override
     public void initData(){
         RestAPI api = Communication.getInstance().getApi();
         if(api != null){
@@ -74,6 +75,7 @@ public class DataRepository_MatchingPeople {
                     if(response.isSuccessful()){
                         ArrayList<UserForm> forms = response.body();
                        submitNewData(forms);
+                        setReady();
                     } else {
                         Log.e("Info", "Cannot get users");
                     }

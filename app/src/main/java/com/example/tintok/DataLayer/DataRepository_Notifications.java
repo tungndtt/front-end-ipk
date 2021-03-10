@@ -30,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DataRepository_Notifications {
+public class DataRepository_Notifications extends AbstractDataRepository {
     MutableLiveData<ArrayList<Notification>> notifications;
     DataRepositoryController controller;
 
@@ -136,6 +136,7 @@ public class DataRepository_Notifications {
                     clientNoti.add(newNoti);
                 }
                 notifications.postValue(clientNoti);
+                setReady();
             }
 
             @Override

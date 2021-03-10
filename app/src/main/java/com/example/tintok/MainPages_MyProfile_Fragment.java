@@ -427,4 +427,8 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
         };
     }
 
+    @Override
+    public boolean isCancelable() {
+        return post == null;
+    }
 }

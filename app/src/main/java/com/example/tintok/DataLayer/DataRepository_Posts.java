@@ -22,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DataRepository_Posts {
+public class DataRepository_Posts extends AbstractDataRepository {
     MutableLiveData<ArrayList<Post>> newfeedPosts;
     DataRepositoryController controller;
     RestAPI api;
@@ -68,7 +68,7 @@ public class DataRepository_Posts {
                    }catch (Exception e){
 
                    }
-
+                    setReady();
                 } else {
                     Log.d("Info", "Response fails");
                 }

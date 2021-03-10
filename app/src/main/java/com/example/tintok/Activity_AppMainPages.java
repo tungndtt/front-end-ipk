@@ -232,6 +232,13 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
     @Override
     public void onBackPressed() {
+        if(isOnDialogFragment){
+            if(myHomepage.isVisible()){
+                if(!myHomepage.isCancelable())
+                    return;
+            }
+        }
+
         if (navBar.getSelectedItemId() == R.id.mediasurfing)
             super.onBackPressed();
         else {

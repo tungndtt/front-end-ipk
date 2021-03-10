@@ -36,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DataRepositiory_Chatrooms {
+public class DataRepositiory_Chatrooms extends AbstractDataRepository {
     MutableLiveData<ArrayList<ChatRoom>> chatrooms;
     DataRepositoryController controller;
     Socket socket;
@@ -155,6 +155,7 @@ public class DataRepositiory_Chatrooms {
                             rooms.add(r);
                         }
                         chatrooms.postValue(rooms);
+                        setReady();
                     } else {
 
                     }

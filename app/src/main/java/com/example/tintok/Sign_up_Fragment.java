@@ -275,7 +275,7 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         this.day.setText(String.valueOf(dayOfMonth));
-        this.month.setText(String.valueOf(month));
+        this.month.setText(String.valueOf(month+1));
         this.year.setText(String.valueOf(year));
         onDismiss(null);
     }

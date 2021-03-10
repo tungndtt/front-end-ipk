@@ -60,7 +60,7 @@ public class PostUploadFragment extends MyDialogFragment {
     public PostUploadFragment(onNewPostListener mListner){
         this.mListner = mListner;
     }
-/*
+
     @Override
     public void onResume() {
         super.onResume();
@@ -82,7 +82,7 @@ public class PostUploadFragment extends MyDialogFragment {
         });
     }
 
- */
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new Dialog(getActivity(), getTheme()){
