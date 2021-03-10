@@ -104,7 +104,7 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/option_male"
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:background="@drawable/custombutton"
@@ -114,24 +114,34 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/option_female"
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:background="@drawable/custombutton"
                         android:button="@drawable/custombutton"
                         android:gravity="center"
                         android:text="@string/female"/>
-
                     <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/option_both"
-                        android:layout_width="100dp"
+                        android:id="@+id/option_divers"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:background="@drawable/custombutton"
                         android:button="@drawable/custombutton"
                         android:checked="true"
                         android:gravity="center"
-                        android:text="Both"/>
+                        android:text="Divers"/>
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/option_both"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/custombutton"
+                        android:button="@drawable/custombutton"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="All"/>
                 </RadioGroup>
             </RelativeLayout>
 

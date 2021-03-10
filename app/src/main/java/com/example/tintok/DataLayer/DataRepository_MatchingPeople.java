@@ -135,7 +135,7 @@ public class DataRepository_MatchingPeople extends AbstractDataRepository {
 
     public interface Filter{
         public enum Gender{
-            MALE, FEMALE, BOTH
+            MALE, FEMALE, DIVERS,ALL
         }
         public String getFilterName();
         public int getMinAge();

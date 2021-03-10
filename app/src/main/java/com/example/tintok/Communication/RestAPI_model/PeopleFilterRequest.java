@@ -37,14 +37,18 @@ public class PeopleFilterRequest {
         ArrayList<Integer> sex = new ArrayList<>();
         switch (e.getGender()){
             case MALE:
-                sex.add(0);
+                sex.add(1);
                 break;
             case FEMALE:
-                sex.add(1);
+                sex.add(2);
+                break;
+            case DIVERS:
+                sex.add(3);
                 break;
             default:
-                sex.add(0);
                 sex.add(1);
+                sex.add(2);
+                sex.add(3);
                 break;
         }
         return new PeopleFilterRequest(e.getFilterName(), age, interests, sex);

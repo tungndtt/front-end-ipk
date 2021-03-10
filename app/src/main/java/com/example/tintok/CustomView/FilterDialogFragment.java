@@ -161,8 +161,11 @@ public class FilterDialogFragment extends MyDialogFragment {
                 case R.id.option_female:
                     currentFilterState.gender = DataRepository_MatchingPeople.Filter.Gender.FEMALE;
                     break;
+                case R.id.option_divers:
+                    currentFilterState.gender = DataRepository_MatchingPeople.Filter.Gender.DIVERS;
+                    break;
                 default:
-                    currentFilterState.gender = DataRepository_MatchingPeople.Filter.Gender.BOTH;
+                    currentFilterState.gender = DataRepository_MatchingPeople.Filter.Gender.ALL;
                     break;
             }
 
@@ -212,7 +215,7 @@ public class FilterDialogFragment extends MyDialogFragment {
             name = "";
             maxAge = 150;
             minAge = 0;
-            gender = Gender.BOTH;
+            gender = Gender.ALL;
             interestBitmap = new boolean[DataRepository_Interest.interests.length];
         }
 
