@@ -84,11 +84,8 @@ public class View_Followers_Fragment extends MyDialogFragment {
             ids = mViewModel.getUserProfile().getValue().getFollowing().getValue();
         }else ids = new ArrayList<>();
 
-        for(int i = 0; i < ids.size(); i++){
-            followers.add(DataRepositoryController.getInstance().getUserSimpleProfile(ids.get(i)));
-        }
 
-        followersAdapter = new FollowersAdapter(this.getContext(), followers);
+        followersAdapter = new FollowersAdapter(this.getContext(), ids);
         mFollowersRV.setAdapter(followersAdapter);
         LinearLayoutManager manager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView.ItemDecoration decoration= new NoSpaceRecyclerViewDecoration();

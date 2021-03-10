@@ -11,15 +11,17 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.tintok.DataLayer.DataRepositoryController;
+import com.example.tintok.DataLayer.DataRepository_UserSimple;
 import com.example.tintok.Model.UserSimple;
 import com.example.tintok.R;
 
 import java.util.ArrayList;
 
-public class FollowersAdapter extends BaseAdapter<UserSimple, FollowersAdapter.ViewHolder> {
+public class FollowersAdapter extends BaseAdapter<String, FollowersAdapter.ViewHolder> {
 
 
-    public FollowersAdapter(Context context, ArrayList<UserSimple> models) {
+    public FollowersAdapter(Context context, ArrayList<String> models) {
         super(context, models);
     }
 
@@ -31,11 +33,24 @@ public class FollowersAdapter extends BaseAdapter<UserSimple, FollowersAdapter.V
 
     }
 
-    public class ViewHolder extends BaseViewHolder<UserSimple> {
+    @Override
+    public void onViewAttachedToWindow(@NonNull  FollowersAdapter.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        DataRepositoryController.getInstance().AddUserProfileChangeListener(holder);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull  FollowersAdapter.ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        DataRepositoryController.getInstance().RemoveUserProfileChangeListener(holder);
+    }
+
+    public class ViewHolder extends BaseViewHolder<String> implements DataRepository_UserSimple.OnUserProfileChangeListener {
 
         TextView mFollowerName;
         AppCompatImageView mFollowerProfilePic;
 
+        String userID;
         public ViewHolder(@NonNull View itemView, BaseAdapter mAdapter) {
             super(itemView, mAdapter);
             mFollowerName = itemView.findViewById(R.id.item_follower_username);
@@ -43,13 +58,20 @@ public class FollowersAdapter extends BaseAdapter<UserSimple, FollowersAdapter.V
         }
 
         @Override
-        public void bindData(UserSimple itemData) {
-            if(itemData != null){
-                mFollowerName.setText(itemData.getUserName());
-                Glide.with(mAdapter.getContext()).load(itemData.getProfilePic().url).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(mFollowerProfilePic);
+        public void bindData(String itemData) {
+            this.userID = itemData;
+            onProfileChange(DataRepositoryController.getInstance().getUserSimpleProfile(itemData));
+        }
+
+        @Override
+        public void onProfileChange(UserSimple user) {
+            if(user == null)
+                return;
+            if(this.userID.compareTo(user.getUserID()) == 0){
+                Glide.with(mAdapter.getContext()).load(user.getProfilePic().url).diskCacheStrategy(DiskCacheStrategy.DATA).into(mFollowerProfilePic);
+                mFollowerName.setText(user.getUserName());
+
             }
-
-
         }
     }
 }

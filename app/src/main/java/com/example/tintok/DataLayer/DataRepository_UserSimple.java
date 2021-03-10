@@ -9,6 +9,8 @@ import com.example.tintok.Model.UserSimple;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,6 +22,25 @@ public class DataRepository_UserSimple  {
         cacheQueriedUserSimple = new HashMap<>();
         mListeners = new ArrayList<>();
     }
+
+    public void startAsyncTaskRecacheUser(){
+        Timer timer = new Timer("Timer");
+        long delay = 600000L;
+        timer.schedule(updateCacheProfile, 0 ,delay);
+    }
+
+    TimerTask updateCacheProfile = new TimerTask(){
+
+        @Override
+        public void run() {
+            Log.e("DataREpo_UsersimpleCache","timertask called");
+            if(cacheQueriedUserSimple != null && !cacheQueriedUserSimple.isEmpty()){
+                ArrayList<String> keySet = new ArrayList<>();
+                keySet.addAll(cacheQueriedUserSimple.keySet());
+                UpdateProfile(keySet);
+            }
+        }
+    };
 
     public void Cache(UserSimple newUser){
         this.cacheQueriedUserSimple.put(newUser.getUserID(), newUser);
@@ -77,6 +98,8 @@ public class DataRepository_UserSimple  {
             }
         });
     }
+
+
     ArrayList<OnUserProfileChangeListener> mListeners;
     public interface OnUserProfileChangeListener{
         void onProfileChange(UserSimple user);

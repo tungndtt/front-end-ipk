@@ -73,15 +73,13 @@ public class DataRepositoryController {
         mChatRooms.add(room);
         chatRooms.setValue(mChatRooms);*/
 
-        UserProfile mUser = new UserProfile();
-
 
 
         //fetchData
 
         Log.e("DataRepo","InitDataDone ");
 
-
+        dataRepository_userSimple.startAsyncTaskRecacheUser();
     }
 
     public boolean isDataReady(){
