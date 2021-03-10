@@ -31,6 +31,7 @@ import com.example.tintok.CustomView.DatePickerFragment;
 import com.example.tintok.DataLayer.DataRepository_Interest;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -198,8 +199,9 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
             setErrorStatus(R.string.error_birthday_invalid);
             return;
         }
+
         if(year.getText().toString().length()!=4 || (dayInt <=0 || dayInt >31)
-            || (monthInt<=0 || monthInt > 12)){
+            || (monthInt<=0 || monthInt > 12) || yearInt >= LocalDateTime.now().getYear()){
             setErrorStatus(R.string.error_birthday_invalid);
             return;
         }
@@ -245,7 +247,7 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     @Override
     public void requestSuccess() {
         loadingBar.setVisibility(View.INVISIBLE);
-        Snackbar.make(getView(), R.string.registration_email_sent, Snackbar.LENGTH_LONG);
+        Snackbar.make(getView(), R.string.registration_email_sent, Snackbar.LENGTH_LONG).show();
         getActivity().onBackPressed();
     }
 

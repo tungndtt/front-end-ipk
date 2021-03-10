@@ -33,6 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:scaleType="fitXY"
+
             />
 
         <ImageView
@@ -97,26 +98,29 @@
 
                    >
                </ImageView> -->
+
+
         <TextView
             android:id="@+id/profilename"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="2dp"
-
+            android:alpha="1"
             android:background="@color/transparent"
             android:fontFamily="sans-serif-condensed"
             android:text="Name, Age"
             android:textColor="@color/white"
-            android:alpha="1"
             android:textSize="24sp"
             android:textStyle="bold"
 
-            app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintBottom_toTopOf="@id/profileDes"
+            app:layout_constraintHorizontal_bias="0.097"
             app:layout_constraintLeft_toLeftOf="@id/profileimage"
             app:layout_constraintRight_toRightOf="@id/profileimage"
-            />
-
+            android:shadowColor="@color/black"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="3"/>
 
         <TextView
             android:id="@+id/profileDes"
@@ -135,7 +139,11 @@
             app:layout_constraintBottom_toBottomOf="@id/profileimage"
             app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintLeft_toLeftOf="@id/profileimage"
-            app:layout_constraintRight_toRightOf="@id/profileimage" />
+            app:layout_constraintRight_toRightOf="@id/profileimage"
+            android:shadowColor="@color/black"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -157,6 +157,6 @@ public class Password_Reset_Fragment extends Fragment implements Login_SignUp_Vi
 
     @Override
     public void connectionFail() {
-        Snackbar.make(getView(), "Some errors occur in reset password!", Snackbar.LENGTH_LONG);
+        Snackbar.make(getView(), "Some errors occur in reset password!", Snackbar.LENGTH_LONG).show();
     }
 }

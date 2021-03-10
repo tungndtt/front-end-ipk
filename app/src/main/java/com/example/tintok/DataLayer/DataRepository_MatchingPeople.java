@@ -77,7 +77,7 @@ public class DataRepository_MatchingPeople extends AbstractDataRepository {
                        submitNewData(forms);
                         setReady();
                     } else {
-                        Log.e("Info", "Cannot get users");
+                        Log.e("DataRepoMatching", "Cannot get users");
                     }
                 }
 

@@ -70,7 +70,7 @@ public class DataRepository_Posts extends AbstractDataRepository {
                    }
                     setReady();
                 } else {
-                    Log.d("Info", "Response fails");
+                    Log.d("DataRepoPost", "Response fails");
                 }
             }
 

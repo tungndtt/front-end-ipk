@@ -60,7 +60,7 @@ public class DataRepository_CurrentUser extends AbstractDataRepository  {
                     Log.e("DataRepoUser", "lastSeen :"+ form.getTime());
                     setReady();
                 } else {
-                    Log.e("Info", "Response fails");
+                    Log.e("DataRepoUser", "Response fails");
                 }
             }
 
