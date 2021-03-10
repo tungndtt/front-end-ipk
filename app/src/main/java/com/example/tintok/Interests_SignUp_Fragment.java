@@ -1,11 +1,14 @@
 package com.example.tintok;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,11 +39,13 @@ public class Interests_SignUp_Fragment extends MyDialogFragment {
     private MaterialToolbar toolbar;
     private ArrayList<Integer> result;
 
-    public Interests_SignUp_Fragment(){
+    DialogInterface.OnDismissListener dismissListener;
+    public Interests_SignUp_Fragment(DialogInterface.OnDismissListener dismissListener){
+        this.dismissListener = dismissListener;
     }
 
-    public static Interests_SignUp_Fragment newInstance() {
-        Interests_SignUp_Fragment fragment = new Interests_SignUp_Fragment();
+    public static Interests_SignUp_Fragment newInstance( DialogInterface.OnDismissListener dismissListener) {
+        Interests_SignUp_Fragment fragment = new Interests_SignUp_Fragment(dismissListener);
         return fragment;
     }
 
@@ -59,6 +64,13 @@ public class Interests_SignUp_Fragment extends MyDialogFragment {
         errorTV = view.findViewById(R.id.interest_error);
         toolbar = view.findViewById(R.id.interest_toolbar);
         return view;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if(dismissListener != null)
+            dismissListener.onDismiss(dialog);
     }
 
     @Override

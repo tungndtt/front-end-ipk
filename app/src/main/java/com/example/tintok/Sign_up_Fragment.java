@@ -1,8 +1,11 @@
 package com.example.tintok;
 
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
@@ -23,6 +27,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tintok.CustomView.DatePickerFragment;
 import com.example.tintok.DataLayer.DataRepository_Interest;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -33,17 +38,18 @@ import java.util.ArrayList;
  * The user must specify its name, email address, birthday, interests and password.
  * Only if all parameter are set by the user then the user can sign in and will receive an email for validation.
  */
-public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel.requestListener {
+public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel.requestListener, DialogInterface.OnDismissListener, DatePickerDialog.OnDateSetListener {
 
     public static final String INTERESTS_SIGN_UP = "interests_sign_up";
+    public static final String DATE_PICKER = "Date Picker";
     private Button registerButton;
     private ProgressBar loadingBar;
-    private TextView status, mInterestTV;
-    private EditText name, email,password, retypepassword, day,month,year;
+    private TextView status, mInterestTV, day,month,year;
+    private EditText name, email,password, retypepassword ;
     private Login_SignUp_ViewModel viewModel;
     private RadioGroup mGenderGroup;
     private String selectedInterest;
-    private DialogFragment interestFragment;
+    private DialogFragment interestFragment, datePicker;
     private View view;
 
     public Sign_up_Fragment(){
@@ -94,6 +100,7 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         year = view.findViewById(R.id.dayofbirth_year);
         mGenderGroup = view.findViewById(R.id.register_gender_group);
         mInterestTV = view.findViewById(R.id.register_interests_inputTV);
+
         return view;
     }
 
@@ -123,9 +130,9 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onStart() {
         super.onStart();
+        this.onDismiss(null);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Registration");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         mInterestTV.setText(selectedInterest);
         viewModel.getChosenInterests().observe(getViewLifecycleOwner(), integers -> {
             selectedInterest= "";
@@ -140,10 +147,19 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         registerButton.setOnClickListener(v -> HandleSignUp());
 
         mInterestTV.setOnClickListener(v -> {
-            if(interestFragment == null)
-                interestFragment = Interests_SignUp_Fragment.newInstance();
-            interestFragment.show(getChildFragmentManager(), INTERESTS_SIGN_UP);
+            Log.e("Sign_up_Frag", "Interest click "+datePicker + interestFragment);
+            if(datePicker == null && interestFragment == null) {
+                interestFragment = Interests_SignUp_Fragment.newInstance(Sign_up_Fragment.this);
+                interestFragment.show(getChildFragmentManager(), INTERESTS_SIGN_UP);
+            }
         });
+
+
+
+        onDateOfBirthClick datePickerClick = new onDateOfBirthClick();
+        day.setOnClickListener(datePickerClick);
+        month.setOnClickListener(datePickerClick);
+        year.setOnClickListener(datePickerClick);
 
     }
 
@@ -247,5 +263,31 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
         status.setVisibility(View.VISIBLE);
         status.setText(R.string.error_connection_failed);
         loadingBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        Log.e("Sign_up_Frag", "on Dialog Fragment dismiss");
+        this.interestFragment = null;
+        this.datePicker = null;
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        this.day.setText(String.valueOf(dayOfMonth));
+        this.month.setText(String.valueOf(month));
+        this.year.setText(String.valueOf(year));
+        onDismiss(null);
+    }
+
+    public class onDateOfBirthClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Log.e("Sign_up_Frag", "Date click "+datePicker + interestFragment);
+            if(datePicker == null && interestFragment == null){
+                datePicker = new DatePickerFragment(Sign_up_Fragment.this);
+                datePicker.show(getChildFragmentManager(), DATE_PICKER);
+            }
+        }
     }
 }

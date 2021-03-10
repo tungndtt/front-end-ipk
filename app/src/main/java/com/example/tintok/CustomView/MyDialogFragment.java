@@ -16,7 +16,6 @@ import com.example.tintok.R;
 
 public class MyDialogFragment extends DialogFragment {
     protected void setupFullscreen() {
-        super.onStart();
         Window window = getDialog().getWindow();
         window.setGravity(Gravity.FILL);
         window.setWindowAnimations(R.style.MyAnimation_Window);
@@ -41,5 +40,26 @@ public class MyDialogFragment extends DialogFragment {
         if (activity instanceof DialogInterface.OnDismissListener) {
             ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener()
+        {
+            @Override
+            public boolean onKey(android.content.DialogInterface dialog,
+                                 int keyCode,android.view.KeyEvent event)
+            {
+                if ((keyCode ==  android.view.KeyEvent.KEYCODE_BACK))
+                {
+                    // To dismiss the fragment when the back-button is pressed.
+                    dismiss();
+                    return true;
+                }
+                // Otherwise, do nothing else
+                else return false;
+            }
+        });
     }
 }
