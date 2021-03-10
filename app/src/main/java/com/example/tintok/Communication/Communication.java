@@ -46,7 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Communication {
     private static Communication instance;
     //ublic static arrayList<String> registeredEvent
-    public static final String myLink ="https://192.168.1.116:3000"; //https://192.168.1.116:3000
+    public static final String myLink ="https://192.168.0.2:3000"; //https://192.168.1.116:3000
 
     public OkHttpClient getHttpsClient() {
         return httpsClient;

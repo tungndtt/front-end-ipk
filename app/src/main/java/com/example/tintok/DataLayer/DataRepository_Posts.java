@@ -1,27 +1,23 @@
 package com.example.tintok.DataLayer;
 
 import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.tintok.Communication.Communication;
 import com.example.tintok.Communication.RestAPI;
 import com.example.tintok.Communication.RestAPI_model.PostForm;
 import com.example.tintok.Communication.RestAPI_model.PostRequest;
-import com.example.tintok.Communication.RestAPI_model.UserForm;
 import com.example.tintok.CustomView.AfterRefreshCallBack;
-import com.example.tintok.Model.MediaEntity;
 import com.example.tintok.Model.Post;
-import com.example.tintok.Model.UserSimple;
 import com.example.tintok.Utils.DataConverter;
-
 import java.time.Instant;
 import java.util.ArrayList;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ *  This class is responsible to load and refresh all posts on the NewsFeed page
+ */
 public class DataRepository_Posts extends AbstractDataRepository {
     MutableLiveData<ArrayList<Post>> newfeedPosts;
     DataRepositoryController controller;
@@ -54,6 +50,9 @@ public class DataRepository_Posts extends AbstractDataRepository {
 
     }
 
+    /**
+     * requests all posts for the newsfeed page after login
+     */
     long timeStamp = 0;
     public void initData(){
 
@@ -86,6 +85,10 @@ public class DataRepository_Posts extends AbstractDataRepository {
         });
     }
 
+    /**
+     * requests all posts for the newsfeed page after user refresh
+     * @param e
+     */
     public void refreshPost(AfterRefreshCallBack e) {
         if(this.getNewfeedPosts().getValue() == null || this.newfeedPosts.getValue().isEmpty()){
             this.initData();
@@ -121,6 +124,10 @@ public class DataRepository_Posts extends AbstractDataRepository {
         });
     }
 
+    /**
+     * update LiveData that contain the newsfeed posts
+     * @param posts fetched posts from backend
+     */
     protected void submitNewData(ArrayList<PostForm> posts) {
         ArrayList<Post> current = this.newfeedPosts.getValue();
         if(current == null)

@@ -16,6 +16,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ *  This class holds a cache with UserSimple who only have a ID, username and profile picture.
+ *  Cache is updated if a given ID cannot be found in cache.
+ */
 public class DataRepository_UserSimple  {
     HashMap<String, UserSimple> cacheQueriedUserSimple;
     public DataRepository_UserSimple(){
@@ -45,6 +49,11 @@ public class DataRepository_UserSimple  {
     public void Cache(UserSimple newUser){
         this.cacheQueriedUserSimple.put(newUser.getUserID(), newUser);
     }
+    /**
+     * requests UserSimple from backend if ID is not in cache
+     * @param id of searched user
+     * @return user
+     */
     public UserSimple findUserSimpleinCahe(String id){
         UserSimple m =  this.cacheQueriedUserSimple.get(id);
         if(m == null && !onQueries.contains(id)){
@@ -60,6 +69,10 @@ public class DataRepository_UserSimple  {
             l.onProfileChange(user);
     }
 
+    /**
+     * Requests user from backend with given id
+     * @param ids
+     */
     private ArrayList<String> onQueries = new ArrayList<>();
     public void UpdateProfile(ArrayList<String> ids){
         onQueries.addAll(ids);
