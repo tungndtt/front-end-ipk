@@ -306,6 +306,17 @@ public class Activity_Comment extends AppCompatActivity implements View.OnClickL
         this.mViewModel.joinPost(this.postID);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        messages.setAdapter(null);
+    }
 
     @Override
     protected void onStop() {

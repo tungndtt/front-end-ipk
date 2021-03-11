@@ -49,7 +49,6 @@ public class CommentAdapter extends BaseAdapter<Comment, CommentAdapter.ViewHold
 
     @Override
     public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-        Log.e("CommentAda[ter", "detachListener");
         super.onViewDetachedFromWindow(holder);
         DataRepositoryController.getInstance().RemoveUserProfileChangeListener(holder);
     }
