@@ -25,17 +25,18 @@ public class DataRepository_UserSimple  {
     public DataRepository_UserSimple(){
         cacheQueriedUserSimple = new HashMap<>();
         mListeners = new ArrayList<>();
+        timer = new Timer("UserSimpleCacheTimer");
     }
 
     Timer timer;
     public void startAsyncTaskRecacheUser(){
-        timer = new Timer("Timer");
         long delay = 600000L;
         timer.schedule(updateCacheProfile, 0 ,delay);
     }
 
     public void cancelRecacheUserTask(){
         timer.cancel();
+        timer.purge();
     }
 
     TimerTask updateCacheProfile = new TimerTask(){
