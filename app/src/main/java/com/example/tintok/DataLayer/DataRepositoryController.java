@@ -230,6 +230,8 @@ public class DataRepositoryController {
 
 //region UserSimpleCache
     public UserSimple getUserSimpleProfile(String id){
+        if(getUser().getValue().getUserID().compareTo(id) == 0)
+            return getUser().getValue();
         UserSimple result = dataRepository_userSimple.findUserSimpleinCahe(id);
         return result;
     }

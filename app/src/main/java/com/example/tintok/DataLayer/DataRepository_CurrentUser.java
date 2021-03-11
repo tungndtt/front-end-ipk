@@ -175,6 +175,7 @@ public class DataRepository_CurrentUser extends AbstractDataRepository  {
                 public void onResponse(Call<UserForm> call, Response<UserForm> response) {
                     if(response.isSuccessful()){
                         currentUser.postValue(setUpdatedUserProfile(response.body()));
+                        currentUser.getValue().getMyPosts().postValue( currentUser.getValue().getMyPosts().getValue());
                        /*
                         UserSimple newUser = new UserSimple();
                         newUser.setUserID(currentUser.getValue().getUserID());
@@ -267,6 +268,7 @@ public class DataRepository_CurrentUser extends AbstractDataRepository  {
                         tmpUser.setProfilePic(tmpMediaEntity);
                         currentUser.postValue(tmpUser);
 
+
                         //TODO:
                         /*
                         UserSimple newUser = new UserSimple();
@@ -314,6 +316,7 @@ public class DataRepository_CurrentUser extends AbstractDataRepository  {
                         UserProfile tmpUser = currentUser.getValue();
                         tmpUser.setProfilePic(tmpMediaEntity);
                         currentUser.postValue(tmpUser);
+                        currentUser.getValue().getMyPosts().postValue( currentUser.getValue().getMyPosts().getValue());
 
                         //TODO:
                         /*

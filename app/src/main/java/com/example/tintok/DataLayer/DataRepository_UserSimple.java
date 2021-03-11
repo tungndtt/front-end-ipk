@@ -91,8 +91,7 @@ public class DataRepository_UserSimple  {
                         newUser.setProfilePic(new MediaEntity(user.getImageUrl()));
                         Cache(newUser);
 
-                        for(OnUserProfileChangeListener l:mListeners)
-                            l.onProfileChange(newUser);
+                        notifyListeners(newUser);
                     }
                     onQueries.removeAll(ids);
                 }
@@ -123,5 +122,12 @@ public class DataRepository_UserSimple  {
     }
     public void removeListener(OnUserProfileChangeListener newListener){
         mListeners.remove(newListener);
+    }
+
+    public void notifyListeners(UserSimple user) {
+        if(mListeners == null)
+            return;
+        for(OnUserProfileChangeListener l:mListeners)
+            l.onProfileChange(user);
     }
 }
