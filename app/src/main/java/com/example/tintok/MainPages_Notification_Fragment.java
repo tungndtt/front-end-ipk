@@ -84,4 +84,10 @@ public class MainPages_Notification_Fragment extends Fragment implements Notific
     public void onProfileClick(int position) {
         App.startActivityViewProfile(this.getContext(),adapter.getItems().get(position).getAuthor_id());
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        notifications.setAdapter(null);
+    }
 }

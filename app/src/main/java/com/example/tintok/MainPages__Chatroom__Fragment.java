@@ -57,6 +57,12 @@ public class MainPages__Chatroom__Fragment extends Fragment implements ChatroomA
        }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        chatrooms.setAdapter(null);
+    }
+
 
     /**
      * Initialize of views and TextChangeListener for the searchBar
