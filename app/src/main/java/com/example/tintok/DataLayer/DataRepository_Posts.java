@@ -10,6 +10,7 @@ import com.example.tintok.CustomView.AfterRefreshCallBack;
 import com.example.tintok.Model.Post;
 import com.example.tintok.Utils.DataConverter;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -99,17 +100,17 @@ public class DataRepository_Posts extends AbstractDataRepository {
         for(Post p : this.getNewfeedPosts().getValue()){
             seenPosts.add(p.getId());
         }
-        this.api.getPosts(new PostRequest(Instant.now().toEpochMilli(), seenPosts)).enqueue(new Callback<ArrayList<PostForm>>() {
+        this.api.getPosts(new PostRequest(this.getNewfeedPosts().getValue().get(seenPosts.size()-1).getDateTime().atZone(ZoneId.systemDefault()).toEpochSecond()
+                , seenPosts)).enqueue(new Callback<ArrayList<PostForm>>() {
             @Override
             public void onResponse(Call<ArrayList<PostForm>> call, Response<ArrayList<PostForm>> response) {
                 if(response.isSuccessful()){
                     ArrayList<PostForm> postForms = response.body();
                     submitNewData(postForms);
-                    e.onRefreshingDone();
                 } else {
                     Log.d("Info", "Response fails");
-                    e.onRefreshingDone();
                 }
+                e.onRefreshingDone();
             }
 
             @Override
@@ -132,7 +133,13 @@ public class DataRepository_Posts extends AbstractDataRepository {
         ArrayList<Post> current = this.newfeedPosts.getValue();
         if(current == null)
             current = new ArrayList<>();
-        current.addAll(DataConverter.ConvertFromPostForm(posts));
+        ArrayList<Post> newPosts = DataConverter.ConvertFromPostForm(posts);
+        for(Post p : newPosts){
+            if(current.contains(p)){
+                current.remove(p);
+            }
+        }
+        current.addAll(newPosts);
         this.newfeedPosts.postValue(current);
     }
     //Server part

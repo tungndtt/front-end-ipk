@@ -45,6 +45,11 @@ public class FollowersAdapter extends BaseAdapter<String, FollowersAdapter.ViewH
         DataRepositoryController.getInstance().RemoveUserProfileChangeListener(holder);
     }
 
+    public onClickUserListener onClickUserListener;
+    public static interface onClickUserListener{
+        public void onClickUser(int position);
+    }
+
     public class ViewHolder extends BaseViewHolder<String> implements DataRepository_UserSimple.OnUserProfileChangeListener {
 
         TextView mFollowerName;
@@ -55,12 +60,17 @@ public class FollowersAdapter extends BaseAdapter<String, FollowersAdapter.ViewH
             super(itemView, mAdapter);
             mFollowerName = itemView.findViewById(R.id.item_follower_username);
             mFollowerProfilePic = itemView.findViewById(R.id.item_follower_profilePic);
+            mFollowerProfilePic.setOnClickListener(v -> {
+                if(onClickUserListener != null)
+                    onClickUserListener.onClickUser(getAdapterPosition());
+            });
         }
 
         @Override
         public void bindData(String itemData) {
             this.userID = itemData;
             onProfileChange(DataRepositoryController.getInstance().getUserSimpleProfile(itemData));
+
         }
 
         @Override

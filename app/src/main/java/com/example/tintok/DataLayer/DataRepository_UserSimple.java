@@ -27,17 +27,22 @@ public class DataRepository_UserSimple  {
         mListeners = new ArrayList<>();
     }
 
+    Timer timer;
     public void startAsyncTaskRecacheUser(){
-        Timer timer = new Timer("Timer");
+        timer = new Timer("Timer");
         long delay = 600000L;
         timer.schedule(updateCacheProfile, 0 ,delay);
+    }
+
+    public void cancelRecacheUserTask(){
+        timer.cancel();
     }
 
     TimerTask updateCacheProfile = new TimerTask(){
 
         @Override
         public void run() {
-            Log.e("DataREpo_UsersimpleCache","timertask called");
+           // Log.e("DataREpo_UsersimpleCache","timertask called");
             if(cacheQueriedUserSimple != null && !cacheQueriedUserSimple.isEmpty()){
                 ArrayList<String> keySet = new ArrayList<>();
                 keySet.addAll(cacheQueriedUserSimple.keySet());
@@ -127,7 +132,9 @@ public class DataRepository_UserSimple  {
     public void notifyListeners(UserSimple user) {
         if(mListeners == null)
             return;
-        for(OnUserProfileChangeListener l:mListeners)
-            l.onProfileChange(user);
+        for(OnUserProfileChangeListener l:mListeners){
+            if(l != null)
+                l.onProfileChange(user);
+        }
     }
 }

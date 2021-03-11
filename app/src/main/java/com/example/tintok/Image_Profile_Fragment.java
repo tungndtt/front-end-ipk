@@ -54,7 +54,6 @@ public class Image_Profile_Fragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //super.onStart();
-        setRetainInstance(true);
         if(mViewModel == null)
             mViewModel = new ViewModelProvider(getParentFragment()).get(MainPages_MyProfile_ViewModel.class);
 

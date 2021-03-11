@@ -15,6 +15,7 @@ public class UserProfile extends UserSimple {
     public MutableLiveData<ArrayList<Integer>> userInterests;
     public MutableLiveData<ArrayList<String>> followingPost;
     public MutableLiveData<ArrayList<Post>> myPosts;
+    public ArrayList<String> likedPosts;
 
     public UserProfile(){
         this.myPosts = new MutableLiveData<>(new ArrayList<>());
@@ -22,6 +23,7 @@ public class UserProfile extends UserSimple {
         this.followers = new MutableLiveData<>(new ArrayList<>());
         this.following = new MutableLiveData<>(new ArrayList<>());
         this.followingPost = new MutableLiveData<>(new ArrayList<>());
+        this.likedPosts = new ArrayList<>();
     }
     public MutableLiveData<ArrayList<String>> getFollowingPost() {
         return followingPost;

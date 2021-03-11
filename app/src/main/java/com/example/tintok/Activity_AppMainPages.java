@@ -322,6 +322,7 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
     @Override
     public void onRefresh() {
+        Log.e("MainPage", "Refresh");
         try {
             ((Refreshable) current).onRefresh(this);
             refreshLayout.setRefreshing(true);
@@ -333,8 +334,14 @@ public class Activity_AppMainPages extends AppCompatActivity implements DataRepo
 
     @Override
     public void onRefreshingDone() {
-        if (refreshLayout.isRefreshing())
-            refreshLayout.setRefreshing(false);
+        refreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("MainPage", "DoneRefreshing onThread");
+                if(refreshLayout.isRefreshing())
+                    refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     

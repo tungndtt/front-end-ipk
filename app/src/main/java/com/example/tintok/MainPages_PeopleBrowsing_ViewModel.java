@@ -40,4 +40,7 @@ public class MainPages_PeopleBrowsing_ViewModel extends AndroidViewModel {
     }
 
 
+    public void loadMoreMatchingPeople() {
+        DataRepositoryController.getInstance().findMoreMatchingPeople();
+    }
 }

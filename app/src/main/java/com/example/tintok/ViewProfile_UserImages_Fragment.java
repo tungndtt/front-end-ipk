@@ -75,7 +75,6 @@ public class ViewProfile_UserImages_Fragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
        // super.onStart();
-        setRetainInstance(true);
         Log.e("IMAGE", "ON ACTIVITY");
         if (mViewModel == null)
             mViewModel = new ViewModelProvider(getActivity()).get(Activity_ViewProfile_ViewModel.class);

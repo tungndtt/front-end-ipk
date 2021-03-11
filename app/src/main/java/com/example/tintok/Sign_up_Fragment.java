@@ -73,7 +73,6 @@ public class Sign_up_Fragment extends Fragment implements Login_SignUp_ViewModel
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e("Sign-Up", "onCreate");
-        setRetainInstance(true);
     }
 
     /**

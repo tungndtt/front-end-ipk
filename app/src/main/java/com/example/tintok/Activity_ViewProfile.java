@@ -1,16 +1,19 @@
 package com.example.tintok;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
@@ -31,7 +34,7 @@ import com.google.android.material.button.MaterialButton;
  * @see ViewProfile_UserImages_Fragment are all images shown.
  *
  */
-public class Activity_ViewProfile extends AppCompatActivity{
+public class Activity_ViewProfile extends AppCompatActivity implements DialogInterface.OnDismissListener {
 
     private Activity_ViewProfile_ViewModel viewModel;
 
@@ -45,6 +48,7 @@ public class Activity_ViewProfile extends AppCompatActivity{
     private View_Profile_Picture_Fragment viewProfilePictureFragment;
     Fragment postFragment;
     MaterialToolbar toolbar;
+    DialogFragment viewUserList = null;
 
     @SuppressLint("ResourceAsColor")
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -137,6 +141,22 @@ public class Activity_ViewProfile extends AppCompatActivity{
         messageBtn.setOnClickListener(v -> {
            App.startActivityChatroom(Activity_ViewProfile.this, viewModel.openChatRoomWithUser().getChatRoomID());
         });
+
+        this.followerNumber.setOnClickListener(v -> {
+            Log.e("Activity_ViewProfile","click follower: "+viewUserList);
+            if(viewUserList == null){
+                viewUserList = new View_Followers_Fragment(viewModel.getProfile().getValue().getFollowers().getValue());
+                viewUserList.show(getSupportFragmentManager(), "Followers");
+            }
+        });
+
+        this.followingNumber.setOnClickListener(v -> {
+            Log.e("Activity_ViewProfile","click following: "+viewUserList);
+            if(viewUserList == null){
+                viewUserList = new View_Followers_Fragment(viewModel.getProfile().getValue().getFollowing().getValue());
+                viewUserList.show(getSupportFragmentManager(), "Following");
+            }
+        });
     }
 
     /**
@@ -168,12 +188,16 @@ public class Activity_ViewProfile extends AppCompatActivity{
     @Override
     public void onStart() {
         super.onStart();
+        Log.e("Activity_ViewProfile","on start called");
         if(infoFragment == null || imageFragment == null)
             return;
         if (profile_navigation_bar.getSelectedItemId() == R.id.profile_info_item)
             getSupportFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, infoFragment).commit();
         else
             getSupportFragmentManager().beginTransaction().replace(R.id.profile_sub_fragment, imageFragment).commit();
+
+
+
     }
 
     @Override
@@ -182,4 +206,8 @@ public class Activity_ViewProfile extends AppCompatActivity{
         Log.i("INFO", "Destroying view of profile fragment ...");
     }
 
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        this.viewUserList = null;
+    }
 }

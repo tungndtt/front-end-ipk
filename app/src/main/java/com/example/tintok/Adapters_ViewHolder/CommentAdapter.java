@@ -1,6 +1,7 @@
 package com.example.tintok.Adapters_ViewHolder;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class CommentAdapter extends BaseAdapter<Comment, CommentAdapter.ViewHold
 
     @Override
     public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        Log.e("CommentAda[ter", "detachListener");
         super.onViewDetachedFromWindow(holder);
         DataRepositoryController.getInstance().RemoveUserProfileChangeListener(holder);
     }

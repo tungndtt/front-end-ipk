@@ -57,17 +57,19 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
     public void onViewAttachedToWindow(@NonNull PostAdapter.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         DataRepositoryController.getInstance().AddUserProfileChangeListener(holder);
+        Log.e("PostAdapter", "View Added:"+holder);
     }
 
     @Override
     public void onViewDetachedFromWindow(@NonNull PostAdapter.ViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         DataRepositoryController.getInstance().RemoveUserProfileChangeListener(holder);
+        Log.e("PostAdapter", "View Removed:"+holder);
 
     }
 
     public class ViewHolder extends BaseViewHolder<Post> implements View.OnClickListener, DataRepository_UserSimple.OnUserProfileChangeListener {
-        private TextView nComment,nCommentText, nLike, status, author;
+        private TextView nComment,nCommentText, nLike, nLikeText, status, author;
         private ImageView iv, notificationIcon, profile;
 
         MaterialButton likeBtn, commentBtn;
@@ -82,6 +84,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
             this.date = itemView.findViewById(R.id.date);
             this.nComment = itemView.findViewById(R.id.post_numberOfComment);
             this.nLike = itemView.findViewById(R.id.post_numberOfLike);
+            this.nLikeText = itemView.findViewById(R.id.post_like);
             this.status = itemView.findViewById(R.id.post_status);
             this.author = itemView.findViewById(R.id.post_name);
             this.iv = itemView.findViewById(R.id.post_image);
@@ -122,7 +125,6 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
             this.nComment.setText(itemData.getNumberOfComments()+"");
             this.nLike.setText(itemData.getNumberOfLikes()+"");
              */
-            Log.e("PostAdapter","new Data"+itemData.getId()+" "+itemData.likers);
             currentPost = itemData;
             mGestureDetector = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener(){
                 @Override
@@ -148,21 +150,24 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(profile);
                 this.author.setText(user.getUserName());
             }
-            this.nLike.setText(String.valueOf(itemData.likers.size()));
 
-            if(itemData.comments == null){
+
+
+            if(itemData.comments == null || itemData.comments.getValue().size() == 0){
                 this.nComment.setVisibility(View.INVISIBLE);
                 this.nCommentText.setVisibility(View.INVISIBLE);
             }
             else{
                 itemData.comments.observe((LifecycleOwner) mAdapter.context, comments -> {
-                    Log.e("postadapter", "new cmt");
+                    if(comments.size() == 0)
+                        return;
                     nComment.setVisibility(View.VISIBLE);
                     nCommentText.setVisibility(View.VISIBLE);
                     nComment.setText(String.valueOf(comments.size()));
                 });
 
             }
+            updateLikeText();
             updateLikeBtn();
             updateSubscription(itemData);
         }
@@ -178,7 +183,7 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
                 mListener.onClickComment(v, getAdapterPosition());
             } else if(id == R.id.like){
                 mListener.onClickLike(v, getAdapterPosition());
-                this.nLike.setText(String.valueOf(((Post)mAdapter.getItems().get(getAdapterPosition())).likers.size()));
+                updateLikeText();
                 updateLikeBtn();
             }
 
@@ -207,6 +212,33 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
                 likeBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0);
                 likeBtn.setBackgroundResource(R.color.transparent);
                 likeBtn.setTextColor(getContext().getColor(R.color.black));
+            }
+        }
+
+        private void updateLikeText(){
+            if(currentPost.likers == null){
+                this.nLike.setVisibility(View.INVISIBLE);
+                this.nLikeText.setVisibility(View.INVISIBLE);
+                return;
+            }
+            if(isLiked()){
+                if(!currentPost.likers.contains(currentPost.getId()))
+                    currentPost.likers.add(currentPost.getId());
+
+            }
+            else{
+                if(currentPost.likers.contains(currentPost.getId()))
+                    currentPost.likers.remove(currentPost.getId());
+            }
+
+            if( currentPost.likers.size() == 0){
+                this.nLike.setVisibility(View.INVISIBLE);
+                this.nLikeText.setVisibility(View.INVISIBLE);
+            }
+            else{
+                this.nLike.setVisibility(View.VISIBLE);
+                this.nLikeText.setVisibility(View.VISIBLE);
+                this.nLike.setText(String.valueOf(currentPost.likers.size()));
             }
         }
 

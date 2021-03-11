@@ -12,9 +12,11 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.tintok.Activity_AppMainPages;
 import com.example.tintok.R;
 
 public class MyDialogFragment extends DialogFragment {
+
     protected void setupFullscreen() {
         Window window = getDialog().getWindow();
         window.setGravity(Gravity.FILL);
@@ -37,6 +39,7 @@ public class MyDialogFragment extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         final Activity activity = getActivity();
+        Log.e("MyDialogFragment", "at: "+ (activity instanceof Activity_AppMainPages));
         if (activity instanceof DialogInterface.OnDismissListener) {
             ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
         }

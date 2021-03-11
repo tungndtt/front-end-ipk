@@ -104,7 +104,6 @@ public class Info_Profile_Fragment extends Fragment {
         if(mViewModel == null){
             mViewModel = new ViewModelProvider(requireParentFragment()).get(MainPages_MyProfile_ViewModel.class); //getParentFragment()
         }
-        setRetainInstance(true);
         Log.e("MyInfo", mViewModel.toString());
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.gender_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

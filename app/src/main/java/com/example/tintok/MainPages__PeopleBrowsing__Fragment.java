@@ -26,6 +26,7 @@ import com.example.tintok.CustomView.FilterDialogFragment;
 import com.example.tintok.CustomView.MyDialogFragment;
 import com.example.tintok.Model.UserSimple;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -43,6 +44,7 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
     MaterialToolbar toolbar;
     private int currentItem = 0;
     private int offScreenPageLimit = 2;
+    MaterialButton loadmoreBtn;
 
     CardStackView cardStackView;
     PeopleBrowsingAdapter adapter;
@@ -68,14 +70,28 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
         return view;
     }
 
+    private void updateLoadMoreBtn(View view){
+        if(loadmoreBtn == null){
+            loadmoreBtn = view.findViewById(R.id.loadmoreBtn);
+            loadmoreBtn.setOnClickListener(v -> {
+                mViewModel.loadMoreMatchingPeople();
+            });
+        }
+
+        if(mViewModel.getMatchingPeople().getValue() != null && mViewModel.getMatchingPeople().getValue().size() > 0)
+            loadmoreBtn.setVisibility(View.GONE);
+        else{
+            loadmoreBtn.setVisibility(View.VISIBLE);
+        }
+    }
 
 
     public void initFragment(View view){
 
-        this.setRetainInstance(true);
         // TODO: Use the ViewModel
         mViewModel.getMatchingPeople().observe(this.getViewLifecycleOwner(), userSimples -> {
             adapter.setItems(userSimples);
+            updateLoadMoreBtn(view);
         });
         toolbar = view.findViewById(R.id.people_matching_toolbar);
         toolbar.setNavigationOnClickListener(v -> {
@@ -88,6 +104,7 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
 
         initCardView(view);
         initButtonGroup(view);
+        updateLoadMoreBtn(view);
     }
 
     @Override

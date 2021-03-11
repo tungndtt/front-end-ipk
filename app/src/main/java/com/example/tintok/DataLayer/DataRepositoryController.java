@@ -87,6 +87,8 @@ public class DataRepositoryController {
                 dataRepository_matchingPeople.isReady() && dataRepository_notifications.isReady && dataRepository_posts.isReady();
     }
 
+   // public void ReFreshingData()
+
 //region Chat Rooms
 
     public MutableLiveData<ArrayList<ChatRoom>> getChatRooms() {
@@ -156,9 +158,7 @@ public class DataRepositoryController {
         return dataRepository_currentUser.lastSeen;
     }
     public boolean isThisUserLikedPost(Post p){
-        if(p.likers == null || p.likers.size() == 0)
-            return false;
-        return p.likers.contains(getUser().getValue().getUserID());
+        return getUser().getValue().likedPosts.contains(p.getId());
     }
     public boolean isThisUserSubscribedPost(Post p){
         return getUser().getValue().getFollowingPost().getValue().contains(p.getId());
@@ -185,6 +185,10 @@ public class DataRepositoryController {
     }
     public void submitPeopleReaction(UserSimple userSimple, boolean isLiked) {
         dataRepository_matchingPeople.submitPeopleReaction(userSimple,isLiked);
+    }
+
+    public void findMoreMatchingPeople() {
+        dataRepository_matchingPeople.initData();
     }
 //endregion
 
@@ -260,13 +264,14 @@ public class DataRepositoryController {
 
 
 
-
     public interface DataObserver{
         public void notifyDataChange(DataRepositoryController dataRepositoryController);
     }
 //endregion
 
     public void ClearRepository(){
+        dataRepository_userSimple.mListeners.clear();
+        dataRepository_userSimple.cancelRecacheUserTask();
         DataRepositoryController.instance = null;
     }
 }

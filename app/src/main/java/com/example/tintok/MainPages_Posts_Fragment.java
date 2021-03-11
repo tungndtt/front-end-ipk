@@ -74,6 +74,14 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
         Log.i("INFO", "OnActivityCreated fragment for post fragment ...");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ArrayList<Post> posts = postAdapter.getItems();
+        postAdapter.setItems(new ArrayList<>());
+        postAdapter.setItems(posts);
+    }
+
     private RecyclerView recyclerView;
 
     private PostAdapter postAdapter;
@@ -81,6 +89,7 @@ public class MainPages_Posts_Fragment extends Fragment implements PostAdapter.on
     @Override
     public void onDestroy() {
         super.onDestroy();
+        recyclerView.setAdapter(null);
         Log.i("INFO", "Destroy fragment for post fragment ...");
     }
 

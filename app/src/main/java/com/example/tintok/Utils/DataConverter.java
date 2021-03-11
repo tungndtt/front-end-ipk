@@ -26,7 +26,7 @@ public class DataConverter {
         for(PostForm postForm: received){
             Post e = new Post(postForm.getId(), postForm.getStatus(),postForm.getAuthor_id(), new MediaEntity(postForm.getImageUrl()),
                     Instant.ofEpochMilli(postForm.getDate()).atZone(ZoneId.systemDefault()).toLocalDateTime());
-            e.likers = postForm.getLikes() == null?new ArrayList<>():postForm.getLikes();
+            e.likers = postForm.getLikes();
             result.add(e);
         }
         return result;
@@ -63,9 +63,10 @@ public class DataConverter {
         for(PostForm post : form.getPosts()){
             Post tmp = new Post(post.getId(), post.getStatus(), post.getAuthor_id(), new MediaEntity(post.getImageUrl()),
                     Instant.ofEpochMilli(post.getDate()).atZone(ZoneId.systemDefault()).toLocalDateTime());
-            tmp.likers = post.getLikes() == null?new ArrayList<>():post.getLikes();
+            tmp.likers = post.getLikes();
             photos.add(tmp);
         }
+        currUser.likedPosts = form.getLiked_posts();
         currUser.myPosts.postValue(photos);
         ArrayList<String> dummy = currUser.getFollowers().getValue();
         dummy.addAll(form.getFollowers());

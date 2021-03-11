@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -41,7 +42,7 @@ import com.google.android.material.snackbar.Snackbar;
  * User can create a new post and see its own posts at the bottom of this fragment.
  * Furthermore, user can click on profile picture to choose between viewing, selecting or creating a new profile picture. A new profile picture is a new post.
  */
-public class MainPages_MyProfile_Fragment extends MyDialogFragment implements PostUploadFragment.onNewPostListener {
+public class MainPages_MyProfile_Fragment extends MyDialogFragment implements PostUploadFragment.onNewPostListener, DialogInterface.OnDismissListener {
 
     private Fragment infoFragment, imageFragment, postFragment;
     private int selected;
@@ -83,7 +84,6 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("INFO", "Creating new fragment for profile...");
-        setRetainInstance(true);
     }
 
 
@@ -231,12 +231,9 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
          */
         followerNumber.setOnClickListener(v -> {
             if(viewFollowersFragment == null){
-                viewFollowersFragment = View_Followers_Fragment.newInstance();
+                viewFollowersFragment = View_Followers_Fragment.newInstance(mViewModel.getUserProfile().getValue().followers.getValue());
+                viewFollowersFragment.show(getChildFragmentManager(), "VIEW_FOLLOWING_FRAGMENT");
             }
-            Bundle bundle = new Bundle();
-            bundle.putInt("FOLLOW", 0);
-            viewFollowersFragment.setArguments(bundle);
-            viewFollowersFragment.show(getChildFragmentManager(), "VIEW_FOLLOWERS_FRAGMENT");
         });
         /**
             If user clicks on followingNumber, he can see all of its persons he follows.
@@ -244,12 +241,10 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
          */
         followingNumber.setOnClickListener(v -> {
             if(viewFollowersFragment == null){
-                viewFollowersFragment = View_Followers_Fragment.newInstance();
+                viewFollowersFragment = View_Followers_Fragment.newInstance(mViewModel.getUserProfile().getValue().following.getValue());
+                viewFollowersFragment.show(getChildFragmentManager(), "VIEW_FOLLOWING_FRAGMENT");
             }
-            Bundle bundle = new Bundle();
-            bundle.putInt("FOLLOW", 1);
-            viewFollowersFragment.setArguments(bundle);
-            viewFollowersFragment.show(getChildFragmentManager(), "VIEW_FOLLOWING_FRAGMENT");
+
         });
 
         /*
@@ -430,5 +425,14 @@ public class MainPages_MyProfile_Fragment extends MyDialogFragment implements Po
     @Override
     public boolean isCancelable() {
         return post == null;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+    }
+
+    public void onCloseViewUserList(){
+        this.viewFollowersFragment = null;
     }
 }
