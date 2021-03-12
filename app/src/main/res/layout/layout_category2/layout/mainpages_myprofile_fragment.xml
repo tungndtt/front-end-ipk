@@ -47,7 +47,7 @@
                     android:gravity="center"
                     android:layout_marginTop="4dp"
                     tools:text="username"
-                    android:inputType="textCapCharacters|textNoSuggestions"
+                    android:inputType="text"
                     android:background="@color/transparent"
                     android:layout_centerHorizontal="true"
                     android:hint="Your username"

@@ -58,7 +58,7 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
 
     public MainPages__PeopleBrowsing__Fragment() {
         currentState = new FilterDialogFragment.FilterState();
-        Log.e("Main_People_Frag", "Constructor");
+
     }
 
     @Override
@@ -67,22 +67,17 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
         View view =  inflater.inflate(R.layout.mainpages__peoplebrowsing__fragment, container, false);
         mViewModel = new ViewModelProvider(this).get(MainPages_PeopleBrowsing_ViewModel.class);
         initFragment(view);
+        Log.e("Main_People_Frag", "OnCreateView");
         return view;
     }
 
-    private void updateLoadMoreBtn(View view){
-        if(loadmoreBtn == null){
-            loadmoreBtn = view.findViewById(R.id.loadmoreBtn);
-            loadmoreBtn.setOnClickListener(v -> {
-                mViewModel.loadMoreMatchingPeople();
-            });
-        }
-
+    private void updateLoadMoreBtn(){
         if(mViewModel.getMatchingPeople().getValue() != null && mViewModel.getMatchingPeople().getValue().size() > 0)
             loadmoreBtn.setVisibility(View.GONE);
         else{
             loadmoreBtn.setVisibility(View.VISIBLE);
         }
+        Log.e("Main_People_Frag", "get more Btn: " +loadmoreBtn.getVisibility()+" "+mViewModel.getMatchingPeople().getValue() );
     }
 
 
@@ -91,7 +86,7 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
         // TODO: Use the ViewModel
         mViewModel.getMatchingPeople().observe(this.getViewLifecycleOwner(), userSimples -> {
             adapter.setItems(userSimples);
-            updateLoadMoreBtn(view);
+            updateLoadMoreBtn();
         });
         toolbar = view.findViewById(R.id.people_matching_toolbar);
         toolbar.setNavigationOnClickListener(v -> {
@@ -101,21 +96,20 @@ public class MainPages__PeopleBrowsing__Fragment extends MyDialogFragment {
         filterBtn.setOnClickListener(v -> {
             handleFilterBtnClicked();
         });
-
+        loadmoreBtn = view.findViewById(R.id.loadmoreBtn);
+        loadmoreBtn.setOnClickListener(v -> {
+            mViewModel.loadMoreMatchingPeople();
+        });
         initCardView(view);
         initButtonGroup(view);
-        updateLoadMoreBtn(view);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     @Override
     public void onResume() {
         super.onResume();
         updateFilterBtn();
+        updateLoadMoreBtn();
     }
 
     public void handleFilterBtnClicked(){
