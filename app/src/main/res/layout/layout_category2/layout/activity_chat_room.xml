@@ -101,7 +101,8 @@
             app:cardElevation="5dp"
             android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="5dp"
-            android:layout_weight="10">
+            android:layout_weight="10"
+            android:layout_gravity="left|center_vertical">
 
             <LinearLayout
                 android:id="@+id/msgLayout"
@@ -182,7 +183,7 @@
             android:layout_height="50dp"
             android:scaleType="fitXY"
             android:layout_marginEnd="10dp"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center_vertical|right"
             android:src="@drawable/ic_send"
             android:backgroundTint="@color/transparent"
             ></ImageButton>
