@@ -79,7 +79,7 @@ public class NotificationsAdapter extends BaseAdapter<Notification, Notification
             current = itemData;
             this.date.setText(itemData.getDate());
             if(itemData.getType() == Notification.NotificationType.NEW_FRIEND){
-                contentPic.setVisibility(View.INVISIBLE);
+                contentPic.setVisibility(View.GONE);
             }
             else{
                 contentPic.setVisibility(View.VISIBLE);
