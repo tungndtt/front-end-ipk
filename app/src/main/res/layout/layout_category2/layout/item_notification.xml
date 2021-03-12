@@ -33,6 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginHorizontal="4dp"
         android:clickable="false"
         app:layout_constraintLeft_toRightOf="@id/profilePicView"
         app:layout_constraintRight_toLeftOf="@+id/contentPic"
