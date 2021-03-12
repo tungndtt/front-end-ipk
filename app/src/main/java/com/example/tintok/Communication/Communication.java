@@ -46,7 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Communication {
     private static Communication instance;
     //ublic static arrayList<String> registeredEvent
-    public static final String myLink ="https://iptk-p.herokuapp.com/"; //https://192.168.1.116:3000, https://iptk-p.herokuapp.com/
+    public static final String myLink ="https://iptk-p.herokuapp.com"; //https://192.168.1.116:3000, https://iptk-p.herokuapp.com/
 
     public OkHttpClient getHttpsClient() {
         return httpsClient;
