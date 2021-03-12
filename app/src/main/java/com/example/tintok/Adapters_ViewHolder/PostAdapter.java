@@ -222,13 +222,13 @@ public class PostAdapter extends BaseAdapter<Post,PostAdapter.ViewHolder> {
                 return;
             }
             if(isLiked()){
-                if(!currentPost.likers.contains(currentPost.getId()))
-                    currentPost.likers.add(currentPost.getId());
+                if(!currentPost.likers.contains(DataRepositoryController.getInstance().getUser().getValue().getUserID()))
+                    currentPost.likers.add(DataRepositoryController.getInstance().getUser().getValue().getUserID());
 
             }
             else{
-                if(currentPost.likers.contains(currentPost.getId()))
-                    currentPost.likers.remove(currentPost.getId());
+                if(currentPost.likers.contains(DataRepositoryController.getInstance().getUser().getValue().getUserID()))
+                    currentPost.likers.remove(DataRepositoryController.getInstance().getUser().getValue().getUserID());
             }
 
             if( currentPost.likers.size() == 0){
