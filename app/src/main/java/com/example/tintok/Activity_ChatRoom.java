@@ -106,6 +106,12 @@ public class Activity_ChatRoom extends AppCompatActivity implements DataReposito
     }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
     void initComponents() {
         emoji = findViewById(R.id.emojiView);
         messages = findViewById(R.id.messageView);
