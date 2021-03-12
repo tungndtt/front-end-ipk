@@ -9,7 +9,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="false">
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 app:contentScrim="@color/primaryColor"
                 app:layout_scrollFlags="scroll|enterAlways"
-                android:fitsSystemWindows="true"
+                android:fitsSystemWindows="false"
                 >
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -111,7 +111,7 @@
         android:visibility="visible"
         android:layout_gravity="start"
         app:menu="@menu/mainpage_navview"
-        >
+>
     </com.google.android.material.navigation.NavigationView>
 
 
