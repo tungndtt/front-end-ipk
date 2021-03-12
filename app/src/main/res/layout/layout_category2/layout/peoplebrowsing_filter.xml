@@ -17,12 +17,14 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/filter_nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:fillViewport="true"
         android:overScrollMode="never"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filter_toolbar">
+        app:layout_constraintTop_toBottomOf="@id/filter_toolbar"
+        app:layout_constraintBottom_toTopOf="@id/applyFilterBtn">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,16 +99,16 @@
                     android:layout_below="@id/gender"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/option_male"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginHorizontal="8dp"
                         android:background="@drawable/custombutton"
                         android:button="@drawable/custombutton"
                         android:gravity="center"
@@ -114,18 +116,18 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/option_female"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginHorizontal="8dp"
                         android:background="@drawable/custombutton"
                         android:button="@drawable/custombutton"
                         android:gravity="center"
                         android:text="@string/female"/>
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/option_divers"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginHorizontal="8dp"
                         android:background="@drawable/custombutton"
                         android:button="@drawable/custombutton"
                         android:checked="true"
@@ -134,9 +136,9 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/option_both"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginHorizontal="8dp"
                         android:background="@drawable/custombutton"
                         android:button="@drawable/custombutton"
                         android:checked="true"
@@ -287,12 +289,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:text="@string/apply_filter"
         app:layout_constraintBottom_toTopOf="@id/resetFilterBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filter_nestedScrollView"
+
 
         app:layout_constraintVertical_chainStyle="packed" />
 
@@ -307,8 +309,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/applyFilterBtn"
+        app:layout_constraintTop_toTopOf="parent"
 
-        />
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

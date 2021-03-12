@@ -12,6 +12,8 @@ import java.util.ArrayList;
 public class DataRepository_Interest {
     public static String[] interests = {"GAMING", "READING", "TRAVELLING",
             "SPORT", "SHOPPING", "LEARNING","GOSSIP"
+            /*,"a", "b","awe" , "we", "Wae","awe","aweaw", "1", "2",
+            "2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2","2"*/
     };
 
     public static ArrayList<InterestTag> parseData(boolean[] bitmap){
